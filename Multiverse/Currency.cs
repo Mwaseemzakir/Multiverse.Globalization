@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
 namespace Multiverse;
-
 public record Currency
 {
 	public static readonly Currency None = new(string.Empty, string.Empty);
