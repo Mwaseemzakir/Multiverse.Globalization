@@ -9,6 +9,15 @@
     <Authors>Muhammad Waseem</Authors>
     <Description>This nuget package contains language code, country code and currency codes from the globe.</Description>
     <AssemblyVersion>1.0</AssemblyVersion>
+    <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
