@@ -1,0 +1,47 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0' # Adjust the version as needed
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release
+
+    - name: Pack
+      run: dotnet pack --configuration Release --output nupkg
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v2
+      with:
+        name: nuget-packages
+        path: '**/*.nupkg'
+
+    - name: Publish to NuGet
+      uses: nuget/nuget@v2
+      with:
+        command: push
+        packages: '**/*.nupkg'
+        nuGetApiKey: ${{ secrets.NUGET_API_KEY }}
+        sourceUrl: https://api.nuget.org/v3/index.json
