@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Multiverse</Title>
+    <Authors>Muhammad Waseem</Authors>
+    <Description>This nuget package contains language code, country code and currency codes from the globe.</Description>
+    <AssemblyVersion>1.0</AssemblyVersion>
+  </PropertyGroup>
+
+</Project>
