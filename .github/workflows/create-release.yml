@@ -45,3 +45,5 @@ jobs:
         packages: '**/*.nupkg'
         nuGetApiKey: ${{ secrets.NUGET_API_KEY }}
         sourceUrl: https://api.nuget.org/v3/index.json
+        arguments: '--skip-duplicate'
+
