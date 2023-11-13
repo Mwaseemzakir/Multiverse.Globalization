@@ -39,7 +39,7 @@ jobs:
         path: '**/*.nupkg'
 
     - name: Publish to NuGet
-      uses: nuget/nuget@v2
+      uses: nuget/push@v1
       with:
         command: push
         packages: '**/*.nupkg'
