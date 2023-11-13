@@ -10,7 +10,6 @@
     <Description>This nuget package contains language code, country code and currency codes from the globe.</Description>
     <AssemblyVersion>1.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse</RepositoryUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Copyright>Muhammad Waseem - 2023</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
