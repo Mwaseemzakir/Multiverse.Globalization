@@ -46,7 +46,7 @@ jobs:
         name: nuget
         if-no-files-found: error
         retention-days: 7
-        path: ${{ env.NuGetDirectory }}/Multiverse.dll
+        path: ${{ env.NuGetDirectory }}/*.nupkg
 
   validate_nuget:
     runs-on: ubuntu-latest
@@ -92,5 +92,5 @@ jobs:
     - name: Publish NuGet package
       run: |
         foreach ($file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
-          dotnet nuget push $file --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push $file --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
         }
