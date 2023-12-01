@@ -1,31 +1,21 @@
-name: publish
+name: prerelease NuGet
 
-on:
-  workflow_dispatch: # Allow running the workflow manually from the GitHub UI
-  push:
-    branches:
-      - 'master'       # Run the workflow when pushing to the main branch
-  pull_request:
-    branches:
-      - '*'          # Run the workflow for all pull requests
-  release:
-    types:
-      - published    # Run the workflow when a new GitHub release is published
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # also works with windows-latest and macos-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
-    - name: Build
-      run: dotnet build -c Release
-    - name: Test
-      run: dotnet test -c Release --no-build
-    - name: Pack nugets
-      run: dotnet pack -c Release --no-build --output .
-    - name: Push to NuGet
-      run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+    - name: Checkout repository
+      uses: actions/checkout@v1
+    - name: Build with dotnet
+      run: dotnet build --configuration Release --version-suffix prerelease-$(date +%Y%m%d%H%M%S)
+      shell: bash
+    - name: Publish nuget
+      run: |
+           for f in ./[repository]/bin/Release/*.nupkg
+           do
+             curl -vX PUT -u "[user]:${{ secrets.NUGET_API_KEY }}" -F package=@$f https://nuget.pkg.github.com/[user]/
+           done
+      shell: bash
