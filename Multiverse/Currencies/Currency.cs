@@ -16,7 +16,9 @@ public record Currency
     public int Number { get; private set; }
     public string Country { get; private set; } = string.Empty;
     public string CurrencyName { get; private set; } = string.Empty;
+    
     public static readonly IReadOnlyDictionary<string, Currency> CodeCurrencies = CreateCodeCurrencies();
+    
     public static readonly IReadOnlyDictionary<int, Currency> NumberCurrencies = CreateNumberCurrencies();
     public static bool ValidNumberCode(int number)
     {
