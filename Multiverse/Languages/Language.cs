@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Multiverse.Features.Languages;
+namespace Multiverse.Languages;
 
 public record Language
 {
@@ -613,30 +613,30 @@ public record Language
 
     private static IReadOnlyDictionary<string, Language> CreateAlpha2Codes()
     {
-		var type = typeof(Language);
+        var type = typeof(Language);
 
-		var fields = type.GetFields(
-							BindingFlags.NonPublic |
-							BindingFlags.Static)
-			.Where(f => f.FieldType == typeof(Language))
+        var fields = type.GetFields(
+                            BindingFlags.NonPublic |
+                            BindingFlags.Static)
+            .Where(f => f.FieldType == typeof(Language))
 
-			.Select(f => (Language)f.GetValue(default)!);
+            .Select(f => (Language)f.GetValue(default)!);
 
-		return fields.ToDictionary(f => f.Alpha2Code);
-	}
+        return fields.ToDictionary(f => f.Alpha2Code);
+    }
 
     private static IReadOnlyDictionary<string, Language> CreateAlpha3Codes()
     {
-		var type = typeof(Language);
+        var type = typeof(Language);
 
-		var fields = type.GetFields(
-							BindingFlags.NonPublic |
-							BindingFlags.Static)
-			.Where(f => f.FieldType == typeof(Language))
+        var fields = type.GetFields(
+                            BindingFlags.NonPublic |
+                            BindingFlags.Static)
+            .Where(f => f.FieldType == typeof(Language))
 
-			.Select(f => (Language)f.GetValue(default)!);
+            .Select(f => (Language)f.GetValue(default)!);
 
-		return fields.ToDictionary(f => f.Alpha3Code);
+        return fields.ToDictionary(f => f.Alpha3Code);
 
-	}
+    }
 }

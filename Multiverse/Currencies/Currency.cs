@@ -1,4 +1,4 @@
-﻿namespace Multiverse.Features.Currencies;
+﻿namespace Multiverse.Currencies;
 public record Currency
 {
     public static readonly Currency None = new(string.Empty, 0, string.Empty);
@@ -20,7 +20,7 @@ public record Currency
     public static readonly IReadOnlyDictionary<int, Currency> NumberCurrencies = CreateNumberCurrencies();
     public static bool ValidNumberCode(int number)
     {
-        if (number > 0 )
+        if (number > 0)
         {
             return NumberCurrencies.ContainsKey(number);
         }

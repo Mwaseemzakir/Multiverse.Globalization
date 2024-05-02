@@ -1,4 +1,4 @@
-﻿namespace Multiverse.Features.Countries;
+﻿namespace Multiverse.Countries;
 public record Country
 {
     #region Countries
@@ -369,44 +369,44 @@ public record Country
     }
     private static IReadOnlyDictionary<string, Country> CreateAlpha2Codes()
     {
-		var type = typeof(Country);
+        var type = typeof(Country);
 
-		var fields = type.GetFields(
-            		        BindingFlags.NonPublic |
+        var fields = type.GetFields(
+                            BindingFlags.NonPublic |
                             BindingFlags.Static)
-			.Where(f => f.FieldType == typeof(Country))
+            .Where(f => f.FieldType == typeof(Country))
 
-			.Select(f => (Country)f.GetValue(default)!);
+            .Select(f => (Country)f.GetValue(default)!);
 
         return fields.ToDictionary(f => f.Alpha2Code);
-	}
+    }
 
     private static IReadOnlyDictionary<string, Country> CreateAlpha3Codes()
     {
-		var type = typeof(Country);
+        var type = typeof(Country);
 
-		var fields = type.GetFields(
-            			    BindingFlags.NonPublic |
+        var fields = type.GetFields(
+                            BindingFlags.NonPublic |
                             BindingFlags.Static)
-			.Where(f => f.FieldType == typeof(Country))
+            .Where(f => f.FieldType == typeof(Country))
 
-			.Select(f => (Country)f.GetValue(default)!);
+            .Select(f => (Country)f.GetValue(default)!);
 
-		return fields.ToDictionary(f => f.Alpha3Code);
-	}
+        return fields.ToDictionary(f => f.Alpha3Code);
+    }
 
-	private static IReadOnlyDictionary<string, Country> CreateNumericCodes()
+    private static IReadOnlyDictionary<string, Country> CreateNumericCodes()
     {
-		var type = typeof(Country);
+        var type = typeof(Country);
 
-		var fields = type.GetFields(
-            		        BindingFlags.NonPublic |
+        var fields = type.GetFields(
+                            BindingFlags.NonPublic |
                             BindingFlags.Static)
-			.Where(f => f.FieldType == typeof(Country))
+            .Where(f => f.FieldType == typeof(Country))
 
-			.Select(f => (Country)f.GetValue(default)!);
+            .Select(f => (Country)f.GetValue(default)!);
 
-		return fields.ToDictionary(f => f.NumericCode);
-	}
+        return fields.ToDictionary(f => f.NumericCode);
+    }
 
 }
