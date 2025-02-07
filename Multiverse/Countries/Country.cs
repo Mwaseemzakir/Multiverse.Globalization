@@ -332,81 +332,312 @@ public record Country
     public string Alpha3Code { get; private set; } = string.Empty;
     public string Alpha2Code { get; private set; } = string.Empty;
     public string NumericCode { get; private set; } = string.Empty;
+
     private static readonly IReadOnlyDictionary<string, Country> Alpha2CodeMap = CreateAlpha2Codes();
     private static readonly IReadOnlyDictionary<string, Country> Alpha3CodeMap = CreateAlpha3Codes();
-    private static readonly IReadOnlyDictionary<string, Country> NumricCodeMap = CreateNumericCodes();
+    private static readonly IReadOnlyDictionary<string, Country> NumericCodeMap = CreateNumericCodes();
+    #region Validation Methods
+
+    /// <summary>
+    /// Determines whether the provided alpha-2 code is valid.
+    /// </summary>
+    /// <param name="code">A 2-letter country code.</param>
+    /// <returns>
+    /// True if the code is not null or empty, converted to uppercase, and exists in the alpha-2 dictionary; otherwise, false.
+    /// </returns>
     public static bool IsValidAlpha2Code(string? code)
     {
-        if (!string.IsNullOrEmpty(code))
+        if(!string.IsNullOrEmpty(code))
         {
             code = code.ToUpperInvariant();
-
             return Alpha2CodeMap.ContainsKey(code);
         }
-
         return false;
     }
+
+    /// <summary>
+    /// Determines whether the provided alpha-3 code is valid.
+    /// </summary>
+    /// <param name="code">A 3-letter country code.</param>
+    /// <returns>
+    /// True if the code is not null or empty, converted to uppercase, and exists in the alpha-3 dictionary; otherwise, false.
+    /// </returns>
     public static bool IsValidAlpha3Code(string? code)
     {
-        if (!string.IsNullOrEmpty(code))
+        if(!string.IsNullOrEmpty(code))
         {
             code = code.ToUpperInvariant();
-
             return Alpha3CodeMap.ContainsKey(code);
         }
         return false;
     }
+
+    /// <summary>
+    /// Determines whether the provided country code is valid in either alpha-2 or alpha-3 format.
+    /// </summary>
+    /// <param name="code">A country code which can be either 2-letter or 3-letter.</param>
+    /// <returns>
+    /// True if the code is valid as either an alpha-2 or alpha-3 code; otherwise, false.
+    /// </returns>
     public static bool IsValidCode(string code)
     {
-        if (!string.IsNullOrEmpty(code))
+        if(!string.IsNullOrEmpty(code))
         {
             code = code.ToUpperInvariant();
-
             return IsValidAlpha2Code(code) || IsValidAlpha3Code(code);
         }
-
         return false;
     }
+
+    #endregion
+
+    #region Retrieval Methods
+
+    /// <summary>
+    /// Retrieves the Country instance corresponding to the specified alpha-2 code.
+    /// </summary>
+    /// <param name="code">A 2-letter country code.</param>
+    /// <returns>The Country instance associated with the provided alpha-2 code.</returns>
+    /// <exception cref="KeyNotFoundException">Thrown if the country is not found.</exception>
+    public static Country GetCountryByAlpha2Code(string code)
+    {
+        if(IsValidAlpha2Code(code))
+        {
+            string upperCode = code.ToUpperInvariant();
+            return Alpha2CodeMap[upperCode];
+        }
+        throw new KeyNotFoundException($"Country with alpha-2 code '{code}' not found.");
+    }
+
+    /// <summary>
+    /// Retrieves the Country instance corresponding to the specified alpha-3 code.
+    /// </summary>
+    /// <param name="code">A 3-letter country code.</param>
+    /// <returns>The Country instance associated with the provided alpha-3 code.</returns>
+    /// <exception cref="KeyNotFoundException">Thrown if the country is not found.</exception>
+    public static Country GetCountryByAlpha3Code(string code)
+    {
+        if(IsValidAlpha3Code(code))
+        {
+            string upperCode = code.ToUpperInvariant();
+            return Alpha3CodeMap[upperCode];
+        }
+        throw new KeyNotFoundException($"Country with alpha-3 code '{code}' not found.");
+    }
+
+    /// <summary>
+    /// Retrieves the Country instance corresponding to the specified numeric code.
+    /// </summary>
+    /// <param name="numericCode">The numeric country code as a string.</param>
+    /// <returns>The Country instance associated with the provided numeric code.</returns>
+    /// <exception cref="KeyNotFoundException">Thrown if the country is not found.</exception>
+    public static Country GetCountryByNumericCode(string numericCode)
+    {
+        if(!string.IsNullOrEmpty(numericCode) && NumericCodeMap.ContainsKey(numericCode))
+        {
+            return NumericCodeMap[numericCode];
+        }
+        throw new KeyNotFoundException($"Country with numeric code '{numericCode}' not found.");
+    }
+
+    #endregion
+
+    #region Try-Get Methods
+
+    /// <summary>
+    /// Attempts to retrieve the Country instance corresponding to the specified alpha-2 code.
+    /// </summary>
+    /// <param name="code">A 2-letter country code.</param>
+    /// <param name="country">
+    /// When this method returns, contains the Country instance if found; otherwise, null.
+    /// </param>
+    /// <returns>True if a country with the specified alpha-2 code is found; otherwise, false.</returns>
+    public static bool TryGetCountryByAlpha2Code(string code, out Country country)
+    {
+        country = None;
+
+        if(IsValidAlpha2Code(code))
+        {
+            return Alpha2CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the Country instance corresponding to the specified alpha-3 code.
+    /// </summary>
+    /// <param name="code">A 3-letter country code.</param>
+    /// <param name="country">
+    /// When this method returns, contains the Country instance if found; otherwise, null.
+    /// </param>
+    /// <returns>True if a country with the specified alpha-3 code is found; otherwise, false.</returns>
+    public static bool TryGetCountryByAlpha3Code(string code, out Country country)
+    {
+        country = None;
+
+        if(IsValidAlpha3Code(code))
+        {
+            return Alpha3CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the Country instance corresponding to the specified numeric code.
+    /// </summary>
+    /// <param name="numericCode">The numeric country code as a string.</param>
+    /// <param name="country">
+    /// When this method returns, contains the Country instance if found; otherwise, null.
+    /// </param>
+    /// <returns>True if a country with the specified numeric code is found; otherwise, false.</returns>
+    public static bool TryGetCountryByNumericCode(string numericCode, out Country country)
+    {
+        country = None;
+        if(!string.IsNullOrEmpty(numericCode) && NumericCodeMap.ContainsKey(numericCode))
+        {
+            return NumericCodeMap.TryGetValue(numericCode, out country);
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region Listing and Parsing Methods
+
+    /// <summary>
+    /// Retrieves all defined Country instances.
+    /// </summary>
+    /// <returns>An enumerable collection of all available Country instances.</returns>
+    public static IEnumerable<Country> GetAllCountries()
+    {
+        // Returns countries based on the alpha-2 codes.
+        return Alpha2CodeMap.Values;
+    }
+
+    /// <summary>
+    /// Gets the total number of defined countries.
+    /// </summary>
+    public static int CountryCount => Alpha2CodeMap.Count;
+
+    /// <summary>
+    /// Retrieves all available alpha-2 country codes.
+    /// </summary>
+    /// <returns>An enumerable collection of 2-letter country codes.</returns>
+    public static IEnumerable<string> GetAllAlpha2Codes()
+    {
+        return Alpha2CodeMap.Keys;
+    }
+
+    /// <summary>
+    /// Retrieves all available alpha-3 country codes.
+    /// </summary>
+    /// <returns>An enumerable collection of 3-letter country codes.</returns>
+    public static IEnumerable<string> GetAllAlpha3Codes()
+    {
+        return Alpha3CodeMap.Keys;
+    }
+
+    /// <summary>
+    /// Retrieves all available numeric country codes.
+    /// </summary>
+    /// <returns>An enumerable collection of numeric country codes as strings.</returns>
+    public static IEnumerable<string> GetAllNumericCodes()
+    {
+        return NumericCodeMap.Keys;
+    }
+
+    /// <summary>
+    /// Parses an input string to retrieve a corresponding Country instance.
+    /// The input can be an alpha-2 code, alpha-3 code, or numeric code.
+    /// </summary>
+    /// <param name="input">A country identifier in string format.</param>
+    /// <returns>
+    /// The Country instance associated with the input code.
+    /// </returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the input is null, empty, or does not correspond to any valid country code.
+    /// </exception>
+    public static Country ParseCountry(string input)
+    {
+        if(string.IsNullOrEmpty(input))
+        {
+            throw new ArgumentException("Input cannot be null or empty.", nameof(input));
+        }
+
+        input = input.ToUpperInvariant();
+        if(input.Length == 2 && IsValidAlpha2Code(input))
+        {
+            return GetCountryByAlpha2Code(input);
+        }
+        if(input.Length == 3)
+        {
+            // Attempt alpha-3 lookup first.
+            if(IsValidAlpha3Code(input))
+            {
+                return GetCountryByAlpha3Code(input);
+            }
+            // If the 3-digit code is numeric, try numeric lookup.
+            if(input.All(char.IsDigit))
+            {
+                return GetCountryByNumericCode(input);
+            }
+        }
+        throw new ArgumentException($"Country with code '{input}' not found.", nameof(input));
+    }
+
+    #endregion
+
+    #region Internal Dictionary Creation
+
+    /// <summary>
+    /// Creates a read-only dictionary that maps alpha-2 country codes to Country instances.
+    /// Uses reflection to retrieve all static Country fields.
+    /// </summary>
+    /// <returns>
+    /// An IReadOnlyDictionary where the key is the alpha-2 code and the value is the Country instance.
+    /// </returns>
     private static IReadOnlyDictionary<string, Country> CreateAlpha2Codes()
     {
         var type = typeof(Country);
-
-        var fields = type.GetFields(
-                            BindingFlags.NonPublic |
-                            BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country))
-
-            .Select(f => (Country)f.GetValue(default)!);
-
+        var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
+                         .Where(f => f.FieldType == typeof(Country))
+                         .Select(f => (Country)f.GetValue(default)!);
         return fields.ToDictionary(f => f.Alpha2Code);
     }
 
+    /// <summary>
+    /// Creates a read-only dictionary that maps alpha-3 country codes to Country instances.
+    /// Uses reflection to retrieve all static Country fields.
+    /// </summary>
+    /// <returns>
+    /// An IReadOnlyDictionary where the key is the alpha-3 code and the value is the Country instance.
+    /// </returns>
     private static IReadOnlyDictionary<string, Country> CreateAlpha3Codes()
     {
         var type = typeof(Country);
-
-        var fields = type.GetFields(
-                            BindingFlags.NonPublic |
-                            BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country))
-
-            .Select(f => (Country)f.GetValue(default)!);
-
+        var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
+                         .Where(f => f.FieldType == typeof(Country))
+                         .Select(f => (Country)f.GetValue(default)!);
         return fields.ToDictionary(f => f.Alpha3Code);
     }
 
+    /// <summary>
+    /// Creates a read-only dictionary that maps numeric country codes to Country instances.
+    /// Uses reflection to retrieve all static Country fields.
+    /// </summary>
+    /// <returns>
+    /// An IReadOnlyDictionary where the key is the numeric code (as a string) and the value is the Country instance.
+    /// </returns>
     private static IReadOnlyDictionary<string, Country> CreateNumericCodes()
     {
         var type = typeof(Country);
-
-        var fields = type.GetFields(
-                            BindingFlags.NonPublic |
-                            BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country))
-
-            .Select(f => (Country)f.GetValue(default)!);
-
+        var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
+                         .Where(f => f.FieldType == typeof(Country))
+                         .Select(f => (Country)f.GetValue(default)!);
         return fields.ToDictionary(f => f.NumericCode);
     }
 
+    #endregion
 }
+
+

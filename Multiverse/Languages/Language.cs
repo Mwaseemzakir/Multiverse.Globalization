@@ -550,93 +550,287 @@ public record Language
     public static readonly Language Zza = new Language("", "zza", "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki");
     #endregion
 
-    public static readonly Language None = new(string.Empty, string.Empty, string.Empty);
-    private Language(string alpha2Code, string alpha3Code, string name)
-    {
-        Name = name;
-        Alpha2Code = alpha2Code;
-        Alpha3Code = alpha3Code;
-    }
+    /// <summary>
+    /// Represents an undefined language.
+    /// </summary>
+    public static readonly Language None = new Language(string.Empty, string.Empty, string.Empty);
+
+    // Static dictionaries for fast lookups by language codes.
+    public static readonly IReadOnlyDictionary<string, Language> Alpha2Codes = CreateAlpha2Codes();
+    public static readonly IReadOnlyDictionary<string, Language> Alpha3Codes = CreateAlpha3Codes();
+
+    /// <summary>
+    /// Gets the 2-letter language code.
+    /// </summary>
     public string Alpha2Code { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the 3-letter language code.
+    /// </summary>
     public string Alpha3Code { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the name of the language.
+    /// </summary>
     public string? Name { get; private set; }
 
-    public static readonly IReadOnlyDictionary<string, Language> Alpha2Codes = CreateAlpha2Codes();
-
-    public static readonly IReadOnlyDictionary<string, Language> Alpha3Codes = CreateAlpha3Codes();
-    public static Language FromAlpha2Code(
-        string? code,
-        [CallerArgumentExpression("code")] string? paramName = null
-    )
+    /// <summary>
+    /// Private constructor to initialize a Language instance.
+    /// </summary>
+    /// <param name="alpha2Code">The 2-letter language code.</param>
+    /// <param name="alpha3Code">The 3-letter language code.</param>
+    /// <param name="name">The language name.</param>
+    private Language(string alpha2Code, string alpha3Code, string name)
     {
-        if (!string.IsNullOrEmpty(code))
-        {
-            code = code.ToLowerInvariant();
-
-            if (Alpha2Codes.ContainsKey(code))
-            {
-                return Alpha2Codes[code];
-            }
-            throw new ApplicationException($"Language with code : {code} is not supported for : {paramName}");
-        }
-
-        throw new ApplicationException($"Language with empty code is not supported for : {paramName}");
+        // Normalize codes to lower-case.
+        Alpha2Code = alpha2Code.ToLowerInvariant();
+        Alpha3Code = alpha3Code.ToLowerInvariant();
+        Name = name;
     }
-    public static Language FromAlpha3Code(
-        string? code,
-        [CallerArgumentExpression("code")] string? paramName = null
-    )
+
+    #region Validation Methods
+
+    /// <summary>
+    /// Determines whether the provided alpha-2 code is valid.
+    /// </summary>
+    /// <param name="code">A 2-letter language code.</param>
+    /// <returns>
+    /// True if the code is not null or empty, normalized to lower-case, and exists in the alpha-2 lookup dictionary; otherwise, false.
+    /// </returns>
+    public static bool IsValidAlpha2Code(string? code)
     {
-        if (!string.IsNullOrEmpty(code))
+        if(!string.IsNullOrEmpty(code))
         {
             code = code.ToLowerInvariant();
-
-            if (Alpha3Codes.ContainsKey(code))
-            {
-                return Alpha3Codes[code];
-            }
-
-            throw new ApplicationException($"Language with code : {code} is not supported for : {paramName}	");
-        }
-        throw new ApplicationException($"Currency with empty code is not supported for : {paramName}");
-    }
-    public static bool IsValidCode(string? code)
-    {
-        if (!string.IsNullOrEmpty(code))
-        {
-            code = code.ToLowerInvariant();
-
-            if (Alpha2Codes.ContainsKey(code) || Alpha3Codes.ContainsKey(code)) return true;
+            return Alpha2Codes.ContainsKey(code);
         }
         return false;
     }
 
+    /// <summary>
+    /// Determines whether the provided alpha-3 code is valid.
+    /// </summary>
+    /// <param name="code">A 3-letter language code.</param>
+    /// <returns>
+    /// True if the code is not null or empty, normalized to lower-case, and exists in the alpha-3 lookup dictionary; otherwise, false.
+    /// </returns>
+    public static bool IsValidAlpha3Code(string? code)
+    {
+        if(!string.IsNullOrEmpty(code))
+        {
+            code = code.ToLowerInvariant();
+            return Alpha3Codes.ContainsKey(code);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Determines whether the provided language code (either alpha-2 or alpha-3) is valid.
+    /// </summary>
+    /// <param name="code">A language code in either 2-letter or 3-letter format.</param>
+    /// <returns>
+    /// True if the code is valid as either an alpha-2 or alpha-3 code; otherwise, false.
+    /// </returns>
+    public static bool IsValidCode(string? code)
+    {
+        if(!string.IsNullOrEmpty(code))
+        {
+            code = code.ToLowerInvariant();
+            return Alpha2Codes.ContainsKey(code) || Alpha3Codes.ContainsKey(code);
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region Retrieval Methods
+
+    /// <summary>
+    /// Retrieves the Language instance corresponding to the specified alpha-2 code.
+    /// </summary>
+    /// <param name="code">A 2-letter language code.</param>
+    /// <param name="paramName">The name of the parameter for error messaging.</param>
+    /// <returns>The Language instance associated with the provided alpha-2 code.</returns>
+    /// <exception cref="ApplicationException">Thrown if the language is not found or if the code is null/empty.</exception>
+    public static Language FromAlpha2Code(
+        string? code,
+        [CallerArgumentExpression("code")] string? paramName = null)
+    {
+        if(!string.IsNullOrEmpty(code))
+        {
+            code = code.ToLowerInvariant();
+            if(Alpha2Codes.ContainsKey(code))
+            {
+                return Alpha2Codes[code];
+            }
+            throw new ApplicationException($"Language with code '{code}' is not supported for: {paramName}");
+        }
+        throw new ApplicationException($"Language with empty code is not supported for: {paramName}");
+    }
+
+    /// <summary>
+    /// Retrieves the Language instance corresponding to the specified alpha-3 code.
+    /// </summary>
+    /// <param name="code">A 3-letter language code.</param>
+    /// <param name="paramName">The name of the parameter for error messaging.</param>
+    /// <returns>The Language instance associated with the provided alpha-3 code.</returns>
+    /// <exception cref="ApplicationException">Thrown if the language is not found or if the code is null/empty.</exception>
+    public static Language FromAlpha3Code(
+        string? code,
+        [CallerArgumentExpression("code")] string? paramName = null)
+    {
+        if(!string.IsNullOrEmpty(code))
+        {
+            code = code.ToLowerInvariant();
+            if(Alpha3Codes.ContainsKey(code))
+            {
+                return Alpha3Codes[code];
+            }
+            throw new ApplicationException($"Language with code '{code}' is not supported for: {paramName}");
+        }
+        throw new ApplicationException($"Language with empty code is not supported for: {paramName}");
+    }
+
+    #endregion
+
+    #region Try-Get Methods
+
+    /// <summary>
+    /// Attempts to retrieve the Language instance corresponding to the specified alpha-2 code.
+    /// </summary>
+    /// <param name="code">A 2-letter language code.</param>
+    /// <param name="language">
+    /// When this method returns, contains the Language instance if found; otherwise, the 'None' instance.
+    /// </param>
+    /// <returns>True if a language with the specified alpha-2 code is found; otherwise, false.</returns>
+    public static bool TryGetLanguageByAlpha2Code(string? code, out Language language)
+    {
+        language = None;
+        if(!string.IsNullOrEmpty(code))
+        {
+            code = code.ToLowerInvariant();
+            return Alpha2Codes.TryGetValue(code, out language);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the Language instance corresponding to the specified alpha-3 code.
+    /// </summary>
+    /// <param name="code">A 3-letter language code.</param>
+    /// <param name="language">
+    /// When this method returns, contains the Language instance if found; otherwise, the 'None' instance.
+    /// </param>
+    /// <returns>True if a language with the specified alpha-3 code is found; otherwise, false.</returns>
+    public static bool TryGetLanguageByAlpha3Code(string? code, out Language language)
+    {
+        language = None;
+        if(!string.IsNullOrEmpty(code))
+        {
+            code = code.ToLowerInvariant();
+            return Alpha3Codes.TryGetValue(code, out language);
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region Listing and Parsing Methods
+
+    /// <summary>
+    /// Retrieves all defined Language instances.
+    /// </summary>
+    /// <returns>An enumerable collection of all available Language instances.</returns>
+    public static IEnumerable<Language> GetAllLanguages()
+    {
+        // Return distinct languages from the alpha-2 lookup dictionary.
+        return Alpha2Codes.Values.Distinct();
+    }
+
+    /// <summary>
+    /// Gets the total number of defined languages.
+    /// </summary>
+    public static int LanguageCount => Alpha2Codes.Count;
+
+    /// <summary>
+    /// Retrieves all available alpha-2 language codes.
+    /// </summary>
+    /// <returns>An enumerable collection of 2-letter language codes.</returns>
+    public static IEnumerable<string> GetAllAlpha2Codes()
+    {
+        return Alpha2Codes.Keys;
+    }
+
+    /// <summary>
+    /// Retrieves all available alpha-3 language codes.
+    /// </summary>
+    /// <returns>An enumerable collection of 3-letter language codes.</returns>
+    public static IEnumerable<string> GetAllAlpha3Codes()
+    {
+        return Alpha3Codes.Keys;
+    }
+
+    /// <summary>
+    /// Parses an input string to retrieve a corresponding Language instance.
+    /// The input can be either an alpha-2 or alpha-3 language code.
+    /// </summary>
+    /// <param name="input">A language identifier in string format.</param>
+    /// <returns>The Language instance associated with the input code.</returns>
+    /// <exception cref="ArgumentException">Thrown if the input is null, empty, or does not match any language.</exception>
+    public static Language ParseLanguage(string input)
+    {
+        if(string.IsNullOrEmpty(input))
+        {
+            throw new ArgumentException("Input cannot be null or empty.", nameof(input));
+        }
+        input = input.ToLowerInvariant();
+
+        if(input.Length == 2 && IsValidAlpha2Code(input))
+        {
+            return FromAlpha2Code(input);
+        }
+        if(input.Length == 3 && IsValidAlpha3Code(input))
+        {
+            return FromAlpha3Code(input);
+        }
+        throw new ArgumentException($"Language with code '{input}' not found.", nameof(input));
+    }
+
+    #endregion
+
+    #region Internal Dictionary Creation
+
+    /// <summary>
+    /// Creates a read-only dictionary that maps alpha-2 language codes to Language instances.
+    /// Uses reflection to retrieve all static Language fields.
+    /// </summary>
+    /// <returns>
+    /// An IReadOnlyDictionary where the key is the alpha-2 code and the value is the Language instance.
+    /// </returns>
     private static IReadOnlyDictionary<string, Language> CreateAlpha2Codes()
     {
         var type = typeof(Language);
-
-        var fields = type.GetFields(
-                            BindingFlags.NonPublic |
-                            BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Language))
-
-            .Select(f => (Language)f.GetValue(default)!);
-
+        var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
+                         .Where(f => f.FieldType == typeof(Language))
+                         .Select(f => (Language)f.GetValue(default)!);
         return fields.ToDictionary(f => f.Alpha2Code);
     }
 
+    /// <summary>
+    /// Creates a read-only dictionary that maps alpha-3 language codes to Language instances.
+    /// Uses reflection to retrieve all static Language fields.
+    /// </summary>
+    /// <returns>
+    /// An IReadOnlyDictionary where the key is the alpha-3 code and the value is the Language instance.
+    /// </returns>
     private static IReadOnlyDictionary<string, Language> CreateAlpha3Codes()
     {
         var type = typeof(Language);
-
-        var fields = type.GetFields(
-                            BindingFlags.NonPublic |
-                            BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Language))
-
-            .Select(f => (Language)f.GetValue(default)!);
-
+        var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
+                         .Where(f => f.FieldType == typeof(Language))
+                         .Select(f => (Language)f.GetValue(default)!);
         return fields.ToDictionary(f => f.Alpha3Code);
-
     }
+
+    #endregion
 }
