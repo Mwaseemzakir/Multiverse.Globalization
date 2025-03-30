@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Multiverse.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Multiverse.Countries
+namespace Multiverse.Models
 {
     public sealed class Country
     {
@@ -339,11 +340,11 @@ namespace Multiverse.Countries
         public string Alpha2Code { get; private set; } = string.Empty;
         public string NumericCode { get; private set; } = string.Empty;
 
-        private static readonly IReadOnlyDictionary<string, Country> Alpha2CodeMap = CreateAlpha2Codes();
+        public static readonly IReadOnlyDictionary<string, Country> Alpha2CodeMap = CreateAlpha2Codes();
         
-        private static readonly IReadOnlyDictionary<string, Country> Alpha3CodeMap = CreateAlpha3Codes();
+        public static readonly IReadOnlyDictionary<string, Country> Alpha3CodeMap = CreateAlpha3Codes();
        
-        private static readonly IReadOnlyDictionary<string, Country> NumericCodeMap = CreateNumericCodes();
+        public static readonly IReadOnlyDictionary<string, Country> NumericCodeMap = CreateNumericCodes();
         #region Validation Methods
 
         /// <summary>
@@ -376,6 +377,7 @@ namespace Multiverse.Countries
             if(!string.IsNullOrEmpty(code))
             {
                 code = code.ToUpperInvariant();
+
                 return Alpha3CodeMap.ContainsKey(code);
             }
             return false;
@@ -413,6 +415,7 @@ namespace Multiverse.Countries
             if(IsValidAlpha2Code(code))
             {
                 string upperCode = code.ToUpperInvariant();
+
                 return Alpha2CodeMap[upperCode];
             }
             throw new KeyNotFoundException($"Country with alpha-2 code '{code}' not found.");
@@ -443,9 +446,7 @@ namespace Multiverse.Countries
         public static Country GetCountryByNumericCode(string numericCode)
         {
             if(!string.IsNullOrEmpty(numericCode) && NumericCodeMap.ContainsKey(numericCode))
-            {
                 return NumericCodeMap[numericCode];
-            }
             throw new KeyNotFoundException($"Country with numeric code '{numericCode}' not found.");
         }
 
@@ -466,9 +467,7 @@ namespace Multiverse.Countries
             country = None;
 
             if(IsValidAlpha2Code(code))
-            {
                 return Alpha2CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
-            }
             return false;
         }
 
@@ -485,9 +484,7 @@ namespace Multiverse.Countries
             country = None;
 
             if(IsValidAlpha3Code(code))
-            {
                 return Alpha3CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
-            }
             return false;
         }
 
@@ -504,9 +501,7 @@ namespace Multiverse.Countries
             country = None;
 
             if(!string.IsNullOrEmpty(numericCode) && NumericCodeMap.ContainsKey(numericCode))
-            {
                 return NumericCodeMap.TryGetValue(numericCode, out country);
-            }
             return false;
         }
 
@@ -520,8 +515,7 @@ namespace Multiverse.Countries
         /// <returns>An enumerable collection of all available Country instances.</returns>
         public static IEnumerable<Country> GetAllCountries()
         {
-            // Returns countries based on the alpha-2 codes.
-            return Alpha2CodeMap.Values;
+            return ReflectionHelper.GetStaticFieldsOfType<Country>();
         }
 
         /// <summary>
@@ -570,27 +564,19 @@ namespace Multiverse.Countries
         public static Country ParseCountry(string input)
         {
             if(string.IsNullOrEmpty(input))
-            {
                 throw new ArgumentException("Input cannot be null or empty.", nameof(input));
-            }
 
             input = input.ToUpperInvariant();
             if(input.Length == 2 && IsValidAlpha2Code(input))
-            {
                 return GetCountryByAlpha2Code(input);
-            }
             if(input.Length == 3)
             {
                 // Attempt alpha-3 lookup first.
                 if(IsValidAlpha3Code(input))
-                {
                     return GetCountryByAlpha3Code(input);
-                }
                 // If the 3-digit code is numeric, try numeric lookup.
                 if(input.All(char.IsDigit))
-                {
                     return GetCountryByNumericCode(input);
-                }
             }
             throw new ArgumentException($"Country with code '{input}' not found.", nameof(input));
         }
@@ -608,13 +594,11 @@ namespace Multiverse.Countries
         /// </returns>
         private static IReadOnlyDictionary<string, Country> CreateAlpha2Codes()
         {
-            Type type = typeof(Country);
+            Type? type = typeof(Country);
 
-            IEnumerable<Country> fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
-                             .Where(f => f.FieldType == typeof(Country))
-                             .Select(f => (Country?)f.GetValue(default))
-                             .Where(f => f != null)
-                             .Select(f => f!);
+            var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
+                .Where(f => f.FieldType == typeof(Country))
+                .Select(f => (Country)f.GetValue(default)!);
 
             return fields.ToDictionary(f => f.Alpha2Code);
 
@@ -629,13 +613,11 @@ namespace Multiverse.Countries
         /// </returns>
         private static IReadOnlyDictionary<string, Country> CreateAlpha3Codes()
         {
-            Type type = typeof(Country);
+            Type? type = typeof(Country);
 
             var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
-                             .Where(f => f.FieldType == typeof(Country))
-                             .Select(f => f.GetValue(default) as Country)
-                             .Where(f => f != null)
-                             .Select(f => f!);
+                .Where(f => f.FieldType == typeof(Country))
+                .Select(f => (Country)f.GetValue(default)!);
 
             return fields.ToDictionary(f => f.Alpha3Code);
         }
@@ -649,13 +631,11 @@ namespace Multiverse.Countries
         /// </returns>
         private static IReadOnlyDictionary<string, Country> CreateNumericCodes()
         {
-            Type type = typeof(Country);
+            Type? type = typeof(Country);
 
-            IEnumerable<Country> fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
-                             .Where(f => f.FieldType == typeof(Country))
-                             .Select(f => f.GetValue(default) as Country)
-                             .Where(f => f != null)
-                             .Select(f => f!);
+            var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
+                .Where(f => f.FieldType == typeof(Country))
+                .Select(f => (Country)f.GetValue(default)!);
 
             return fields.ToDictionary(f => f.NumericCode);
         }
