@@ -11,12 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{02EA681E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multiverse.UnitTests", "Multiverse.UnitTests\Multiverse.UnitTests.csproj", "{D0EDCE7B-8BB4-4AE9-B233-405771BF3BF4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{95BC41F2-8F75-4478-8CD4-970343E9684A}"
-	ProjectSection(SolutionItems) = preProject
-		C:\Users\Muhammad Waseem\Downloads\logo.png = C:\Users\Muhammad Waseem\Downloads\logo.png
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{E6D2E5F1-F8DC-457D-A440-55238CF29B7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{C63BB248-BD80-44E4-8E2C-EFF6A1C8C2A0}"
