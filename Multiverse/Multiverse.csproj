@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Multiverse</Title>
     <Authors>Muhammad Waseem</Authors>
-    <Description>This nuget package contains language code, country code and currency codes from the globe.</Description>
+    <Description>This NuGet package provides comprehensive language codes, country codes, and currency codes from around the globe, making it an essential tool for internationalization and localization in .NET projects.</Description>
     <AssemblyVersion>2.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse</RepositoryUrl>
-    <Copyright>Muhammad Waseem - 2023</Copyright>
+    <Copyright>Muhammad Waseem - $(Year)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
