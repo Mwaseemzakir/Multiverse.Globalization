@@ -30,7 +30,10 @@
 
 	<PropertyGroup>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageIconUrl>https://raw.githubusercontent.com/mwaseemzakir/Multiverse/master/logo.png</PackageIconUrl>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="logo.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>
