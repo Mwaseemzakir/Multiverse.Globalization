@@ -1,9 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
-namespace Multiverse.Languages;
-
-public record Language
+namespace Multiverse.Languages
 {
+    public class Language
+    {
     #region Languages
     public static readonly Language Aar = new Language("aa", "aar", "Afar");
     public static readonly Language Abk = new Language("ab", "abk", "Abkhazian");
@@ -572,7 +575,7 @@ public record Language
     /// <summary>
     /// Gets the name of the language.
     /// </summary>
-    public string? Name { get; private set; }
+    public string Name { get; private set; }
 
     /// <summary>
     /// Private constructor to initialize a Language instance.
@@ -597,7 +600,7 @@ public record Language
     /// <returns>
     /// True if the code is not null or empty, normalized to lower-case, and exists in the alpha-2 lookup dictionary; otherwise, false.
     /// </returns>
-    public static bool IsValidAlpha2Code(string? code)
+    public static bool IsValidAlpha2Code(string code)
     {
         if(!string.IsNullOrEmpty(code))
         {
@@ -614,7 +617,7 @@ public record Language
     /// <returns>
     /// True if the code is not null or empty, normalized to lower-case, and exists in the alpha-3 lookup dictionary; otherwise, false.
     /// </returns>
-    public static bool IsValidAlpha3Code(string? code)
+    public static bool IsValidAlpha3Code(string code)
     {
         if(!string.IsNullOrEmpty(code))
         {
@@ -631,7 +634,7 @@ public record Language
     /// <returns>
     /// True if the code is valid as either an alpha-2 or alpha-3 code; otherwise, false.
     /// </returns>
-    public static bool IsValidCode(string? code)
+    public static bool IsValidCode(string code)
     {
         if(!string.IsNullOrEmpty(code))
         {
@@ -653,16 +656,18 @@ public record Language
     /// <returns>The Language instance associated with the provided alpha-2 code.</returns>
     /// <exception cref="ApplicationException">Thrown if the language is not found or if the code is null/empty.</exception>
     public static Language FromAlpha2Code(
-        string? code,
-        [CallerArgumentExpression("code")] string? paramName = null)
+        string code,
+        string paramName = null)
     {
         if(!string.IsNullOrEmpty(code))
         {
             code = code.ToLowerInvariant();
+
             if(Alpha2Codes.ContainsKey(code))
             {
                 return Alpha2Codes[code];
             }
+
             throw new ApplicationException($"Language with code '{code}' is not supported for: {paramName}");
         }
         throw new ApplicationException($"Language with empty code is not supported for: {paramName}");
@@ -676,12 +681,13 @@ public record Language
     /// <returns>The Language instance associated with the provided alpha-3 code.</returns>
     /// <exception cref="ApplicationException">Thrown if the language is not found or if the code is null/empty.</exception>
     public static Language FromAlpha3Code(
-        string? code,
-        [CallerArgumentExpression("code")] string? paramName = null)
+        string code,
+        string paramName = null)
     {
         if(!string.IsNullOrEmpty(code))
         {
             code = code.ToLowerInvariant();
+
             if(Alpha3Codes.ContainsKey(code))
             {
                 return Alpha3Codes[code];
@@ -703,7 +709,7 @@ public record Language
     /// When this method returns, contains the Language instance if found; otherwise, the 'None' instance.
     /// </param>
     /// <returns>True if a language with the specified alpha-2 code is found; otherwise, false.</returns>
-    public static bool TryGetLanguageByAlpha2Code(string? code, out Language language)
+    public static bool TryGetLanguageByAlpha2Code(string code, out Language language)
     {
         language = None;
         if(!string.IsNullOrEmpty(code))
@@ -722,7 +728,7 @@ public record Language
     /// When this method returns, contains the Language instance if found; otherwise, the 'None' instance.
     /// </param>
     /// <returns>True if a language with the specified alpha-3 code is found; otherwise, false.</returns>
-    public static bool TryGetLanguageByAlpha3Code(string? code, out Language language)
+    public static bool TryGetLanguageByAlpha3Code(string code, out Language language)
     {
         language = None;
         if(!string.IsNullOrEmpty(code))
@@ -787,7 +793,7 @@ public record Language
 
         if(input.Length == 2 && IsValidAlpha2Code(input))
         {
-            return FromAlpha2Code(input);
+            return FromAlpha2Code(input, nameof(input));
         }
         if(input.Length == 3 && IsValidAlpha3Code(input))
         {
@@ -812,7 +818,7 @@ public record Language
         var type = typeof(Language);
         var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
                          .Where(f => f.FieldType == typeof(Language))
-                         .Select(f => (Language)f.GetValue(default)!);
+                         .Select(f => (Language)f.GetValue(default));
         return fields.ToDictionary(f => f.Alpha2Code);
     }
 
@@ -828,9 +834,10 @@ public record Language
         var type = typeof(Language);
         var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
                          .Where(f => f.FieldType == typeof(Language))
-                         .Select(f => (Language)f.GetValue(default)!);
+                         .Select(f => (Language)f.GetValue(default));
         return fields.ToDictionary(f => f.Alpha3Code);
     }
 
     #endregion
+}
 }
