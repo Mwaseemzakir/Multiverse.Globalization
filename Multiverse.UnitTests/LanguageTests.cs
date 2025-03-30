@@ -16,5 +16,25 @@ namespace Multiverse.UnitTests
 
             Assert.Contains(Language.None, languages);
         }
+
+        [Fact]
+        public void IsValidAlpha2Code_Should_ReturnTrueForValidCode()
+        {
+            string pakAlpha2Code = Language.Urd.Alpha2Code;
+
+            bool isValid = Language.IsValidAlpha2Code(pakAlpha2Code);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void IsValidAlpha2Code_Should_IgnoreCaseSensitivity()
+        {
+            string pakAlpha2Code = Language.Urd.Alpha2Code.ToLower();
+
+            bool isValid = Language.IsValidAlpha2Code(pakAlpha2Code);
+
+            Assert.True(isValid);
+        }
     }
 }

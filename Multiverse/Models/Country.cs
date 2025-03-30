@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Multiverse.Models
 {
@@ -358,9 +357,7 @@ namespace Multiverse.Models
         {
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToUpperInvariant();
-
-                return Alpha2CodeMap.ContainsKey(code);
+                return Alpha2CodeMap.ContainsKey(code.ToUpperInvariant());
             }
             return false;
         }
@@ -376,9 +373,7 @@ namespace Multiverse.Models
         {
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToUpperInvariant();
-
-                return Alpha3CodeMap.ContainsKey(code);
+                return Alpha3CodeMap.ContainsKey(code.ToUpperInvariant());
             }
             return false;
         }
@@ -394,8 +389,10 @@ namespace Multiverse.Models
         {
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToUpperInvariant();
-                return IsValidAlpha2Code(code) || IsValidAlpha3Code(code);
+                code = code.Normalize();
+
+                return IsValidAlpha2Code(code) 
+                    || IsValidAlpha3Code(code);
             }
             return false;
         }
@@ -414,9 +411,7 @@ namespace Multiverse.Models
         {
             if(IsValidAlpha2Code(code))
             {
-                string upperCode = code.ToUpperInvariant();
-
-                return Alpha2CodeMap[upperCode];
+                return Alpha2CodeMap[code.ToUpperInvariant()];
             }
             throw new KeyNotFoundException($"Country with alpha-2 code '{code}' not found.");
         }
@@ -431,8 +426,7 @@ namespace Multiverse.Models
         {
             if(IsValidAlpha3Code(code))
             {
-                string upperCode = code.ToUpperInvariant();
-                return Alpha3CodeMap[upperCode];
+                return Alpha3CodeMap[code.ToUpperInvariant()];
             }
             throw new KeyNotFoundException($"Country with alpha-3 code '{code}' not found.");
         }
@@ -467,7 +461,9 @@ namespace Multiverse.Models
             country = None;
 
             if(IsValidAlpha2Code(code))
-                return Alpha2CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
+                return Alpha2CodeMap.TryGetValue(
+                    code.ToUpperInvariant(), 
+                    out country);
             return false;
         }
 
@@ -484,7 +480,9 @@ namespace Multiverse.Models
             country = None;
 
             if(IsValidAlpha3Code(code))
-                return Alpha3CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
+                return Alpha3CodeMap.TryGetValue(
+                    code.ToUpperInvariant(), 
+                    out country);
             return false;
         }
 
@@ -509,72 +507,47 @@ namespace Multiverse.Models
 
         #region Listing and Parsing Methods
 
-        /// <summary>
-        /// Retrieves all defined Country instances.
-        /// </summary>
-        /// <returns>An enumerable collection of all available Country instances.</returns>
         public static IEnumerable<Country> GetAllCountries()
         {
             return ReflectionHelper.GetStaticFieldsOfType<Country>();
         }
 
-        /// <summary>
-        /// Gets the total number of defined countries.
-        /// </summary>
+
         public static int CountryCount => Alpha2CodeMap.Count;
 
-        /// <summary>
-        /// Retrieves all available alpha-2 country codes.
-        /// </summary>
-        /// <returns>An enumerable collection of 2-letter country codes.</returns>
+
         public static IEnumerable<string> GetAllAlpha2Codes()
         {
             return Alpha2CodeMap.Keys;
         }
 
-        /// <summary>
-        /// Retrieves all available alpha-3 country codes.
-        /// </summary>
-        /// <returns>An enumerable collection of 3-letter country codes.</returns>
+  
         public static IEnumerable<string> GetAllAlpha3Codes()
         {
             return Alpha3CodeMap.Keys;
         }
 
-        /// <summary>
-        /// Retrieves all available numeric country codes.
-        /// </summary>
-        /// <returns>An enumerable collection of numeric country codes as strings.</returns>
         public static IEnumerable<string> GetAllNumericCodes()
         {
             return NumericCodeMap.Keys;
         }
 
-        /// <summary>
-        /// Parses an input string to retrieve a corresponding Country instance.
-        /// The input can be an alpha-2 code, alpha-3 code, or numeric code.
-        /// </summary>
-        /// <param name="input">A country identifier in string format.</param>
-        /// <returns>
-        /// The Country instance associated with the input code.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// Thrown if the input is null, empty, or does not correspond to any valid country code.
-        /// </exception>
+  
         public static Country ParseCountry(string input)
         {
             if(string.IsNullOrEmpty(input))
                 throw new ArgumentException("Input cannot be null or empty.", nameof(input));
 
             input = input.ToUpperInvariant();
+
             if(input.Length == 2 && IsValidAlpha2Code(input))
                 return GetCountryByAlpha2Code(input);
+
             if(input.Length == 3)
             {
-                // Attempt alpha-3 lookup first.
                 if(IsValidAlpha3Code(input))
                     return GetCountryByAlpha3Code(input);
-                // If the 3-digit code is numeric, try numeric lookup.
+
                 if(input.All(char.IsDigit))
                     return GetCountryByNumericCode(input);
             }
@@ -583,63 +556,26 @@ namespace Multiverse.Models
 
         #endregion
 
-        #region Internal Dictionary Creation
-
-        /// <summary>
-        /// Creates a read-only dictionary that maps alpha-2 country codes to Country instances.
-        /// Uses reflection to retrieve all static Country fields.
-        /// </summary>
-        /// <returns>
-        /// An IReadOnlyDictionary where the key is the alpha-2 code and the value is the Country instance.
-        /// </returns>
         private static IReadOnlyDictionary<string, Country> CreateAlpha2Codes()
         {
-            Type? type = typeof(Country);
-
-            var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
-                .Where(f => f.FieldType == typeof(Country))
-                .Select(f => (Country)f.GetValue(default)!);
+            IEnumerable<Country>? fields = ReflectionHelper.GetStaticFieldsOfType<Country>();
 
             return fields.ToDictionary(f => f.Alpha2Code);
 
         }
 
-        /// <summary>
-        /// Creates a read-only dictionary that maps alpha-3 country codes to Country instances.
-        /// Uses reflection to retrieve all static Country fields.
-        /// </summary>
-        /// <returns>
-        /// An IReadOnlyDictionary where the key is the alpha-3 code and the value is the Country instance.
-        /// </returns>
         private static IReadOnlyDictionary<string, Country> CreateAlpha3Codes()
         {
-            Type? type = typeof(Country);
-
-            var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
-                .Where(f => f.FieldType == typeof(Country))
-                .Select(f => (Country)f.GetValue(default)!);
+            IEnumerable<Country>? fields = ReflectionHelper.GetStaticFieldsOfType<Country>();
 
             return fields.ToDictionary(f => f.Alpha3Code);
         }
 
-        /// <summary>
-        /// Creates a read-only dictionary that maps numeric country codes to Country instances.
-        /// Uses reflection to retrieve all static Country fields.
-        /// </summary>
-        /// <returns>
-        /// An IReadOnlyDictionary where the key is the numeric code (as a string) and the value is the Country instance.
-        /// </returns>
         private static IReadOnlyDictionary<string, Country> CreateNumericCodes()
         {
-            Type? type = typeof(Country);
-
-            var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Static)
-                .Where(f => f.FieldType == typeof(Country))
-                .Select(f => (Country)f.GetValue(default)!);
+            IEnumerable<Country>? fields = ReflectionHelper.GetStaticFieldsOfType<Country>();
 
             return fields.ToDictionary(f => f.NumericCode);
         }
-
-        #endregion
     }
 }

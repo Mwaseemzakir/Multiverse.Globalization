@@ -16,5 +16,25 @@ namespace Multiverse.UnitTests
 
             Assert.Contains(Country.None, countries);
         }
+
+        [Fact]
+        public void IsValidAlpha2Code_Should_ReturnTrueForValidCode()
+        {
+            string pakAlpha2Code = Country.Pakistan.Alpha2Code;
+
+            bool isValid = Country.IsValidAlpha2Code(pakAlpha2Code);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void IsValidAlpha2Code_Should_IgnoreCaseSensitivity()
+        {
+            string pakAlpha2Code = Country.Pakistan.Alpha2Code.ToLower();
+
+            bool isValid = Country.IsValidAlpha2Code(pakAlpha2Code);
+
+            Assert.True(isValid);
+        }
     }
 }

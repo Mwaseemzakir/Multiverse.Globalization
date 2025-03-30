@@ -533,8 +533,8 @@ namespace Multiverse.Languages
         private Language(string alpha2Code, string alpha3Code, string name)
         {
             Name = name;
-            Alpha2Code = alpha2Code.Normalize();
-            Alpha3Code = alpha3Code.Normalize();
+            Alpha2Code = alpha2Code;
+            Alpha3Code = alpha3Code;
         }
 
         #region Validation Methods
@@ -542,8 +542,7 @@ namespace Multiverse.Languages
         {
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToLowerInvariant();
-                return Alpha2Codes.ContainsKey(code);
+                return Alpha2Codes.ContainsKey(code.ToUpperInvariant());
             }
             return false;
         }
@@ -562,8 +561,8 @@ namespace Multiverse.Languages
         {
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToLowerInvariant();
-                return Alpha2Codes.ContainsKey(code) || Alpha3Codes.ContainsKey(code);
+                return Alpha2Codes.ContainsKey(code.ToUpperInvariant()) 
+                    || Alpha3Codes.ContainsKey(code.ToUpperInvariant());
             }
             return false;
         }
@@ -574,8 +573,9 @@ namespace Multiverse.Languages
         {
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToLowerInvariant();
-                if(Alpha2Codes.TryGetValue(code, out var language))
+                if(Alpha2Codes.TryGetValue(
+                    code.ToUpperInvariant(), 
+                    out var language))
                     return language;
                 throw new ApplicationException($"Language with code '{code}' is not supported for: {paramName}");
             }
@@ -586,8 +586,9 @@ namespace Multiverse.Languages
         {
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToLowerInvariant();
-                if(Alpha3Codes.TryGetValue(code, out var language))
+                if(Alpha3Codes.TryGetValue(
+                    code.ToUpperInvariant(), 
+                    out var language))
                     return language;
                 throw new ApplicationException($"Language with code '{code}' is not supported for: {paramName}");
             }
@@ -601,8 +602,7 @@ namespace Multiverse.Languages
             language = None;
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToLowerInvariant();
-                return Alpha2Codes.TryGetValue(code, out language);
+                return Alpha2Codes.TryGetValue(code.ToUpperInvariant(), out language);
             }
             return false;
         }
@@ -612,8 +612,7 @@ namespace Multiverse.Languages
             language = None;
             if(!string.IsNullOrEmpty(code))
             {
-                code = code.ToLowerInvariant();
-                return Alpha3Codes.TryGetValue(code, out language);
+                return Alpha3Codes.TryGetValue(code.ToUpperInvariant(), out language);
             }
             return false;
         }
@@ -635,8 +634,8 @@ namespace Multiverse.Languages
             if(string.IsNullOrEmpty(input))
                 throw new ArgumentException("Input cannot be null or empty.", nameof(input));
 
-            input = input.ToLowerInvariant();
-            if(TryGetLanguageByAlpha2Code(input, out var lang) || TryGetLanguageByAlpha3Code(input, out lang))
+            if(TryGetLanguageByAlpha2Code(input.ToUpperInvariant(), out var lang) 
+                || TryGetLanguageByAlpha3Code(input, out lang))
                 return lang;
 
             throw new ArgumentException($"Language with code '{input}' not found.", nameof(input));
@@ -648,14 +647,14 @@ namespace Multiverse.Languages
         {
             var fields = ReflectionHelper.GetStaticFieldsOfType<Language>();
             return fields.Where(l => !string.IsNullOrEmpty(l.Alpha2Code))
-                         .ToDictionary(l => l.Alpha2Code.ToLowerInvariant());
+                         .ToDictionary(l => l.Alpha2Code.ToUpperInvariant());
         }
 
         private static IReadOnlyDictionary<string, Language> CreateAlpha3Codes()
         {
             var fields = ReflectionHelper.GetStaticFieldsOfType<Language>();
             return fields.Where(l => !string.IsNullOrEmpty(l.Alpha3Code))
-                         .ToDictionary(l => l.Alpha3Code.ToLowerInvariant());
+                         .ToDictionary(l => l.Alpha3Code.ToUpperInvariant());
         }
         #endregion
     }

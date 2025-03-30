@@ -104,14 +104,7 @@ namespace Multiverse.Models
         public static readonly IReadOnlyDictionary<string, Currency> CodeCurrencies = CreateCodeCurrencies();
 
         public static readonly IReadOnlyDictionary<int, Currency> NumberCurrencies = CreateNumberCurrencies();
-        
-        /// <summary>
-        /// Checks whether the provided numeric code corresponds to a valid currency.
-        /// </summary>
-        /// <param name="number">The numeric code of the currency.</param>
-        /// <returns>
-        /// True if the numeric code is greater than zero and exists in the lookup dictionary; otherwise, false.
-        /// </returns>
+
         public static bool ValidNumberCode(int number)
         {
             if(number > 0)
@@ -119,50 +112,24 @@ namespace Multiverse.Models
             return false;
         }
 
-        /// <summary>
-        /// Checks whether the provided ISO code (3-letter code) corresponds to a valid currency.
-        /// </summary>
-        /// <param name="code">The ISO code of the currency.</param>
-        /// <returns>
-        /// True if the ISO code is non-null, has exactly 3 characters, and exists in the lookup dictionary; otherwise, false.
-        /// </returns>
         public static bool ValidIsoCode(string code)
         {
             if(!string.IsNullOrWhiteSpace(code) && code.Length == 3)
             {
-                // Convert to uppercase for consistency.
-                string upperVariant = code.ToUpperInvariant();
-
-                if(code != upperVariant)
-                    code = upperVariant;
-
-                return CodeCurrencies.ContainsKey(code);
+                return CodeCurrencies.ContainsKey(code.ToUpperInvariant());
             }
             return false;
         }
 
-        /// <summary>
-        /// Retrieves the currency instance corresponding to the specified ISO code.
-        /// </summary>
-        /// <param name="code">The 3-letter ISO code of the currency.</param>
-        /// <returns>The Currency instance associated with the provided ISO code.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown if the ISO code is not found.</exception>
         public static Currency GetCurrencyByIsoCode(string code)
         {
             if(ValidIsoCode(code))
             {
-                string upperCode = code.ToUpperInvariant();
-                return CodeCurrencies[upperCode];
+                return CodeCurrencies[code.ToUpperInvariant()];
             }
             throw new KeyNotFoundException($"Currency with ISO code '{code}' not found.");
         }
 
-        /// <summary>
-        /// Retrieves the currency instance corresponding to the specified numeric code.
-        /// </summary>
-        /// <param name="number">The numeric code of the currency.</param>
-        /// <returns>The Currency instance associated with the provided numeric code.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown if the numeric code is not found.</exception>
         public static Currency GetCurrencyByNumber(int number)
         {
             if(ValidNumberCode(number))
@@ -170,39 +137,19 @@ namespace Multiverse.Models
             throw new KeyNotFoundException($"Currency with number code '{number}' not found.");
         }
 
-        /// <summary>
-        /// Attempts to retrieve the currency instance corresponding to the specified ISO code.
-        /// </summary>
-        /// <param name="code">The 3-letter ISO code of the currency.</param>
-        /// <param name="currency">
-        /// When this method returns, contains the Currency instance associated with the specified ISO code if it is found; otherwise, null.
-        /// </param>
-        /// <returns>
-        /// True if a currency with the specified ISO code is found; otherwise, false.
-        /// </returns>
         public static bool TryGetCurrencyByIsoCode(string code, out Currency currency)
         {
             currency = None;
 
             if(ValidIsoCode(code))
             {
-                string upperCode = code.ToUpperInvariant();
-
-                return CodeCurrencies.TryGetValue(upperCode, out currency);
+                return CodeCurrencies.TryGetValue(
+                    code.ToUpperInvariant(),
+                    out currency);
             }
             return false;
         }
 
-        /// <summary>
-        /// Attempts to retrieve the currency instance corresponding to the specified numeric code.
-        /// </summary>
-        /// <param name="number">The numeric code of the currency.</param>
-        /// <param name="currency">
-        /// When this method returns, contains the Currency instance associated with the specified numeric code if it is found; otherwise, null.
-        /// </param>
-        /// <returns>
-        /// True if a currency with the specified numeric code is found; otherwise, false.
-        /// </returns>
         public static bool TryGetCurrencyByNumber(int number, out Currency currency)
         {
             currency = None;
@@ -212,55 +159,23 @@ namespace Multiverse.Models
             return false;
         }
 
-        /// <summary>
-        /// Retrieves all defined currency instances.
-        /// </summary>
-        /// <returns>
-        /// An enumerable collection of all available Currency instances.
-        /// </returns>
         public static IEnumerable<Currency> GetAllCurrencies()
         {
             return ReflectionHelper.GetStaticFieldsOfType<Currency>();
         }
 
-        /// <summary>
-        /// Gets the total number of defined currencies.
-        /// </summary>
         public static int CurrencyCount => CodeCurrencies.Count;
 
-        /// <summary>
-        /// Retrieves all available ISO currency codes.
-        /// </summary>
-        /// <returns>
-        /// An enumerable collection of 3-letter ISO currency codes.
-        /// </returns>
         public static IEnumerable<string> GetAllIsoCodes()
         {
             return CodeCurrencies.Keys;
         }
 
-        /// <summary>
-        /// Retrieves all available numeric currency codes.
-        /// </summary>
-        /// <returns>
-        /// An enumerable collection of numeric currency codes.
-        /// </returns>
         public static IEnumerable<int> GetAllNumberCodes()
         {
             return NumberCurrencies.Keys;
         }
 
-        /// <summary>
-        /// Parses an input object to retrieve a corresponding Currency instance.
-        /// The input can be either a 3-letter ISO code (string) or a numeric code (int).
-        /// </summary>
-        /// <param name="input">A currency identifier, either as a string (ISO code) or int (numeric code).</param>
-        /// <returns>
-        /// The Currency instance associated with the input.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// Thrown if the input is neither a valid ISO code nor a numeric code.
-        /// </exception>
         public static Currency ParseCurrency(object input)
         {
             if(input is int number)
@@ -270,13 +185,6 @@ namespace Multiverse.Models
             throw new ArgumentException("Input must be a valid 3-letter ISO code or numeric currency code.");
         }
 
-        /// <summary>
-        /// Creates a read-only dictionary that maps ISO currency codes to Currency instances.
-        /// This method uses reflection to retrieve all static Currency fields.
-        /// </summary>
-        /// <returns>
-        /// An IReadOnlyDictionary where the key is the ISO code and the value is the Currency instance.
-        /// </returns>
         private static IReadOnlyDictionary<string, Currency> CreateCodeCurrencies()
         {
             IEnumerable<Currency>? fields = ReflectionHelper.GetStaticFieldsOfType<Currency>();
@@ -284,13 +192,6 @@ namespace Multiverse.Models
             return fields.ToDictionary(f => f.Code);
         }
 
-        /// <summary>
-        /// Creates a read-only dictionary that maps numeric currency codes to Currency instances.
-        /// This method uses reflection to retrieve all static Currency fields.
-        /// </summary>
-        /// <returns>
-        /// An IReadOnlyDictionary where the key is the numeric code and the value is the Currency instance.
-        /// </returns>
         private static IReadOnlyDictionary<int, Currency> CreateNumberCurrencies()
         {
             IEnumerable<Currency>? fields = ReflectionHelper.GetStaticFieldsOfType<Currency>();
