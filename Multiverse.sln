@@ -7,13 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multiverse", "Multiverse\Mu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{325BA33A-1D25-40DB-8D76-936B2E725C82}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{16F4E612-9831-4F9F-A9C8-C75089220F5A}"
-	ProjectSection(SolutionItems) = preProject
-		nuget-publish.yml = nuget-publish.yml
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,7 +23,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CB8E62C3-F4F7-4ACA-9CB8-B975FA08A84E} = {325BA33A-1D25-40DB-8D76-936B2E725C82}
-		{16F4E612-9831-4F9F-A9C8-C75089220F5A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1E81738-7CA6-4A8A-A2BC-9834895977F9}
