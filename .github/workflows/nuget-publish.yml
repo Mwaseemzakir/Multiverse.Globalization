@@ -6,6 +6,11 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
 
+    env:
+      PROJECT_NAME: "Multiverse"
+      PACKAGE_SOURCE: "https://api.nuget.org/v3/index.json"
+      PACKAGE_VERSION : "1.0.1"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,7 +27,11 @@ jobs:
         run: |
           VERSION="1.0.$(date +%Y%m%d%H%M)"  # Generates a timestamped version
           echo "New Version: $VERSION"
-          sed -i "s|<Version>.*</Version>|<Version>$VERSION</Version>|" **/*.csproj
+          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Update Version in .csproj
+        run: |
+          sed -i "s|<Version>.*</Version>|<Version>${{ env.PACKAGE_VERSION }}</Version>|" **/*.csproj
 
       - name: Build project
         run: dotnet build --configuration Release --no-restore
@@ -31,7 +40,7 @@ jobs:
         run: dotnet test --configuration Release --no-build --verbosity normal
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output nupkgs
+        run: dotnet pack --configuration Release --no-build --output nupkgs --property:PackageVersion=${{ env.PACKAGE_VERSION }}
 
       - name: Push NuGet Package
-        run: dotnet nuget push "nupkgs/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+        run: dotnet nuget push "nupkgs/${{ env.PROJECT_NAME }}.${{ env.PACKAGE_VERSION }}.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "${{ env.PACKAGE_SOURCE }}" --skip-duplicate
