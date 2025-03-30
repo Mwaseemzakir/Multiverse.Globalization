@@ -18,6 +18,12 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      - name: Auto Increment Version
+        run: |
+          VERSION="1.0.$(date +%Y%m%d%H%M)"  # Generates a timestamped version
+          echo "New Version: $VERSION"
+          sed -i "s|<Version>.*</Version>|<Version>$VERSION</Version>|" **/*.csproj
+
       - name: Build project
         run: dotnet build --configuration Release --no-restore
 
