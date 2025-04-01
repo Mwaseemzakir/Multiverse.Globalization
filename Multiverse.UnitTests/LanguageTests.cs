@@ -9,7 +9,7 @@ public class LanguageTests
     public void GetAllLanguages_Should_ReturnAllLanguages()
     {
         List<Language>? languages = Language
-            .GetAllLanguages()
+            .GetAll()
             .ToList();
 
         Assert.NotEmpty(languages);

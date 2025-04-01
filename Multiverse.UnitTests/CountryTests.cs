@@ -9,7 +9,7 @@ public class CountryTests
     public void GetAllLanguages_Should_ReturnAllLanguages()
     {
         List<Country>? countries = Country
-            .GetAllCountries()
+            .GetAll()
             .ToList();
 
         Assert.NotNull(countries);

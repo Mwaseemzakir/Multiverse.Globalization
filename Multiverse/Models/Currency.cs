@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Multiverse.Models;
 
-public class Currency
+public sealed class Currency
 {
     public static int Count => CodeCurrencies.Count;
 
@@ -129,7 +129,7 @@ public class Currency
         return CodeCurrencies.ContainsKey(code.ToUpperInvariant());
 
     }
-    public static Currency? GetCurrencyByIsoCodeOrDefault(string code)
+    public static Currency? GetByIsoCodeOrDefault(string code)
     {
         if(IsValidIsoCode(code))
         {
@@ -138,7 +138,7 @@ public class Currency
 
         return default;
     }
-    public static Currency? GetCurrencyByNumberOrDefault(int number)
+    public static Currency? GetByNumberOrDefault(int number)
     {
         if(IsValidNumberCode(number))
         {
@@ -147,7 +147,7 @@ public class Currency
 
         return default;
     }
-    public static bool TryGetCurrencyByIsoCodeOrDefault(
+    public static bool TryGetyByIsoCodeOrDefault(
         string code, 
         out Currency? currency)
     {
@@ -160,7 +160,7 @@ public class Currency
 
         return CodeCurrencies.TryGetValue(code.ToUpperInvariant(), out currency);
     }
-    public static bool TryGetCurrencyByNumberOrDefault(
+    public static bool TryGetByNumberOrDefault(
         int number, 
         out Currency? currency)
     {
@@ -175,7 +175,7 @@ public class Currency
 
     }
 
-    public static IEnumerable<Currency> GetAllCurrencies() =>
+    public static IEnumerable<Currency> GetAll() =>
         ReflectionHelper.GetStaticFieldsOfType<Currency>();
     private static IReadOnlyDictionary<string, Currency> CreateCodeCurrencies()
     {

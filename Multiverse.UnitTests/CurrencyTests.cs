@@ -9,7 +9,7 @@ public class CurrencyTests
     public void GetAllCurrencies_Should_ReturnAllCurrencies()
     {
         List<Currency>? currencies = Currency
-            .GetAllCurrencies()
+            .GetAll()
             .ToList();
 
         Assert.NotNull(currencies);

@@ -385,7 +385,7 @@ public sealed class Country
             || IsValidAlpha3Code(code)
             || IsValidNumericCode(code);
     }
-    public static Country? GetCountryByAlpha2CodeOrDefault(string code)
+    public static Country? GetByAlpha2CodeOrDefault(string code)
     {
         if(
             string.IsNullOrWhiteSpace(code)
@@ -396,7 +396,7 @@ public sealed class Country
 
         return Alpha2CodeMap[code.ToUpperInvariant()];
     }
-    public static Country? GetCountryByAlpha3CodeOrDefault(string code)
+    public static Country? GetByAlpha3CodeOrDefault(string code)
     {
         if(
            string.IsNullOrWhiteSpace(code)
@@ -407,7 +407,7 @@ public sealed class Country
 
         return Alpha3CodeMap[code.ToUpperInvariant()];
     }
-    public static Country? GetCountryByNumericCodeOrDefault(string code)
+    public static Country? GetByNumericCodeOrDefault(string code)
     {
         if(
            string.IsNullOrWhiteSpace(code)
@@ -418,7 +418,7 @@ public sealed class Country
 
         return NumericCodeMap[code.ToUpperInvariant()];
     }
-    public static bool TryGetCountryByAlpha2Code(string code, out Country? country)
+    public static bool TryGetByAlpha2Code(string code, out Country? country)
     {
         if(!IsValidAlpha2Code(code))
         {
@@ -429,7 +429,7 @@ public sealed class Country
 
         return Alpha2CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
     }
-    public static bool TryGetCountryByAlpha3Code(string code, out Country? country)
+    public static bool TryGetByAlpha3Code(string code, out Country? country)
     {
         if(!IsValidAlpha3Code(code))
         {
@@ -440,7 +440,7 @@ public sealed class Country
 
         return Alpha3CodeMap.TryGetValue(code.ToUpperInvariant(), out country);
     }
-    public static bool TryGetCountryByNumericCode(string numericCode, out Country? country)
+    public static bool TryGetByNumericCode(string numericCode, out Country? country)
     {
         if(!IsValidNumericCode(numericCode))
         {
@@ -451,7 +451,7 @@ public sealed class Country
 
         return NumericCodeMap.TryGetValue(numericCode.ToUpperInvariant(), out country);
     }
-    public static IEnumerable<Country> GetAllCountries() => 
+    public static IEnumerable<Country> GetAll() => 
         ReflectionHelper.GetStaticFieldsOfType<Country>();
     public static Country? ParseCountry(string code)
     {

@@ -625,14 +625,12 @@ public sealed class Language
 
         return Alpha3Codes[code.ToUpperInvariant()];
     }
-    public static IEnumerable<Language> GetAllLanguages()
-    {
-        return ReflectionHelper.GetStaticFieldsOfType<Language>();
-    }
+    public static IEnumerable<Language> GetAll() => 
+        ReflectionHelper.GetStaticFieldsOfType<Language>();
+    public static IEnumerable<string> GetAlpha2Codes() => Alpha2Codes.Keys;
+    public static IEnumerable<string> GetAlpha3Codes() => Alpha3Codes.Keys;
 
-    public static IEnumerable<string> GetAllAlpha2Codes() => Alpha2Codes.Keys;
-    public static IEnumerable<string> GetAllAlpha3Codes() => Alpha3Codes.Keys;
-    public static Language? ParseLanguage(string code)
+    public static Language? Parse(string code)
     {
         if(string.IsNullOrWhiteSpace(code) || !IsValidCode(code))
         {

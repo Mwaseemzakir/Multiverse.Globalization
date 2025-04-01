@@ -16,11 +16,22 @@ This NuGet package provides comprehensive language codes, country codes, and cur
 
 ### How to use
 
-Get all counries/languages/currencies :
+Get all counries:
 ```
-Country.GetAllCountries();
+IEnumerable<Country> countries = Country.GetAll();
+```
 
-Language.GetAllLanguages();
+To check is it valid country code :
 
-Currency.GetAllCurrencies();
+```
+bool isValidAlpha2Code = Country.IsValidAlpha2Code(code);
+
+bool isValidAlpha3Code = Country.IsValidAlpha3Code(code);
+
+bool isValidNumericCode =Country.IsValidNumericCode(code);
+```
+
+Get all languages:
+```
+IEnumerable<Language> languages = Language.GetAll();
 ```
