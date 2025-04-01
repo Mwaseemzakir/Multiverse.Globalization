@@ -1,4 +1,4 @@
-﻿using Multiverse.Models;
+﻿using Multiverse.Countries;
 using Xunit;
 
 namespace Multiverse.UnitTests;
@@ -13,25 +13,25 @@ public class CountryTests
 
         Assert.NotNull(countries);
 
-        Assert.Contains(CountryHelpers.None, countries);
+        Assert.Contains(CountryHelper.None, countries);
     }
 
     [Fact]
-    public void IsValidAlpha2Code_Should_ReturnTrueForValidCode()
+    public void IsValid_Should_ReturnTrueForValidCode()
     {
-        string pakAlpha2Code = CountryHelpers.Pakistan.Alpha2Code;
+        string pakAlpha2Code = CountryHelper.Pakistan.Alpha2Code;
 
-        bool isValid = Country.IsValidAlpha2Code(pakAlpha2Code);
+        bool isValid = Country.IsValid(pakAlpha2Code);
 
         Assert.True(isValid);
     }
 
     [Fact]
-    public void IsValidAlpha2Code_Should_IgnoreCaseSensitivity()
+    public void IsValid_Should_IgnoreCaseSensitivity()
     {
-        string pakAlpha2Code = CountryHelpers.Pakistan.Alpha2Code.ToLower();
+        string pakAlpha2Code = CountryHelper.Pakistan.Alpha2Code.ToLower();
 
-        bool isValid = Country.IsValidAlpha2Code(pakAlpha2Code);
+        bool isValid = Country.IsValid(pakAlpha2Code);
 
         Assert.True(isValid);
     }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	<TargetFrameworks>net8.0;netstandard2.0;net462</TargetFrameworks>
-	 <LangVersion>latest</LangVersion>
+	<TargetFrameworks>net8.0;net6.0;netstandard2.0;net462</TargetFrameworks>
+  <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <Title>Multiverse</Title>
     <Authors>Muhammad Waseem</Authors>
@@ -11,6 +11,7 @@
     <Copyright>Muhammad Waseem - $(Year)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	<PackageTags>internationalization; localization; language codes; country codes; currency codes; .NET; globalization</PackageTags>
   </PropertyGroup>
 	
   <ItemGroup>

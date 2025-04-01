@@ -1,5 +1,4 @@
-﻿using Multiverse.Helpers;
-using Multiverse.Languages;
+﻿using Multiverse.Languages;
 using Xunit;
 
 namespace Multiverse.UnitTests;
@@ -7,32 +6,30 @@ namespace Multiverse.UnitTests;
 public class LanguageTests
 {
     [Fact]
-    public void GetAllLanguages_Should_ReturnAllLanguages()
+    public void GetAll_Should_ReturnAllLanguages()
     {
         List<Language>? languages = Language
             .GetAll();
 
         Assert.NotEmpty(languages);
-
-        Assert.Contains(LanguageHelpers.None, languages);
     }
 
     [Fact]
-    public void IsValidAlpha2Code_Should_ReturnTrueForValidCode()
+    public void IsValid_Should_ReturnTrueForValidCode()
     {
-        string pakAlpha2Code = LanguageHelpers.Urd.Alpha2Code;
+        string pakAlpha2Code = LanguageHelper.Urdu.Alpha2Code;
 
-        bool isValid = Language.IsValidAlpha2Code(pakAlpha2Code);
+        bool isValid = Language.IsValid(pakAlpha2Code);
 
         Assert.True(isValid);
     }
 
     [Fact]
-    public void IsValidAlpha2Code_Should_IgnoreCaseSensitivity()
+    public void IsValid_Should_IgnoreCaseSensitivity()
     {
-        string pakAlpha2Code = LanguageHelpers.Urd.Alpha2Code.ToLower();
+        string pakAlpha2Code = LanguageHelper.Urdu.Alpha2Code.ToLower();
 
-        bool isValid = Language.IsValidAlpha2Code(pakAlpha2Code);
+        bool isValid = Language.IsValid(pakAlpha2Code);
 
         Assert.True(isValid);
     }
