@@ -18,7 +18,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Multiverse\Multiverse.csproj" />
+    <ProjectReference Include="..\Multiverse\Multiverse.Globalization.csproj" />
   </ItemGroup>
 
 </Project>

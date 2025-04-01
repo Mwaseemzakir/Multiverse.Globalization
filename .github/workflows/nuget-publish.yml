@@ -1,4 +1,4 @@
-name: Publish NuGet Package (Preview)
+name: Publish NuGet Package
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PROJECT_NAME: "Multiverse"
+      PROJECT_NAME: "Multiverse.Globalization"
       PACKAGE_SOURCE: "https://api.nuget.org/v3/index.json"
       PACKAGE_VERSION: "2.0.0-preview.${{ github.run_number }}"
 

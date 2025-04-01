@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Multiverse.Countries;
+namespace Multiverse.Globalization.Countries;
 
 public static class CountryHelper
 {

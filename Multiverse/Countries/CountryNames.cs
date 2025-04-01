@@ -1,4 +1,4 @@
-﻿namespace Multiverse.Countries;
+﻿namespace Multiverse.Globalization.Countries;
 class CountryNames
 {
     public const string Afghanistan = "Afghanistan";

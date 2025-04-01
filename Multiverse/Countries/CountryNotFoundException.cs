@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Multiverse.Countries;
+namespace Multiverse.Globalization.Countries;
 
 [Serializable]
 public class CountryNotFoundException : Exception

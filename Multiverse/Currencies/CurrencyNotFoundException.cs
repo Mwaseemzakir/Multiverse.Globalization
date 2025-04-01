@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Multiverse.Currencies;
+namespace Multiverse.Globalization.Currencies;
 
 [Serializable]
 public class CurrencyNotFoundException : Exception

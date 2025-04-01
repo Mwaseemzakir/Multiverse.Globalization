@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using static Multiverse.Languages.LanguageHelper;
+using static Multiverse.Globalization.Languages.LanguageHelper;
 
-namespace Multiverse.Languages;
+namespace Multiverse.Globalization.Languages;
 
 public sealed class Language
 {
@@ -27,27 +27,19 @@ public sealed class Language
     /// </summary>
     public static Language? GetLanguageOrDefault(string identifier)
     {
-        if (string.IsNullOrWhiteSpace(identifier))
-        {
+        if(string.IsNullOrWhiteSpace(identifier))
             return default;
-        }
 
         identifier = identifier.ToUpperInvariant();
 
-        if (Alpha2CodeMap.ContainsKey(identifier))
-        {
+        if(Alpha2CodeMap.ContainsKey(identifier))
             return Alpha2CodeMap[identifier];
-        }
 
-        if (Alpha3CodeMap.ContainsKey(identifier))
-        {
+        if(Alpha3CodeMap.ContainsKey(identifier))
             return Alpha3CodeMap[identifier];
-        }
 
-        if (NameMap.ContainsKey(identifier))
-        {
+        if(NameMap.ContainsKey(identifier))
             return NameMap[identifier];
-        }
 
         return default;
     }
@@ -58,15 +50,11 @@ public sealed class Language
     /// </summary>
     public static Language GetLanguage(string identifier)
     {
-        if (string.IsNullOrWhiteSpace(identifier))
-        {
+        if(string.IsNullOrWhiteSpace(identifier))
             throw new ArgumentNullException("Must provide the identifier value");
-        }
 
-        if (!IsValid(identifier))
-        {
+        if(!IsValid(identifier))
             throw new LanguageNotFoundException($"Language with identifier '{identifier}' was not found.");
-        }
 
         identifier = identifier.ToUpperInvariant();
 
@@ -88,10 +76,11 @@ public sealed class Language
         return !string.IsNullOrWhiteSpace(identifier) && (
             Alpha2CodeMap.ContainsKey(identifier.ToUpperInvariant()) ||
             Alpha3CodeMap.ContainsKey(identifier.ToUpperInvariant()) ||
-            NameMap.ContainsKey(identifier.ToUpperInvariant()));
+            NameMap.ContainsKey(identifier.ToUpperInvariant()) );
     }
 
     /// <summary>
     /// Retrieves a list of all available Language objects.
     /// </summary>
-    public static List<Language> GetAll() => GetAll();
+    public static List<Language> GetAll() => LanguageHelper.GetAll();
+}

@@ -1,7 +1,7 @@
-﻿using Multiverse.Currencies;
+﻿using Multiverse.Globalization.Currencies;
 using Xunit;
 
-namespace Multiverse.UnitTests;
+namespace Multiverse.Globalization.UnitTests;
 
 public class CurrencyTests
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Multiverse.Currencies;
+namespace Multiverse.Globalization.Currencies;
 
 internal static class CurrencyHelper
 {

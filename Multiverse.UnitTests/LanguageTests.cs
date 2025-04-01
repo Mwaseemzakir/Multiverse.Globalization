@@ -1,7 +1,7 @@
-﻿using Multiverse.Languages;
+﻿using Multiverse.Globalization.Languages;
 using Xunit;
 
-namespace Multiverse.UnitTests;
+namespace Multiverse.Globalization.UnitTests;
 
 public class LanguageTests
 {

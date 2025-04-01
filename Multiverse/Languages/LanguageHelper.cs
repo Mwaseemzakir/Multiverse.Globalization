@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Multiverse.Languages;
+namespace Multiverse.Globalization.Languages;
 
 internal static class LanguageHelper
 {

@@ -1,7 +1,7 @@
-﻿using Multiverse.Countries;
+﻿using Multiverse.Globalization.Countries;
 using Xunit;
 
-namespace Multiverse.UnitTests;
+namespace Multiverse.Globalization.UnitTests;
 
 public class CountryTests
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Multiverse.Countries.CountryHelper;
+using static Multiverse.Globalization.Countries.CountryHelper;
 
-namespace Multiverse.Countries;
+namespace Multiverse.Globalization.Countries;
 
 public sealed class Country
 {
@@ -90,5 +90,5 @@ public sealed class Country
     /// <summary>
     /// Retrieves a list of all available Country objects.
     /// </summary>
-    public static List<Country> GetAll() => GetAll();
+    public static List<Country> GetAll() => CountryHelper.GetAll();
 }

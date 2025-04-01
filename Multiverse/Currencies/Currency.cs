@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Multiverse.Currencies.CurrencyHelper;
+using static Multiverse.Globalization.Currencies.CurrencyHelper;
 
-namespace Multiverse.Currencies;
+namespace Multiverse.Globalization.Currencies;
 
 public sealed class Currency
 {  
@@ -37,7 +37,7 @@ public sealed class Currency
     /// </summary>
     public static Currency? GetCurrencyOrDefault(string identifier) =>
         IsValid(identifier) ?
-        (CodeMap.ContainsKey(identifier.ToUpperInvariant()) ? CodeMap[identifier.ToUpperInvariant()] : NameMap[identifier.ToUpperInvariant()]) 
+        CodeMap.ContainsKey(identifier.ToUpperInvariant()) ? CodeMap[identifier.ToUpperInvariant()] : NameMap[identifier.ToUpperInvariant()] 
         : default;
 
     /// <summary>
@@ -77,5 +77,5 @@ public sealed class Currency
     /// <summary>
     /// Retrieves a list of all available Currency objects.
     /// </summary>
-    public static List<Currency> GetAll() => GetAll();
+    public static List<Currency> GetAll() => CurrencyHelper.GetAll();
 }

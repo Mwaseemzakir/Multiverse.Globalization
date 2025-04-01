@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Multiverse.Languages;
+namespace Multiverse.Globalization.Languages;
 
 [Serializable]
 internal class LanguageNotFoundException : Exception
