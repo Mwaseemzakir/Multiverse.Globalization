@@ -18,21 +18,23 @@ public class CurrencyTests
     }
 
     [Fact]
-    public void ValidIsoCode_Should_ReturnTrueForValidCode()
+    public void IsValidIsoCode_Should_ReturnTrueForValidCode()
     {
-        string pakCurrencyCode = Currency.PKR.Code;
+        //string pakCurrencyCode = Currency.PKR.Code;
 
-        bool isValid = Currency.ValidIsoCode(pakCurrencyCode);
+        string pakCurrencyCode = "dsfsdfdsf";
+
+        bool isValid = Currency.IsValidIsoCode(pakCurrencyCode);
 
         Assert.True(isValid);
     }
 
     [Fact]
-    public void ValidIsoCode_Should_IgnoreCaseSensitivity()
+    public void IsValidIsoCode_Should_IgnoreCaseSensitivity()
     {
         string pakCurrencyCode = Currency.PKR.Code.ToLower();
 
-        bool isValid = Currency.ValidIsoCode(pakCurrencyCode);
+        bool isValid = Currency.IsValidIsoCode(pakCurrencyCode);
 
         Assert.True(isValid);
     }
