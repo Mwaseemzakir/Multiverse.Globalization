@@ -6,21 +6,20 @@ namespace Multiverse.UnitTests;
 public class CountryTests
 {
     [Fact]
-    public void GetAllLanguages_Should_ReturnAllLanguages()
+    public void GetAll_Should_ReturnAllCountries()
     {
         List<Country>? countries = Country
-            .GetAll()
-            .ToList();
+            .GetAll();
 
         Assert.NotNull(countries);
 
-        Assert.Contains(Country.None, countries);
+        Assert.Contains(CountryHelpers.None, countries);
     }
 
     [Fact]
     public void IsValidAlpha2Code_Should_ReturnTrueForValidCode()
     {
-        string pakAlpha2Code = Country.Pakistan.Alpha2Code;
+        string pakAlpha2Code = CountryHelpers.Pakistan.Alpha2Code;
 
         bool isValid = Country.IsValidAlpha2Code(pakAlpha2Code);
 
@@ -30,7 +29,7 @@ public class CountryTests
     [Fact]
     public void IsValidAlpha2Code_Should_IgnoreCaseSensitivity()
     {
-        string pakAlpha2Code = Country.Pakistan.Alpha2Code.ToLower();
+        string pakAlpha2Code = CountryHelpers.Pakistan.Alpha2Code.ToLower();
 
         bool isValid = Country.IsValidAlpha2Code(pakAlpha2Code);
 

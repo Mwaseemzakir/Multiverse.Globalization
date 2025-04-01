@@ -1,4 +1,5 @@
-﻿using Multiverse.Models;
+﻿using Multiverse.Helpers;
+using Multiverse.Models;
 using Xunit;
 
 namespace Multiverse.UnitTests;
@@ -9,12 +10,11 @@ public class CurrencyTests
     public void GetAllCurrencies_Should_ReturnAllCurrencies()
     {
         List<Currency>? currencies = Currency
-            .GetAll()
-            .ToList();
+            .GetAll();
 
         Assert.NotNull(currencies);
 
-        Assert.Contains(Currency.None, currencies);
+        Assert.Contains(CurrencyHelpers.None, currencies);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class CurrencyTests
     [Fact]
     public void IsValidIsoCode_Should_IgnoreCaseSensitivity()
     {
-        string pakCurrencyCode = Currency.PKR.Code.ToLower();
+        string pakCurrencyCode = CurrencyHelpers.PKR.Code.ToLower();
 
         bool isValid = Currency.IsValidIsoCode(pakCurrencyCode);
 
