@@ -12,6 +12,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	<PackageTags>internationalization; localization; language codes; country codes; currency codes; .NET; globalization</PackageTags>
+	<PackageId>Multiverse</PackageId>
   </PropertyGroup>
 	
   <ItemGroup>
