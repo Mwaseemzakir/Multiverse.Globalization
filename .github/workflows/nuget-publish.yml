@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PROJECT_NAME: "Multiverse.Globalization"
+      PROJECT_NAME: "Multiverse"
       PACKAGE_SOURCE: "https://api.nuget.org/v3/index.json"
       PACKAGE_VERSION: "3.0.0"
 
