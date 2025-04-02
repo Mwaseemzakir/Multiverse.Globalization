@@ -24,11 +24,7 @@ IEnumerable<Country> countries = Country.GetAll();
 To check is it valid country code :
 
 ```
-bool isValidAlpha2Code = Country.IsValidAlpha2Code(code);
-
-bool isValidAlpha3Code = Country.IsValidAlpha3Code(code);
-
-bool isValidNumericCode =Country.IsValidNumericCode(code);
+bool isValid = Country.IsValid(code);
 ```
 
 Get all languages:
