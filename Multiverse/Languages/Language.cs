@@ -17,8 +17,8 @@ public sealed class Language
         string name)
     {
         Name = name;
-        Alpha2Code = alpha2Code;
-        Alpha3Code = alpha3Code;
+        Alpha2Code = alpha2Code ?? string.Empty;
+        Alpha3Code = alpha3Code ?? string.Empty;
     }
 
     /// <summary>
@@ -73,14 +73,39 @@ public sealed class Language
     /// </summary>
     public static bool IsValid(string identifier)
     {
-        return !string.IsNullOrWhiteSpace(identifier) && (
-            Alpha2CodeMap.ContainsKey(identifier.ToUpperInvariant()) ||
-            Alpha3CodeMap.ContainsKey(identifier.ToUpperInvariant()) ||
-            NameMap.ContainsKey(identifier.ToUpperInvariant()) );
+        if(string.IsNullOrWhiteSpace(identifier))
+            return false;
+
+        identifier = identifier.ToUpperInvariant();
+        return Alpha2CodeMap.ContainsKey(identifier) ||
+               Alpha3CodeMap.ContainsKey(identifier) ||
+               NameMap.ContainsKey(identifier);
     }
 
     /// <summary>
     /// Retrieves a list of all available Language objects.
     /// </summary>
     public static List<Language> GetAll() => LanguageHelper.GetAll();
+
+    public override bool Equals(object? obj)
+    {
+        if(obj is not Language other)
+            return false;
+
+        return Alpha2Code == other.Alpha2Code &&
+               Alpha3Code == other.Alpha3Code &&
+               Name == other.Name;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + (Alpha2Code?.GetHashCode() ?? 0);
+            hash = hash * 23 + (Alpha3Code?.GetHashCode() ?? 0);
+            hash = hash * 23 + (Name?.GetHashCode() ?? 0);
+            return hash;
+        }
+    }
 }

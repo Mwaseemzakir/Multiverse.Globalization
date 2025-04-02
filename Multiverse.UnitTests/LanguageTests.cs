@@ -8,29 +8,110 @@ public class LanguageTests
     [Fact]
     public void GetAll_Should_ReturnAllLanguages()
     {
-        List<Language>? languages = Language
-            .GetAll();
+        List<Language>? languages = Language.GetAll();
 
+        Assert.NotNull(languages);
         Assert.NotEmpty(languages);
+        Assert.Contains(languages, l => l.Alpha2Code == "en" && l.Alpha3Code == "eng" && l.Name == "English");
+        Assert.Contains(languages, l => l.Alpha2Code == "es" && l.Alpha3Code == "spa" && l.Name == "Spanish; Castilian");
+        Assert.Contains(languages, l => l.Alpha2Code == "fr" && l.Alpha3Code == "fre" && l.Name == "French");
+        Assert.Contains(languages, l => l.Alpha2Code == "ur" && l.Alpha3Code == "urd" && l.Name == "Urdu");
     }
 
     [Fact]
     public void IsValid_Should_ReturnTrueForValidCode()
     {
-        string pakAlpha2Code = LanguageHelper.Urdu.Alpha2Code;
+        // Test with Alpha2 codes
+        Assert.True(Language.IsValid(LanguageHelper.English.Alpha2Code));
+        Assert.True(Language.IsValid(LanguageHelper.Spanish.Alpha2Code));
+        Assert.True(Language.IsValid(LanguageHelper.French.Alpha2Code));
+        Assert.True(Language.IsValid(LanguageHelper.Urdu.Alpha2Code));
 
-        bool isValid = Language.IsValid(pakAlpha2Code);
+        // Test with Alpha3 codes
+        Assert.True(Language.IsValid(LanguageHelper.English.Alpha3Code));
+        Assert.True(Language.IsValid(LanguageHelper.Spanish.Alpha3Code));
+        Assert.True(Language.IsValid(LanguageHelper.French.Alpha3Code));
+        Assert.True(Language.IsValid(LanguageHelper.Urdu.Alpha3Code));
+    }
 
-        Assert.True(isValid);
+    [Fact]
+    public void IsValid_Should_ReturnFalseForInvalidCode()
+    {
+        Assert.False(Language.IsValid("xx")); // Invalid 2-letter code
+        Assert.False(Language.IsValid("xxx")); // Invalid 3-letter code
+        Assert.False(Language.IsValid("")); // Empty string
+        Assert.False(Language.IsValid(null)); // Null
+        Assert.False(Language.IsValid("12")); // Numeric code
+        Assert.False(Language.IsValid("!@")); // Special characters
     }
 
     [Fact]
     public void IsValid_Should_IgnoreCaseSensitivity()
     {
-        string pakAlpha2Code = LanguageHelper.Urdu.Alpha2Code.ToLower();
+        // Test with Alpha2 codes
+        Assert.True(Language.IsValid(LanguageHelper.English.Alpha2Code.ToLower()));
+        Assert.True(Language.IsValid(LanguageHelper.English.Alpha2Code.ToUpper()));
+        
+        // Test with Alpha3 codes
+        Assert.True(Language.IsValid(LanguageHelper.English.Alpha3Code.ToLower()));
+        Assert.True(Language.IsValid(LanguageHelper.English.Alpha3Code.ToUpper()));
+    }
 
-        bool isValid = Language.IsValid(pakAlpha2Code);
+    [Fact]
+    public void Language_Properties_Should_BeCorrect()
+    {
+        // Test English language properties
+        var english = LanguageHelper.English;
+        Assert.Equal("en", english.Alpha2Code);
+        Assert.Equal("eng", english.Alpha3Code);
+        Assert.Equal("English", english.Name);
 
-        Assert.True(isValid);
+        // Test Spanish language properties
+        var spanish = LanguageHelper.Spanish;
+        Assert.Equal("es", spanish.Alpha2Code);
+        Assert.Equal("spa", spanish.Alpha3Code);
+        Assert.Equal("Spanish; Castilian", spanish.Name);
+
+        // Test None language properties
+        var none = LanguageHelper.None;
+        Assert.Equal(string.Empty, none.Alpha2Code);
+        Assert.Equal(string.Empty, none.Alpha3Code);
+        Assert.Equal(string.Empty, none.Name);
+    }
+
+    [Fact]
+    public void GetAll_Should_NotContainDuplicateCodes()
+    {
+        var languages = Language.GetAll();
+        
+        // Check for duplicate Alpha2 codes
+        var alpha2Codes = languages.Select(l => l.Alpha2Code.ToUpperInvariant())
+                                 .Where(code => !string.IsNullOrEmpty(code))
+                                 .ToList();
+        Assert.Equal(alpha2Codes.Count, alpha2Codes.Distinct().Count());
+
+        // Check for duplicate Alpha3 codes
+        var alpha3Codes = languages.Select(l => l.Alpha3Code.ToUpperInvariant())
+                                 .Where(code => !string.IsNullOrEmpty(code))
+                                 .ToList();
+        Assert.Equal(alpha3Codes.Count, alpha3Codes.Distinct().Count());
+    }
+
+    [Fact]
+    public void Language_Equality_Should_Work()
+    {
+        var english1 = LanguageHelper.English;
+        var english2 = new Language("en", "eng", "English");
+        var french = LanguageHelper.French;
+
+        // Test equality
+        Assert.Equal(english1.Alpha2Code, english2.Alpha2Code);
+        Assert.Equal(english1.Alpha3Code, english2.Alpha3Code);
+        Assert.Equal(english1.Name, english2.Name);
+
+        // Test inequality
+        Assert.NotEqual(english1.Alpha2Code, french.Alpha2Code);
+        Assert.NotEqual(english1.Alpha3Code, french.Alpha3Code);
+        Assert.NotEqual(english1.Name, french.Name);
     }
 }
