@@ -3,7 +3,7 @@
 	<TargetFrameworks>net8.0;netstandard2.0;net462</TargetFrameworks>
   <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <Title>Multiverse.Globalization</Title>
+    <Title>Multiverse</Title>
     <Authors>Muhammad Waseem</Authors>
     <Description>This NuGet package provides comprehensive language codes, country codes, and currency codes from around the globe, making it an essential tool for internationalization and localization in .NET projects.</Description>
     <AssemblyVersion>2.0</AssemblyVersion>
@@ -31,7 +31,7 @@
 	<PropertyGroup>
 		<PackageIcon>logo.png</PackageIcon>
 		<Readme>README.md</Readme>
-		<RepositoryUrl>https://github.com/mwaseemzakir/Multiverse</RepositoryUrl>
+		<RepositoryUrl>https://github.com/mwaseemzakir/Multiverse.Globalization</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
