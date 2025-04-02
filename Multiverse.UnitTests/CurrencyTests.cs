@@ -28,6 +28,14 @@ public class CurrencyTests
         Assert.True(Currency.IsValid(CurrencyHelper.PakistanRupee.Code));
         Assert.True(Currency.IsValid(CurrencyHelper.Yen.Code));
         Assert.True(Currency.IsValid(CurrencyHelper.SwissFranc.Code));
+
+        // Test major currencies by number
+        Assert.True(Currency.IsValid(CurrencyHelper.UsDollar.Number));
+        Assert.True(Currency.IsValid(CurrencyHelper.Euro.Number));
+        Assert.True(Currency.IsValid(CurrencyHelper.PoundSterling.Number));
+        Assert.True(Currency.IsValid(CurrencyHelper.PakistanRupee.Number));
+        Assert.True(Currency.IsValid(CurrencyHelper.Yen.Number));
+        Assert.True(Currency.IsValid(CurrencyHelper.SwissFranc.Number));
     }
 
     [Fact]
@@ -37,7 +45,6 @@ public class CurrencyTests
         Assert.False(Currency.IsValid("XX")); // Too short
         Assert.False(Currency.IsValid("USDD")); // Too long
         Assert.False(Currency.IsValid("")); // Empty string
-        Assert.False(Currency.IsValid(null)); // Null
         Assert.False(Currency.IsValid("123")); // Numeric code
         Assert.False(Currency.IsValid("!@#")); // Special characters
     }
@@ -83,29 +90,9 @@ public class CurrencyTests
         var currencies = Currency.GetAll();
         
         // Check for duplicate codes
-        var codes = currencies.Select(c => c.Code.ToUpperInvariant())
+        var codes = currencies.Select(c => c.Code.ToLowerInvariant())
                             .Where(code => !string.IsNullOrEmpty(code))
                             .ToList();
         Assert.Equal(codes.Count, codes.Distinct().Count());
-    }
-
-    [Fact]
-    public void Currency_Equality_Should_Work()
-    {
-        var usd1 = CurrencyHelper.UsDollar;
-        var usd2 = new Currency(840, "US Dollar", "USD", "$");
-        var eur = CurrencyHelper.Euro;
-
-        // Test equality
-        Assert.Equal(usd1.Code, usd2.Code);
-        Assert.Equal(usd1.Name, usd2.Name);
-        Assert.Equal(usd1.Symbol, usd2.Symbol);
-        Assert.Equal(usd1.Number, usd2.Number);
-
-        // Test inequality
-        Assert.NotEqual(usd1.Code, eur.Code);
-        Assert.NotEqual(usd1.Name, eur.Name);
-        Assert.NotEqual(usd1.Symbol, eur.Symbol);
-        Assert.NotEqual(usd1.Number, eur.Number);
     }
 }

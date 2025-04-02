@@ -29,7 +29,16 @@ public sealed class Currency
     /// </summary>
     public static bool IsValid(string identifier) =>
         !string.IsNullOrWhiteSpace(identifier) &&
-        (CodeMap.ContainsKey(identifier.ToUpperInvariant()) || NameMap.ContainsKey(identifier.ToUpperInvariant()));
+        (CodeMap.ContainsKey(identifier.ToLowerInvariant()) || NameMap.ContainsKey(identifier.ToLowerInvariant()));
+
+    /// <summary>
+    /// Checks if the provided identifier is valid. 
+    /// The identifier would be currency number
+    /// </summary>
+    public static bool IsValid(int number)
+    {
+        return NumberMap.ContainsKey(number);
+    }
 
     /// <summary>
     /// Retrieves a Currency object based on the provided identifier, which can be a currency code or name. 
@@ -37,7 +46,7 @@ public sealed class Currency
     /// </summary>
     public static Currency? GetCurrencyOrDefault(string identifier) =>
         IsValid(identifier) ?
-        CodeMap.ContainsKey(identifier.ToUpperInvariant()) ? CodeMap[identifier.ToUpperInvariant()] : NameMap[identifier.ToUpperInvariant()] 
+        CodeMap.ContainsKey(identifier.ToLowerInvariant()) ? CodeMap[identifier.ToLowerInvariant()] : NameMap[identifier.ToLowerInvariant()] 
         : default;
 
     /// <summary>
@@ -52,7 +61,7 @@ public sealed class Currency
         if (!IsValid(identifier))
             throw new CurrencyNotFoundException($"Currency with identifier '{identifier}' was not found.");
 
-        return CodeMap.ContainsKey(identifier.ToUpperInvariant()) ? CodeMap[identifier.ToUpperInvariant()] : NameMap[identifier.ToUpperInvariant()];
+        return CodeMap.ContainsKey(identifier.ToLowerInvariant()) ? CodeMap[identifier.ToLowerInvariant()] : NameMap[identifier.ToLowerInvariant()];
     }
 
     /// <summary>
@@ -78,4 +87,23 @@ public sealed class Currency
     /// Retrieves a list of all available Currency objects.
     /// </summary>
     public static List<Currency> GetAll() => CurrencyHelper.GetAll();
+
+    /// <summary>
+    /// Retrieves a Currency object based on the provided currency number. 
+    /// Returns null if not found.
+    /// </summary>
+    public static Currency? GetCurrencyOrDefaultByNumber(int currencyNumber) =>
+        NumberMap.ContainsKey(currencyNumber) ? NumberMap[currencyNumber] : default;
+
+    /// <summary>
+    /// Retrieves a Currency object based on the provided currency number. 
+    /// Throws an exception if not found.
+    /// </summary>
+    public static Currency GetCurrencyByNumber(int currencyNumber)
+    {
+        if(!NumberMap.ContainsKey(currencyNumber))
+            throw new CurrencyNotFoundException($"Currency with number '{currencyNumber}' was not found.");
+
+        return NumberMap[currencyNumber];
+    }
 }

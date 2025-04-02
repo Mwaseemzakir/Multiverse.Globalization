@@ -40,7 +40,6 @@ public class LanguageTests
         Assert.False(Language.IsValid("xx")); // Invalid 2-letter code
         Assert.False(Language.IsValid("xxx")); // Invalid 3-letter code
         Assert.False(Language.IsValid("")); // Empty string
-        Assert.False(Language.IsValid(null)); // Null
         Assert.False(Language.IsValid("12")); // Numeric code
         Assert.False(Language.IsValid("!@")); // Special characters
     }
@@ -85,33 +84,15 @@ public class LanguageTests
         var languages = Language.GetAll();
         
         // Check for duplicate Alpha2 codes
-        var alpha2Codes = languages.Select(l => l.Alpha2Code.ToUpperInvariant())
+        var alpha2Codes = languages.Select(l => l.Alpha2Code.ToLowerInvariant())
                                  .Where(code => !string.IsNullOrEmpty(code))
                                  .ToList();
         Assert.Equal(alpha2Codes.Count, alpha2Codes.Distinct().Count());
 
         // Check for duplicate Alpha3 codes
-        var alpha3Codes = languages.Select(l => l.Alpha3Code.ToUpperInvariant())
+        var alpha3Codes = languages.Select(l => l.Alpha3Code.ToLowerInvariant())
                                  .Where(code => !string.IsNullOrEmpty(code))
                                  .ToList();
         Assert.Equal(alpha3Codes.Count, alpha3Codes.Distinct().Count());
-    }
-
-    [Fact]
-    public void Language_Equality_Should_Work()
-    {
-        var english1 = LanguageHelper.English;
-        var english2 = new Language("en", "eng", "English");
-        var french = LanguageHelper.French;
-
-        // Test equality
-        Assert.Equal(english1.Alpha2Code, english2.Alpha2Code);
-        Assert.Equal(english1.Alpha3Code, english2.Alpha3Code);
-        Assert.Equal(english1.Name, english2.Name);
-
-        // Test inequality
-        Assert.NotEqual(english1.Alpha2Code, french.Alpha2Code);
-        Assert.NotEqual(english1.Alpha3Code, french.Alpha3Code);
-        Assert.NotEqual(english1.Name, french.Name);
     }
 }

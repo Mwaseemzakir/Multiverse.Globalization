@@ -12,7 +12,7 @@ jobs:
     env:
       PROJECT_NAME: "Multiverse"
       PACKAGE_SOURCE: "https://api.nuget.org/v3/index.json"
-      PACKAGE_VERSION: "2.0.0"
+      PACKAGE_VERSION: "2.0.1"
 
     steps:
       - name: Checkout repository

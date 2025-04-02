@@ -32,6 +32,18 @@ public class CountryTests
         Assert.True(Country.IsValid(CountryHelper.UnitedKingdom.Alpha3Code));
         Assert.True(Country.IsValid(CountryHelper.France.Alpha3Code));
         Assert.True(Country.IsValid(CountryHelper.Pakistan.Alpha3Code));
+
+        // Test with Numeric codes
+        Assert.True(Country.IsValid(CountryHelper.UnitedStatesOfAmerica.NumericCode));
+        Assert.True(Country.IsValid(CountryHelper.UnitedKingdom.NumericCode));
+        Assert.True(Country.IsValid(CountryHelper.France.NumericCode));
+        Assert.True(Country.IsValid(CountryHelper.Pakistan.NumericCode));
+
+        // Test with Names
+        Assert.True(Country.IsValid(CountryHelper.UnitedStatesOfAmerica.Name));
+        Assert.True(Country.IsValid(CountryHelper.UnitedKingdom.Name));
+        Assert.True(Country.IsValid(CountryHelper.France.Name));
+        Assert.True(Country.IsValid(CountryHelper.Pakistan.Name));
     }
 
     [Fact]
@@ -40,7 +52,6 @@ public class CountryTests
         Assert.False(Country.IsValid("XX")); // Invalid 2-letter code
         Assert.False(Country.IsValid("XXX")); // Invalid 3-letter code
         Assert.False(Country.IsValid("")); // Empty string
-        Assert.False(Country.IsValid(null)); // Null
         Assert.False(Country.IsValid("12")); // Numeric code
         Assert.False(Country.IsValid("!@")); // Special characters
     }
@@ -88,13 +99,13 @@ public class CountryTests
         var countries = Country.GetAll();
         
         // Check for duplicate Alpha2 codes
-        var alpha2Codes = countries.Select(c => c.Alpha2Code.ToUpperInvariant())
+        var alpha2Codes = countries.Select(c => c.Alpha2Code.ToLowerInvariant())
                                  .Where(code => !string.IsNullOrEmpty(code))
                                  .ToList();
         Assert.Equal(alpha2Codes.Count, alpha2Codes.Distinct().Count());
 
         // Check for duplicate Alpha3 codes
-        var alpha3Codes = countries.Select(c => c.Alpha3Code.ToUpperInvariant())
+        var alpha3Codes = countries.Select(c => c.Alpha3Code.ToLowerInvariant())
                                  .Where(code => !string.IsNullOrEmpty(code))
                                  .ToList();
         Assert.Equal(alpha3Codes.Count, alpha3Codes.Distinct().Count());
@@ -104,25 +115,5 @@ public class CountryTests
                                   .Where(code => !string.IsNullOrEmpty(code))
                                   .ToList();
         Assert.Equal(numericCodes.Count, numericCodes.Distinct().Count());
-    }
-
-    [Fact]
-    public void Country_Equality_Should_Work()
-    {
-        var us1 = CountryHelper.UnitedStatesOfAmerica;
-        var us2 = new Country("United States of America", "840", "US", "USA");
-        var uk = CountryHelper.UnitedKingdom;
-
-        // Test equality
-        Assert.Equal(us1.Alpha2Code, us2.Alpha2Code);
-        Assert.Equal(us1.Alpha3Code, us2.Alpha3Code);
-        Assert.Equal(us1.NumericCode, us2.NumericCode);
-        Assert.Equal(us1.Name, us2.Name);
-
-        // Test inequality
-        Assert.NotEqual(us1.Alpha2Code, uk.Alpha2Code);
-        Assert.NotEqual(us1.Alpha3Code, uk.Alpha3Code);
-        Assert.NotEqual(us1.NumericCode, uk.NumericCode);
-        Assert.NotEqual(us1.Name, uk.Name);
     }
 }

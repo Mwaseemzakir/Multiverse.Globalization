@@ -30,7 +30,7 @@ public sealed class Language
         if(string.IsNullOrWhiteSpace(identifier))
             return default;
 
-        identifier = identifier.ToUpperInvariant();
+        identifier = identifier.ToLowerInvariant();
 
         if(Alpha2CodeMap.ContainsKey(identifier))
             return Alpha2CodeMap[identifier];
@@ -56,7 +56,7 @@ public sealed class Language
         if(!IsValid(identifier))
             throw new LanguageNotFoundException($"Language with identifier '{identifier}' was not found.");
 
-        identifier = identifier.ToUpperInvariant();
+        identifier = identifier.ToLowerInvariant();
 
         return identifier switch
         {
@@ -76,7 +76,7 @@ public sealed class Language
         if(string.IsNullOrWhiteSpace(identifier))
             return false;
 
-        identifier = identifier.ToUpperInvariant();
+        identifier = identifier.ToLowerInvariant();
         return Alpha2CodeMap.ContainsKey(identifier) ||
                Alpha3CodeMap.ContainsKey(identifier) ||
                NameMap.ContainsKey(identifier);
@@ -86,26 +86,4 @@ public sealed class Language
     /// Retrieves a list of all available Language objects.
     /// </summary>
     public static List<Language> GetAll() => LanguageHelper.GetAll();
-
-    public override bool Equals(object? obj)
-    {
-        if(obj is not Language other)
-            return false;
-
-        return Alpha2Code == other.Alpha2Code &&
-               Alpha3Code == other.Alpha3Code &&
-               Name == other.Name;
-    }
-
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            int hash = 17;
-            hash = hash * 23 + (Alpha2Code?.GetHashCode() ?? 0);
-            hash = hash * 23 + (Alpha3Code?.GetHashCode() ?? 0);
-            hash = hash * 23 + (Name?.GetHashCode() ?? 0);
-            return hash;
-        }
-    }
 }

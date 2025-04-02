@@ -33,7 +33,7 @@ public sealed class Country
         if (string.IsNullOrWhiteSpace(identifier))
             return default;
 
-        identifier = identifier.ToUpperInvariant();
+        identifier = identifier.ToLowerInvariant();
 
         if (Alpha2CodeMap.ContainsKey(identifier))
             return Alpha2CodeMap[identifier];
@@ -62,7 +62,7 @@ public sealed class Country
         if (!IsValid(identifier))
             throw new CountryNotFoundException($"Country with identifier '{identifier}' was not found.");
 
-        identifier = identifier.ToUpperInvariant();
+        identifier = identifier.ToLowerInvariant();
 
         return identifier switch
         {
@@ -80,11 +80,13 @@ public sealed class Country
     /// </summary>
     public static bool IsValid(string identifier)
     {
+        identifier = identifier.ToLowerInvariant();
+
         return !string.IsNullOrWhiteSpace(identifier) && (
-            Alpha2CodeMap.ContainsKey(identifier.ToUpperInvariant()) ||
-            Alpha3CodeMap.ContainsKey(identifier.ToUpperInvariant()) ||
-            NumericCodeMap.ContainsKey(identifier.ToUpperInvariant()) ||
-            NameMap.ContainsKey(identifier.ToUpperInvariant()));
+            Alpha2CodeMap.ContainsKey(identifier) ||
+            Alpha3CodeMap.ContainsKey(identifier) ||
+            NumericCodeMap.ContainsKey(identifier) ||
+            NameMap.ContainsKey(identifier));
     }
 
     /// <summary>
