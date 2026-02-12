@@ -290,6 +290,7 @@ public static class LanguageHelper
     public static readonly Language UncodedLanguages = new Language("", "mis", "Uncoded languages");
     public static readonly Language MonKhmerLanguages = new Language("", "mkh", "Mon-Khmer languages");
     public static readonly Language Malagasy = new Language("mg", "mlg", "Malagasy");
+    public static readonly Language Malay = new Language("ms", "may", "Malay");
     public static readonly Language Maltese = new Language("mt", "mlt", "Maltese");
     public static readonly Language Manchu = new Language("", "mnc", "Manchu");
     public static readonly Language Manipuri = new Language("", "mni", "Manipuri");
@@ -781,6 +782,7 @@ public static class LanguageHelper
             UncodedLanguages,
             MonKhmerLanguages,
             Malagasy,
+            Malay,
             Maltese,
             Manchu,
             Manipuri,
@@ -1085,6 +1087,7 @@ public static class LanguageHelper
         { Marshallese.Alpha3Code.ToLowerInvariant(), Marshallese },
         { Malayalam.Alpha3Code.ToLowerInvariant(), Malayalam },
         { Marathi.Alpha3Code.ToLowerInvariant(), Marathi },
+        { Malay.Alpha3Code.ToLowerInvariant(), Malay },
         { Maltese.Alpha3Code.ToLowerInvariant(), Maltese },
         { Mongolian.Alpha3Code.ToLowerInvariant(), Mongolian },
         { Maori.Alpha3Code.ToLowerInvariant(), Maori },
@@ -1262,6 +1265,7 @@ public static class LanguageHelper
         { Marshallese.Alpha2Code.ToLowerInvariant(), Marshallese },
         { Malayalam.Alpha2Code.ToLowerInvariant(), Malayalam },
         { Marathi.Alpha2Code.ToLowerInvariant(), Marathi },
+        { Malay.Alpha2Code.ToLowerInvariant(), Malay },
         { Maltese.Alpha2Code.ToLowerInvariant(), Maltese },
         { Mongolian.Alpha2Code.ToLowerInvariant(), Mongolian },
         { Maori.Alpha2Code.ToLowerInvariant(), Maori },
@@ -1438,6 +1442,7 @@ public static class LanguageHelper
         { Marshallese.Name.ToLowerInvariant(), Marshallese },
         { Malayalam.Name.ToLowerInvariant(), Malayalam },
         { Marathi.Name.ToLowerInvariant(), Marathi },
+        { Malay.Name.ToLowerInvariant(), Malay },
         { Maltese.Name.ToLowerInvariant(), Maltese },
         { Mongolian.Name.ToLowerInvariant(), Mongolian },
         { Maori.Name.ToLowerInvariant(), Maori },

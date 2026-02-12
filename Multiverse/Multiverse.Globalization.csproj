@@ -39,14 +39,10 @@
   </ItemGroup>
 
 	<PropertyGroup>
-		<PackageIcon>logo.png</PackageIcon>
+		<PackageIcon>logo.jpg</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/mwaseemzakir/Multiverse.Globalization</RepositoryUrl>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="logo.png" Pack="true" PackagePath="\" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

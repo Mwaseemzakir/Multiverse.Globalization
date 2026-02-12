@@ -7,6 +7,8 @@
 
 **Multiverse** is a lightweight, zero-dependency .NET library that provides a comprehensive, standards-compliant dataset of **countries**, **currencies**, and **languages** from around the globe — making it an essential building block for internationalization (i18n) and localization (l10n) in any .NET application.
 
+**Country is the central entity.** Each country carries its own `Currency` object and `OfficialLanguages` list, so a single lookup gives you everything you need — no cross-referencing required.
+
 ---
 
 ## Table of Contents
@@ -17,6 +19,8 @@
 - [Quick Start](#quick-start)
 - [Countries](#countries)
   - [Country Properties](#country-properties)
+  - [Accessing a Country's Currency](#accessing-a-countrys-currency)
+  - [Accessing a Country's Official Languages](#accessing-a-countrys-official-languages)
   - [Lookup by Identifier](#lookup-country-by-identifier)
   - [Validation](#validate-a-country-identifier)
   - [Get All Countries](#get-all-countries)
@@ -46,10 +50,11 @@
 
 | Capability | Standard | Coverage |
 |---|---|---|
-| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) | 250 countries & territories |
-| **Currencies** | ISO 4217 (code, numeric) | 78 world currencies |
+| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 250 countries & territories with capitals, regions, currencies, official languages & flag emojis |
+| **Currencies** | ISO 4217 (code, numeric) | 150+ world currencies |
 | **Languages** | ISO 639-1 & ISO 639-2 (alpha-2, alpha-3) | 475+ languages |
 
+- **Country-centric design** — each `Country` carries its `Currency` and `OfficialLanguages`; one lookup gives you everything
 - **Fast lookups** — pre-built dictionary maps for O(1) retrieval by code, name, or number
 - **Case-insensitive** — all lookups normalize input automatically
 - **Null-safe** — `OrDefault` variants return `null` instead of throwing
@@ -85,7 +90,7 @@ dotnet add package Multiverse
 
 ### PackageReference
 ```xml
-<PackageReference Include="Multiverse" Version="2.0.1" />
+<PackageReference Include="Multiverse" Version="3.0.0" />
 ```
 
 ---
@@ -97,17 +102,30 @@ using Multiverse.Globalization.Countries;
 using Multiverse.Globalization.Currencies;
 using Multiverse.Globalization.Languages;
 
-// Country
-var usa = Country.GetCountry("US");
-Console.WriteLine($"{usa.Name} ({usa.Alpha3Code})"); // United States of America (USA)
+// Country — the single source of truth
+var pakistan = Country.GetCountry("PK");
+Console.WriteLine($"{pakistan.Flag} {pakistan.Name}");          // 🇵🇰 Pakistan
+Console.WriteLine($"Capital: {pakistan.Capital}");              // Capital: Islamabad
+Console.WriteLine($"Region: {pakistan.Region}");                // Region: Asia
+Console.WriteLine($"Calling Code: {pakistan.CallingCode}");     // Calling Code: +92
 
-// Currency
+// Currency — accessed directly from the country
+Console.WriteLine($"Currency: {pakistan.Currency!.Name}");      // Currency: Pakistan Rupee
+Console.WriteLine($"  Code: {pakistan.CurrencyCode}");          // Code: PKR
+Console.WriteLine($"  Symbol: {pakistan.Currency.Symbol}");     // Symbol: ₨
+
+// Official Languages — accessed directly from the country
+foreach (var lang in pakistan.OfficialLanguages)
+    Console.WriteLine($"  Language: {lang.Name} ({lang.Alpha2Code})");
+// Language: Urdu (ur)
+// Language: English (en)
+
+// Standalone currency & language lookups still work
 var eur = Currency.GetCurrency("EUR");
-Console.WriteLine($"{eur.Name} {eur.Symbol}"); // Euro €
+Console.WriteLine($"{eur.Name} {eur.Symbol}");                 // Euro €
 
-// Language
 var french = Language.GetLanguage("fr");
-Console.WriteLine($"{french.Name} ({french.Alpha2Code})"); // French (fr)
+Console.WriteLine($"{french.Name} ({french.Alpha2Code})");     // French (fr)
 ```
 
 ---
@@ -116,16 +134,70 @@ Console.WriteLine($"{french.Name} ({french.Alpha2Code})"); // French (fr)
 
 Namespace: `Multiverse.Globalization.Countries`
 
-The `Country` class provides access to **250 countries and territories** based on the **ISO 3166-1** standard.
+The `Country` class is the **central entity** of Multiverse. Each country object provides access to **250 countries and territories** based on **ISO 3166-1**, and carries its own `Currency` and `OfficialLanguages` — so a single lookup gives you everything about a country.
 
 ### Country Properties
 
 | Property | Type | Description | Example |
 |---|---|---|---|
-| `Name` | `string` | Official country name | `"United States of America"` |
-| `Alpha2Code` | `string` | ISO 3166-1 alpha-2 (2-letter code) | `"US"` |
-| `Alpha3Code` | `string` | ISO 3166-1 alpha-3 (3-letter code) | `"USA"` |
-| `NumericCode` | `string` | ISO 3166-1 numeric (3-digit code) | `"840"` |
+| `Name` | `string` | Official country name | `"Pakistan"` |
+| `Alpha2Code` | `string` | ISO 3166-1 alpha-2 (2-letter code) | `"PK"` |
+| `Alpha3Code` | `string` | ISO 3166-1 alpha-3 (3-letter code) | `"PAK"` |
+| `NumericCode` | `string` | ISO 3166-1 numeric (3-digit code) | `"586"` |
+| `CallingCode` | `string` | International dialing code (E.164) | `"+92"` |
+| `Capital` | `string` | Capital city name | `"Islamabad"` |
+| `Region` | `string` | Geographic region / continent | `"Asia"` |
+| `Currency` | `Currency?` | Full currency object (nullable for territories with no currency) | `CurrencyHelper.PakistanRupee` |
+| `CurrencyCode` | `string` | ISO 4217 code derived from `Currency` (empty if no currency) | `"PKR"` |
+| `OfficialLanguages` | `IReadOnlyList<Language>` | Official languages of the country | `[Urdu, English]` |
+| `Flag` | `string` | Unicode flag emoji (computed from Alpha2Code) | 🇵🇰 |
+
+### Accessing a Country's Currency
+
+Every country carries a full `Currency` object — no need for a separate lookup:
+
+```csharp
+var japan = Country.GetCountry("JP");
+
+// Access the Currency object directly
+Currency yen = japan.Currency!;
+Console.WriteLine(yen.Name);    // Yen
+Console.WriteLine(yen.Code);    // JPY
+Console.WriteLine(yen.Symbol);  // ¥
+Console.WriteLine(yen.Number);  // 392
+
+// Or use the convenience CurrencyCode property
+Console.WriteLine(japan.CurrencyCode); // JPY
+
+// Some territories have no official currency
+var antarctica = CountryHelper.Antarctica;
+Console.WriteLine(antarctica.Currency is null);  // True
+Console.WriteLine(antarctica.CurrencyCode);      // (empty string)
+```
+
+### Accessing a Country's Official Languages
+
+Each country carries its official languages as a `IReadOnlyList<Language>`:
+
+```csharp
+var switzerland = Country.GetCountry("CH");
+
+Console.WriteLine($"{switzerland.Name} has {switzerland.OfficialLanguages.Count} languages:");
+foreach (var lang in switzerland.OfficialLanguages)
+    Console.WriteLine($"  {lang.Name} ({lang.Alpha2Code}/{lang.Alpha3Code})");
+// Switzerland has 3 languages:
+//   German (de/ger)
+//   French (fr/fre)
+//   Italian (it/ita)
+
+// Countries with one official language
+var france = Country.GetCountry("FR");
+Console.WriteLine($"{france.Name}: {france.OfficialLanguages[0].Name}"); // France: French
+
+// Antarctica has no official languages
+var aq = CountryHelper.Antarctica;
+Console.WriteLine(aq.OfficialLanguages.Count); // 0
+```
 
 ### Lookup Country by Identifier
 
@@ -160,7 +232,7 @@ List<Country> countries = Country.GetAll();
 
 foreach (var c in countries)
 {
-    Console.WriteLine($"{c.Alpha2Code} - {c.Name}");
+    Console.WriteLine($"{c.Flag} {c.Alpha2Code} - {c.Name} ({c.CurrencyCode})");
 }
 ```
 
@@ -170,9 +242,18 @@ For compile-time access without string lookups, use `CountryHelper` fields direc
 
 ```csharp
 var pakistan = CountryHelper.Pakistan;
-Console.WriteLine(pakistan.Alpha2Code); // PK
-Console.WriteLine(pakistan.Alpha3Code); // PAK
-Console.WriteLine(pakistan.NumericCode); // 586
+Console.WriteLine(pakistan.Alpha2Code);                   // PK
+Console.WriteLine(pakistan.Alpha3Code);                   // PAK
+Console.WriteLine(pakistan.NumericCode);                  // 586
+Console.WriteLine(pakistan.CallingCode);                  // +92
+Console.WriteLine(pakistan.Capital);                      // Islamabad
+Console.WriteLine(pakistan.Region);                       // Asia
+Console.WriteLine(pakistan.CurrencyCode);                 // PKR
+Console.WriteLine(pakistan.Currency!.Name);               // Pakistan Rupee
+Console.WriteLine(pakistan.Currency.Symbol);              // ₨
+Console.WriteLine(pakistan.OfficialLanguages[0].Name);    // Urdu
+Console.WriteLine(pakistan.OfficialLanguages[1].Name);    // English
+Console.WriteLine(pakistan.Flag);                         // 🇵🇰
 
 var none = CountryHelper.None; // Empty sentinel value
 ```
@@ -183,7 +264,9 @@ var none = CountryHelper.None; // Empty sentinel value
 
 Namespace: `Multiverse.Globalization.Currencies`
 
-The `Currency` class provides access to **78 world currencies** based on the **ISO 4217** standard.
+The `Currency` class provides access to **150+ world currencies** based on the **ISO 4217** standard.
+
+> **Tip:** You can also reach a country's currency directly via `Country.Currency` — see [Accessing a Country's Currency](#accessing-a-countrys-currency).
 
 ### Currency Properties
 
@@ -263,6 +346,8 @@ Namespace: `Multiverse.Globalization.Languages`
 
 The `Language` class provides access to **475+ languages** based on the **ISO 639-1** (alpha-2) and **ISO 639-2** (alpha-3) standards.
 
+> **Tip:** You can also reach a country's official languages directly via `Country.OfficialLanguages` — see [Accessing a Country's Official Languages](#accessing-a-countrys-official-languages).
+
 ### Language Properties
 
 | Property | Type | Description | Example |
@@ -340,7 +425,7 @@ Each domain has a dedicated exception type that inherits from `System.Exception`
 try
 {
     var country = Country.GetCountry(userInput);
-    Console.WriteLine($"Found: {country.Name}");
+    Console.WriteLine($"Found: {country.Name} — Currency: {country.CurrencyCode}");
 }
 catch (CountryNotFoundException ex)
 {
@@ -356,7 +441,22 @@ catch (ArgumentNullException)
 
 ## Best Practices
 
-### 1. Prefer Safe Lookups for User Input
+### 1. Use Country as Your Single Source of Truth
+
+A single `Country` lookup gives you the country, its currency, and its official languages — no need to query them separately:
+
+```csharp
+var country = Country.GetCountry("PK");
+
+// Everything in one place
+var name       = country.Name;                     // Pakistan
+var currency   = country.Currency!;                 // CurrencyHelper.PakistanRupee
+var code       = country.CurrencyCode;              // PKR
+var languages  = country.OfficialLanguages;         // [Urdu, English]
+var flag       = country.Flag;                      // 🇵🇰
+```
+
+### 2. Prefer Safe Lookups for User Input
 
 Use the `OrDefault` variants when dealing with untrusted or user-provided values to avoid unnecessary exception overhead:
 
@@ -364,34 +464,38 @@ Use the `OrDefault` variants when dealing with untrusted or user-provided values
 var country = Country.GetCountryOrDefault(userInput);
 if (country is not null)
 {
-    // process
+    Console.WriteLine($"{country.Name} uses {country.Currency?.Name ?? "no official currency"}");
 }
 ```
 
-### 2. Validate Before Processing
+### 3. Validate Before Processing
 
 Use `IsValid()` as a guard clause before further business logic:
 
 ```csharp
-if (!Currency.IsValid(currencyCode))
+if (!Country.IsValid(countryCode))
 {
-    return BadRequest("Invalid currency code.");
+    return BadRequest("Invalid country code.");
 }
 
-var currency = Currency.GetCurrency(currencyCode);
+var country = Country.GetCountry(countryCode);
 ```
 
-### 3. Use Static Fields for Known Values
+### 4. Use Static Fields for Known Values
 
 When you know the value at compile time, reference `CountryHelper`, `CurrencyHelper`, or `LanguageHelper` fields directly — this avoids string parsing entirely:
 
 ```csharp
+var defaultCountry  = CountryHelper.UnitedStatesOfAmerica;
 var defaultCurrency = CurrencyHelper.UsDollar;
 var defaultLanguage = LanguageHelper.English;
-var defaultCountry  = CountryHelper.UnitedStatesOfAmerica;
+
+// Or reach currency/language through the country
+var usCurrency   = CountryHelper.UnitedStatesOfAmerica.Currency;   // CurrencyHelper.UsDollar
+var usLanguages  = CountryHelper.UnitedStatesOfAmerica.OfficialLanguages; // [English]
 ```
 
-### 4. Use Case-Insensitive Input Freely
+### 5. Use Case-Insensitive Input Freely
 
 All lookups normalize to lowercase internally, so you never need to pre-process casing:
 
@@ -407,6 +511,20 @@ Country.GetCountry("Us");
 ## API Reference Summary
 
 ### Country
+
+| Property / Method | Returns | Description |
+|---|---|---|
+| `Name` | `string` | Official country name |
+| `Alpha2Code` | `string` | ISO 3166-1 alpha-2 code |
+| `Alpha3Code` | `string` | ISO 3166-1 alpha-3 code |
+| `NumericCode` | `string` | ISO 3166-1 numeric code |
+| `CallingCode` | `string` | International dialing code (E.164) |
+| `Capital` | `string` | Capital city |
+| `Region` | `string` | Geographic region / continent |
+| `Currency` | `Currency?` | Full currency object (null for territories with no currency) |
+| `CurrencyCode` | `string` | ISO 4217 code derived from `Currency` |
+| `OfficialLanguages` | `IReadOnlyList<Language>` | Official languages of the country |
+| `Flag` | `string` | Unicode flag emoji |
 
 | Method | Returns | Throws | Description |
 |---|---|---|---|
@@ -425,7 +543,7 @@ Country.GetCountry("Us");
 | `GetCurrencyOrDefault(int)` | `Currency?` | — | Safe lookup by numeric code |
 | `IsValid(string)` | `bool` | — | Check if code/name maps to a known currency |
 | `IsValid(int)` | `bool` | — | Check if numeric code maps to a known currency |
-| `GetAll()` | `List<Currency>` | — | All 78 currencies |
+| `GetAll()` | `List<Currency>` | — | All 150+ currencies |
 
 ### Language
 

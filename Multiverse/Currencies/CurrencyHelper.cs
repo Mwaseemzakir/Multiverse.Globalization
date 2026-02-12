@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Multiverse.Globalization.Currencies;
 
 public static class CurrencyHelper
 {
-    #region List
+    // ===== EXISTING currencies =====
     public static readonly Currency None = new Currency(0, string.Empty, string.Empty, string.Empty);
     public static readonly Currency Afghani = new Currency(971, "Afghani", "AFN", "؋");
     public static readonly Currency Euro = new Currency(978, "Euro", "EUR", "€");
@@ -85,338 +88,120 @@ public static class CurrencyHelper
     public static readonly Currency EastCaribbeanDollar = new Currency(951, "East Caribbean Dollar", "XCD", "$");
     public static readonly Currency Sdr = new Currency(960, "SDR (Special Drawing Right)", "XDR", "XDR");
 
-    #endregion
-    public static List<Currency> GetAll()
-    {
-        return new List<Currency>
-        {
-            Afghani,
-            Euro,
-            UsDollar,
-            PoundSterling,
-            Yen,
-            YuanRenminbi,
-            IndianRupee,
-            AustralianDollar,
-            CanadianDollar,
-            SwissFranc,
-            SwedishKrona,
-            NorwegianKrone,
-            DanishKrone,
-            NewZealandDollar,
-            Rand,
-            BrazilianReal,
-            RussianRuble,
-            MexicanPeso,
-            SingaporeDollar,
-            HongKongDollar,
-            Won,
-            TurkishLira,
-            SaudiRiyal,
-            UaeDirham,
-            Baht,
-            MalaysianRinggit,
-            Rupiah,
-            PhilippinePeso,
-            Dong,
-            PakistanRupee,
-            Taka,
-            SriLankaRupee,
-            NepaleseRupee,
-            IraqiDinar,
-            IranianRial,
-            EgyptianPound,
-            Naira,
-            KenyanShilling,
-            GhanaCedi,
-            CfaFrancBceao,
-            CfaFrancBeac,
-            ArgentinePeso,
-            ChileanPeso,
-            ColombianPeso,
-            Sol,
-            Hryvnia,
-            Zloty,
-            CzechKoruna,
-            Forint,
-            RomanianLeu,
-            NewIsraeliSheqel,
-            QatariRial,
-            KuwaitiDinar,
-            RialOmani,
-            BahrainiDinar,
-            IcelandKrona,
-            CostaRicanColon,
-            DominicanPeso,
-            Quetzal,
-            Lempira,
-            Balboa,
-            PesoUruguayo,
-            Boliviano,
-            Guarani,
-            UzbekistanSum,
-            Tenge,
-            Somoni,
-            Som,
-            TurkmenistanNewManat,
-            AzerbaijanManat,
-            Lari,
-            ArmenianDram,
-            BelarusianRuble,
-            TunisianDinar,
-            MoroccanDirham,
-            CfpFranc,
-            EastCaribbeanDollar,
-            Sdr
-        };
-    }
+    // ===== NEW currencies =====
+    public static readonly Currency AlbanianLek = new Currency(008, "Albanian Lek", "ALL", "L");
+    public static readonly Currency AlgerianDinar = new Currency(012, "Algerian Dinar", "DZD", "د.ج");
+    public static readonly Currency AngolanKwanza = new Currency(973, "Angolan Kwanza", "AOA", "Kz");
+    public static readonly Currency ArubanFlorin = new Currency(533, "Aruban Florin", "AWG", "ƒ");
+    public static readonly Currency BahamianDollar = new Currency(044, "Bahamian Dollar", "BSD", "$");
+    public static readonly Currency BarbadosDollar = new Currency(052, "Barbados Dollar", "BBD", "$");
+    public static readonly Currency BelizeDollar = new Currency(084, "Belize Dollar", "BZD", "BZ$");
+    public static readonly Currency BermudianDollar = new Currency(060, "Bermudian Dollar", "BMD", "$");
+    public static readonly Currency BhutaneseNgultrum = new Currency(064, "Bhutanese Ngultrum", "BTN", "Nu");
+    public static readonly Currency BosniaConvertibleMark = new Currency(977, "Bosnia Convertible Mark", "BAM", "KM");
+    public static readonly Currency BotswanaPula = new Currency(072, "Botswana Pula", "BWP", "P");
+    public static readonly Currency BruneiDollar = new Currency(096, "Brunei Dollar", "BND", "$");
+    public static readonly Currency BulgarianLev = new Currency(975, "Bulgarian Lev", "BGN", "лв");
+    public static readonly Currency BurundianFranc = new Currency(108, "Burundian Franc", "BIF", "FBu");
+    public static readonly Currency CambodianRiel = new Currency(116, "Cambodian Riel", "KHR", "៛");
+    public static readonly Currency CapeVerdeanEscudo = new Currency(132, "Cape Verdean Escudo", "CVE", "$");
+    public static readonly Currency CaymanIslandsDollar = new Currency(136, "Cayman Islands Dollar", "KYD", "$");
+    public static readonly Currency CongoleseFranc = new Currency(976, "Congolese Franc", "CDF", "FC");
+    public static readonly Currency CubanPeso = new Currency(192, "Cuban Peso", "CUP", "$");
+    public static readonly Currency DjiboutianFranc = new Currency(262, "Djiboutian Franc", "DJF", "Fdj");
+    public static readonly Currency EritreanNakfa = new Currency(232, "Eritrean Nakfa", "ERN", "Nfk");
+    public static readonly Currency EthiopianBirr = new Currency(230, "Ethiopian Birr", "ETB", "Br");
+    public static readonly Currency FalklandIslandsPound = new Currency(238, "Falkland Islands Pound", "FKP", "£");
+    public static readonly Currency FijianDollar = new Currency(242, "Fijian Dollar", "FJD", "$");
+    public static readonly Currency GibraltarPound = new Currency(292, "Gibraltar Pound", "GIP", "£");
+    public static readonly Currency GuineanFranc = new Currency(324, "Guinean Franc", "GNF", "FG");
+    public static readonly Currency GuyaneseDollar = new Currency(328, "Guyanese Dollar", "GYD", "$");
+    public static readonly Currency HaitianGourde = new Currency(332, "Haitian Gourde", "HTG", "G");
+    public static readonly Currency JamaicanDollar = new Currency(388, "Jamaican Dollar", "JMD", "J$");
+    public static readonly Currency JordanianDinar = new Currency(400, "Jordanian Dinar", "JOD", "د.ا");
+    public static readonly Currency NorthKoreanWon = new Currency(408, "North Korean Won", "KPW", "₩");
+    public static readonly Currency LaoKip = new Currency(418, "Lao Kip", "LAK", "₭");
+    public static readonly Currency LebanesePound = new Currency(422, "Lebanese Pound", "LBP", "ل.ل");
+    public static readonly Currency LesothoLoti = new Currency(426, "Lesotho Loti", "LSL", "L");
+    public static readonly Currency LiberianDollar = new Currency(430, "Liberian Dollar", "LRD", "$");
+    public static readonly Currency LibyanDinar = new Currency(434, "Libyan Dinar", "LYD", "ل.د");
+    public static readonly Currency MacanesePataca = new Currency(446, "Macanese Pataca", "MOP", "MOP$");
+    public static readonly Currency MacedonianDenar = new Currency(807, "Macedonian Denar", "MKD", "ден");
+    public static readonly Currency MalagasyAriary = new Currency(969, "Malagasy Ariary", "MGA", "Ar");
+    public static readonly Currency MalawianKwacha = new Currency(454, "Malawian Kwacha", "MWK", "MK");
+    public static readonly Currency MaldivianRufiyaa = new Currency(462, "Maldivian Rufiyaa", "MVR", "Rf");
+    public static readonly Currency MauritanianOuguiya = new Currency(929, "Mauritanian Ouguiya", "MRU", "UM");
+    public static readonly Currency MauritianRupee = new Currency(480, "Mauritian Rupee", "MUR", "₨");
+    public static readonly Currency MoldovanLeu = new Currency(498, "Moldovan Leu", "MDL", "L");
+    public static readonly Currency MongolianTugrik = new Currency(496, "Mongolian Tugrik", "MNT", "₮");
+    public static readonly Currency MozambicanMetical = new Currency(943, "Mozambican Metical", "MZN", "MT");
+    public static readonly Currency MyanmarKyat = new Currency(104, "Myanmar Kyat", "MMK", "K");
+    public static readonly Currency NamibianDollar = new Currency(516, "Namibian Dollar", "NAD", "$");
+    public static readonly Currency NetherlandsAntilleanGuilder = new Currency(532, "Netherlands Antillean Guilder", "ANG", "ƒ");
+    public static readonly Currency NicaraguanCordoba = new Currency(558, "Nicaraguan Cordoba", "NIO", "C$");
+    public static readonly Currency PapuaNewGuineanKina = new Currency(598, "Papua New Guinean Kina", "PGK", "K");
+    public static readonly Currency ComorianFranc = new Currency(174, "Comorian Franc", "KMF", "CF");
+    public static readonly Currency SaintHelenaPound = new Currency(654, "Saint Helena Pound", "SHP", "£");
+    public static readonly Currency SamoanTala = new Currency(882, "Samoan Tala", "WST", "T");
+    public static readonly Currency SaoTomeDobra = new Currency(930, "Sao Tome Dobra", "STN", "Db");
+    public static readonly Currency SerbianDinar = new Currency(941, "Serbian Dinar", "RSD", "din");
+    public static readonly Currency SeychelloisRupee = new Currency(690, "Seychellois Rupee", "SCR", "₨");
+    public static readonly Currency SierraLeoneanLeone = new Currency(925, "Sierra Leonean Leone", "SLE", "Le");
+    public static readonly Currency SolomonIslandsDollar = new Currency(090, "Solomon Islands Dollar", "SBD", "$");
+    public static readonly Currency SomaliShilling = new Currency(706, "Somali Shilling", "SOS", "Sh");
+    public static readonly Currency SouthSudanesePound = new Currency(728, "South Sudanese Pound", "SSP", "£");
+    public static readonly Currency SudanesePound = new Currency(938, "Sudanese Pound", "SDG", "ج.س");
+    public static readonly Currency SurinameseDollar = new Currency(968, "Surinamese Dollar", "SRD", "$");
+    public static readonly Currency SwaziLilangeni = new Currency(748, "Swazi Lilangeni", "SZL", "L");
+    public static readonly Currency SyrianPound = new Currency(760, "Syrian Pound", "SYP", "£");
+    public static readonly Currency NewTaiwanDollar = new Currency(901, "New Taiwan Dollar", "TWD", "NT$");
+    public static readonly Currency TanzanianShilling = new Currency(834, "Tanzanian Shilling", "TZS", "TSh");
+    public static readonly Currency TonganPaanga = new Currency(776, "Tongan Paanga", "TOP", "T$");
+    public static readonly Currency TrinidadDollar = new Currency(780, "Trinidad and Tobago Dollar", "TTD", "TT$");
+    public static readonly Currency UgandanShilling = new Currency(800, "Ugandan Shilling", "UGX", "USh");
+    public static readonly Currency VanuatuVatu = new Currency(548, "Vanuatu Vatu", "VUV", "VT");
+    public static readonly Currency VenezuelanBolivar = new Currency(928, "Venezuelan Bolivar Soberano", "VES", "Bs.S");
+    public static readonly Currency YemeniRial = new Currency(886, "Yemeni Rial", "YER", "﷼");
+    public static readonly Currency ZambianKwacha = new Currency(967, "Zambian Kwacha", "ZMW", "ZK");
+    public static readonly Currency ZimbabweanDollar = new Currency(932, "Zimbabwean Dollar", "ZWL", "Z$");
+    public static readonly Currency RwandanFranc = new Currency(646, "Rwandan Franc", "RWF", "RF");
+    public static readonly Currency GambianDalasi = new Currency(270, "Gambian Dalasi", "GMD", "D");
 
-    public static readonly IReadOnlyDictionary<string, Currency> CodeMap = new Dictionary<string, Currency>
-    {
-        { None.Code.ToLowerInvariant(), None },
-        { Afghani.Code.ToLowerInvariant(), Afghani },
-        { Euro.Code.ToLowerInvariant(), Euro },
-        { UsDollar.Code.ToLowerInvariant(), UsDollar },
-        { PoundSterling.Code.ToLowerInvariant(), PoundSterling },
-        { Yen.Code.ToLowerInvariant(), Yen },
-        { YuanRenminbi.Code.ToLowerInvariant(), YuanRenminbi },
-        { IndianRupee.Code.ToLowerInvariant(), IndianRupee },
-        { AustralianDollar.Code.ToLowerInvariant(), AustralianDollar },
-        { CanadianDollar.Code.ToLowerInvariant(), CanadianDollar },
-        { SwissFranc.Code.ToLowerInvariant(), SwissFranc },
-        { SwedishKrona.Code.ToLowerInvariant(), SwedishKrona },
-        { NorwegianKrone.Code.ToLowerInvariant(), NorwegianKrone },
-        { DanishKrone.Code.ToLowerInvariant(), DanishKrone },
-        { NewZealandDollar.Code.ToLowerInvariant(), NewZealandDollar },
-        { Rand.Code.ToLowerInvariant(), Rand },
-        { BrazilianReal.Code.ToLowerInvariant(), BrazilianReal },
-        { RussianRuble.Code.ToLowerInvariant(), RussianRuble },
-        { MexicanPeso.Code.ToLowerInvariant(), MexicanPeso },
-        { SingaporeDollar.Code.ToLowerInvariant(), SingaporeDollar },
-        { HongKongDollar.Code.ToLowerInvariant(), HongKongDollar },
-        { Won.Code.ToLowerInvariant(), Won },
-        { TurkishLira.Code.ToLowerInvariant(), TurkishLira },
-        { SaudiRiyal.Code.ToLowerInvariant(), SaudiRiyal },
-        { UaeDirham.Code.ToLowerInvariant(), UaeDirham },
-        { Baht.Code.ToLowerInvariant(), Baht },
-        { MalaysianRinggit.Code.ToLowerInvariant(), MalaysianRinggit },
-        { Rupiah.Code.ToLowerInvariant(), Rupiah },
-        { PhilippinePeso.Code.ToLowerInvariant(), PhilippinePeso },
-        { Dong.Code.ToLowerInvariant(), Dong },
-        { PakistanRupee.Code.ToLowerInvariant(), PakistanRupee },
-        { Taka.Code.ToLowerInvariant(), Taka },
-        { SriLankaRupee.Code.ToLowerInvariant(), SriLankaRupee },
-        { NepaleseRupee.Code.ToLowerInvariant(), NepaleseRupee },
-        { IraqiDinar.Code.ToLowerInvariant(), IraqiDinar },
-        { IranianRial.Code.ToLowerInvariant(), IranianRial },
-        { EgyptianPound.Code.ToLowerInvariant(), EgyptianPound },
-        { Naira.Code.ToLowerInvariant(), Naira },
-        { KenyanShilling.Code.ToLowerInvariant(), KenyanShilling },
-        { GhanaCedi.Code.ToLowerInvariant(), GhanaCedi },
-        { CfaFrancBceao.Code.ToLowerInvariant(), CfaFrancBceao },
-        { CfaFrancBeac.Code.ToLowerInvariant(), CfaFrancBeac },
-        { ArgentinePeso.Code.ToLowerInvariant(), ArgentinePeso },
-        { ChileanPeso.Code.ToLowerInvariant(), ChileanPeso },
-        { ColombianPeso.Code.ToLowerInvariant(), ColombianPeso },
-        { Sol.Code.ToLowerInvariant(), Sol },
-        { Hryvnia.Code.ToLowerInvariant(), Hryvnia },
-        { Zloty.Code.ToLowerInvariant(), Zloty },
-        { CzechKoruna.Code.ToLowerInvariant(), CzechKoruna },
-        { Forint.Code.ToLowerInvariant(), Forint },
-        { RomanianLeu.Code.ToLowerInvariant(), RomanianLeu },
-        { NewIsraeliSheqel.Code.ToLowerInvariant(), NewIsraeliSheqel },
-        { QatariRial.Code.ToLowerInvariant(), QatariRial },
-        { KuwaitiDinar.Code.ToLowerInvariant(), KuwaitiDinar },
-        { RialOmani.Code.ToLowerInvariant(), RialOmani },
-        { BahrainiDinar.Code.ToLowerInvariant(), BahrainiDinar },
-        { IcelandKrona.Code.ToLowerInvariant(), IcelandKrona },
-        { CostaRicanColon.Code.ToLowerInvariant(), CostaRicanColon },
-        { DominicanPeso.Code.ToLowerInvariant(), DominicanPeso },
-        { Quetzal.Code.ToLowerInvariant(), Quetzal },
-        { Lempira.Code.ToLowerInvariant(), Lempira },
-        { Balboa.Code.ToLowerInvariant(), Balboa },
-        { PesoUruguayo.Code.ToLowerInvariant(), PesoUruguayo },
-        { Boliviano.Code.ToLowerInvariant(), Boliviano },
-        { Guarani.Code.ToLowerInvariant(), Guarani },
-        { UzbekistanSum.Code.ToLowerInvariant(), UzbekistanSum },
-        { Tenge.Code.ToLowerInvariant(), Tenge },
-        { Somoni.Code.ToLowerInvariant(), Somoni },
-        { Som.Code.ToLowerInvariant(), Som },
-        { TurkmenistanNewManat.Code.ToLowerInvariant(), TurkmenistanNewManat },
-        { AzerbaijanManat.Code.ToLowerInvariant(), AzerbaijanManat },
-        { Lari.Code.ToLowerInvariant(), Lari },
-        { ArmenianDram.Code.ToLowerInvariant(), ArmenianDram },
-        { BelarusianRuble.Code.ToLowerInvariant(), BelarusianRuble },
-        { TunisianDinar.Code.ToLowerInvariant(), TunisianDinar },
-        { MoroccanDirham.Code.ToLowerInvariant(), MoroccanDirham },
-        { CfpFranc.Code.ToLowerInvariant(), CfpFranc },
-        { EastCaribbeanDollar.Code.ToLowerInvariant(), EastCaribbeanDollar },
-        { Sdr.Code.ToLowerInvariant(), Sdr }
-    };
+    // ===== Reflection-based lookup =====
+    private static readonly Lazy<List<Currency>> _all = new(() =>
+        typeof(CurrencyHelper)
+            .GetFields(BindingFlags.Public | BindingFlags.Static)
+            .Where(f => f.FieldType == typeof(Currency) && f.Name != "None")
+            .Select(f => (Currency)f.GetValue(null)!)
+            .OrderBy(c => c.Name)
+            .ToList());
 
-    public static readonly IReadOnlyDictionary<string, Currency> NameMap = new Dictionary<string, Currency>
+    private static readonly Lazy<IReadOnlyDictionary<string, Currency>> _codeMap = new(() =>
     {
-        { None.Name.ToLowerInvariant(), None },
-        { Afghani.Name.ToLowerInvariant(), Afghani },
-        { Euro.Name.ToLowerInvariant(), Euro },
-        { UsDollar.Name.ToLowerInvariant(), UsDollar },
-        { PoundSterling.Name.ToLowerInvariant(), PoundSterling },
-        { Yen.Name.ToLowerInvariant(), Yen },
-        { YuanRenminbi.Name.ToLowerInvariant(), YuanRenminbi },
-        { IndianRupee.Name.ToLowerInvariant(), IndianRupee },
-        { AustralianDollar.Name.ToLowerInvariant(), AustralianDollar },
-        { CanadianDollar.Name.ToLowerInvariant(), CanadianDollar },
-        { SwissFranc.Name.ToLowerInvariant(), SwissFranc },
-        { SwedishKrona.Name.ToLowerInvariant(), SwedishKrona },
-        { NorwegianKrone.Name.ToLowerInvariant(), NorwegianKrone },
-        { DanishKrone.Name.ToLowerInvariant(), DanishKrone },
-        { NewZealandDollar.Name.ToLowerInvariant(), NewZealandDollar },
-        { Rand.Name.ToLowerInvariant(), Rand },
-        { BrazilianReal.Name.ToLowerInvariant(), BrazilianReal },
-        { RussianRuble.Name.ToLowerInvariant(), RussianRuble },
-        { MexicanPeso.Name.ToLowerInvariant(), MexicanPeso },
-        { SingaporeDollar.Name.ToLowerInvariant(), SingaporeDollar },
-        { HongKongDollar.Name.ToLowerInvariant(), HongKongDollar },
-        { Won.Name.ToLowerInvariant(), Won },
-        { TurkishLira.Name.ToLowerInvariant(), TurkishLira },
-        { SaudiRiyal.Name.ToLowerInvariant(), SaudiRiyal },
-        { UaeDirham.Name.ToLowerInvariant(), UaeDirham },
-        { Baht.Name.ToLowerInvariant(), Baht },
-        { MalaysianRinggit.Name.ToLowerInvariant(), MalaysianRinggit },
-        { Rupiah.Name.ToLowerInvariant(), Rupiah },
-        { PhilippinePeso.Name.ToLowerInvariant(), PhilippinePeso },
-        { Dong.Name.ToLowerInvariant(), Dong },
-        { PakistanRupee.Name.ToLowerInvariant(), PakistanRupee },
-        { Taka.Name.ToLowerInvariant(), Taka },
-        { SriLankaRupee.Name.ToLowerInvariant(), SriLankaRupee },
-        { NepaleseRupee.Name.ToLowerInvariant(), NepaleseRupee },
-        { IraqiDinar.Name.ToLowerInvariant(), IraqiDinar },
-        { IranianRial.Name.ToLowerInvariant(), IranianRial },
-        { EgyptianPound.Name.ToLowerInvariant(), EgyptianPound },
-        { Naira.Name.ToLowerInvariant(), Naira },
-        { KenyanShilling.Name.ToLowerInvariant(), KenyanShilling },
-        { GhanaCedi.Name.ToLowerInvariant(), GhanaCedi },
-        { CfaFrancBceao.Name.ToLowerInvariant(), CfaFrancBceao },
-        { CfaFrancBeac.Name.ToLowerInvariant(), CfaFrancBeac },
-        { ArgentinePeso.Name.ToLowerInvariant(), ArgentinePeso },
-        { ChileanPeso.Name.ToLowerInvariant(), ChileanPeso },
-        { ColombianPeso.Name.ToLowerInvariant(), ColombianPeso },
-        { Sol.Name.ToLowerInvariant(), Sol },
-        { Hryvnia.Name.ToLowerInvariant(), Hryvnia },
-        { Zloty.Name.ToLowerInvariant(), Zloty },
-        { CzechKoruna.Name.ToLowerInvariant(), CzechKoruna },
-        { Forint.Name.ToLowerInvariant(), Forint },
-        { RomanianLeu.Name.ToLowerInvariant(), RomanianLeu },
-        { NewIsraeliSheqel.Name.ToLowerInvariant(), NewIsraeliSheqel },
-        { QatariRial.Name.ToLowerInvariant(), QatariRial },
-        { KuwaitiDinar.Name.ToLowerInvariant(), KuwaitiDinar },
-        { RialOmani.Name.ToLowerInvariant(), RialOmani },
-        { BahrainiDinar.Name.ToLowerInvariant(), BahrainiDinar },
-        { IcelandKrona.Name.ToLowerInvariant(), IcelandKrona },
-        { CostaRicanColon.Name.ToLowerInvariant(), CostaRicanColon },
-        { DominicanPeso.Name.ToLowerInvariant(), DominicanPeso },
-        { Quetzal.Name.ToLowerInvariant(), Quetzal },
-        { Lempira.Name.ToLowerInvariant(), Lempira },
-        { Balboa.Name.ToLowerInvariant(), Balboa },
-        { PesoUruguayo.Name.ToLowerInvariant(), PesoUruguayo },
-        { Boliviano.Name.ToLowerInvariant(), Boliviano },
-        { Guarani.Name.ToLowerInvariant(), Guarani },
-        { UzbekistanSum.Name.ToLowerInvariant(), UzbekistanSum },
-        { Tenge.Name.ToLowerInvariant(), Tenge },
-        { Somoni.Name.ToLowerInvariant(), Somoni },
-        { Som.Name.ToLowerInvariant(), Som },
-        { TurkmenistanNewManat.Name.ToLowerInvariant(), TurkmenistanNewManat },
-        { AzerbaijanManat.Name.ToLowerInvariant(), AzerbaijanManat },
-        { Lari.Name.ToLowerInvariant(), Lari },
-        { ArmenianDram.Name.ToLowerInvariant(), ArmenianDram },
-        { BelarusianRuble.Name.ToLowerInvariant(), BelarusianRuble },
-        { TunisianDinar.Name.ToLowerInvariant(), TunisianDinar },
-        { MoroccanDirham.Name.ToLowerInvariant(), MoroccanDirham },
-        { CfpFranc.Name.ToLowerInvariant(), CfpFranc },
-        { EastCaribbeanDollar.Name.ToLowerInvariant(), EastCaribbeanDollar },
-        { Sdr.Name.ToLowerInvariant(), Sdr }
-    };
-    public static readonly IReadOnlyDictionary<int, Currency> NumberMap = new Dictionary<int, Currency>
-    {
-        { None.Number, None },
-        { Afghani.Number, Afghani },
-        { Euro.Number, Euro },
-        { UsDollar.Number, UsDollar },
-        { PoundSterling.Number, PoundSterling },
-        { Yen.Number, Yen },
-        { YuanRenminbi.Number, YuanRenminbi },
-        { IndianRupee.Number, IndianRupee },
-        { AustralianDollar.Number, AustralianDollar },
-        { CanadianDollar.Number, CanadianDollar },
-        { SwissFranc.Number, SwissFranc },
-        { SwedishKrona.Number, SwedishKrona },
-        { NorwegianKrone.Number, NorwegianKrone },
-        { DanishKrone.Number, DanishKrone },
-        { NewZealandDollar.Number, NewZealandDollar },
-        { Rand.Number, Rand },
-        { BrazilianReal.Number, BrazilianReal },
-        { RussianRuble.Number, RussianRuble },
-        { MexicanPeso.Number, MexicanPeso },
-        { SingaporeDollar.Number, SingaporeDollar },
-        { HongKongDollar.Number, HongKongDollar },
-        { Won.Number, Won },
-        { TurkishLira.Number, TurkishLira },
-        { SaudiRiyal.Number, SaudiRiyal },
-        { UaeDirham.Number, UaeDirham },
-        { Baht.Number, Baht },
-        { MalaysianRinggit.Number, MalaysianRinggit },
-        { Rupiah.Number, Rupiah },
-        { PhilippinePeso.Number, PhilippinePeso },
-        { Dong.Number, Dong },
-        { PakistanRupee.Number, PakistanRupee },
-        { Taka.Number, Taka },
-        { SriLankaRupee.Number, SriLankaRupee },
-        { NepaleseRupee.Number, NepaleseRupee },
-        { IraqiDinar.Number, IraqiDinar },
-        { IranianRial.Number, IranianRial },
-        { EgyptianPound.Number, EgyptianPound },
-        { Naira.Number, Naira },
-        { KenyanShilling.Number, KenyanShilling },
-        { GhanaCedi.Number, GhanaCedi },
-        { CfaFrancBceao.Number, CfaFrancBceao },
-        { CfaFrancBeac.Number, CfaFrancBeac },
-        { ArgentinePeso.Number, ArgentinePeso },
-        { ChileanPeso.Number, ChileanPeso },
-        { ColombianPeso.Number, ColombianPeso },
-        { Sol.Number, Sol },
-        { Hryvnia.Number, Hryvnia },
-        { Zloty.Number, Zloty },
-        { CzechKoruna.Number, CzechKoruna },
-        { Forint.Number, Forint },
-        { RomanianLeu.Number, RomanianLeu },
-        { NewIsraeliSheqel.Number, NewIsraeliSheqel },
-        { QatariRial.Number, QatariRial },
-        { KuwaitiDinar.Number, KuwaitiDinar },
-        { RialOmani.Number, RialOmani },
-        { BahrainiDinar.Number, BahrainiDinar },
-        { IcelandKrona.Number, IcelandKrona },
-        { CostaRicanColon.Number, CostaRicanColon },
-        { DominicanPeso.Number, DominicanPeso },
-        { Quetzal.Number, Quetzal },
-        { Lempira.Number, Lempira },
-        { Balboa.Number, Balboa },
-        { PesoUruguayo.Number, PesoUruguayo },
-        { Boliviano.Number, Boliviano },
-        { Guarani.Number, Guarani },
-        { UzbekistanSum.Number, UzbekistanSum },
-        { Tenge.Number, Tenge },
-        { Somoni.Number, Somoni },
-        { Som.Number, Som },
-        { TurkmenistanNewManat.Number, TurkmenistanNewManat },
-        { AzerbaijanManat.Number, AzerbaijanManat },
-        { Lari.Number, Lari },
-        { ArmenianDram.Number, ArmenianDram },
-        { BelarusianRuble.Number, BelarusianRuble },
-        { TunisianDinar.Number, TunisianDinar },
-        { MoroccanDirham.Number, MoroccanDirham },
-        { CfpFranc.Number, CfpFranc },
-        { EastCaribbeanDollar.Number, EastCaribbeanDollar },
-        { Sdr.Number, Sdr }
-    };
+        var map = new Dictionary<string, Currency> { { string.Empty, None } };
+        foreach (var c in _all.Value)
+            map[c.Code.ToLowerInvariant()] = c;
+        return map;
+    });
 
+    private static readonly Lazy<IReadOnlyDictionary<string, Currency>> _nameMap = new(() =>
+    {
+        var map = new Dictionary<string, Currency> { { string.Empty, None } };
+        foreach (var c in _all.Value)
+            map[c.Name.ToLowerInvariant()] = c;
+        return map;
+    });
+
+    private static readonly Lazy<IReadOnlyDictionary<int, Currency>> _numberMap = new(() =>
+    {
+        var map = new Dictionary<int, Currency> { { 0, None } };
+        foreach (var c in _all.Value)
+            map[c.Number] = c;
+        return map;
+    });
+
+    public static List<Currency> GetAll() => new(_all.Value);
+    public static IReadOnlyDictionary<string, Currency> CodeMap => _codeMap.Value;
+    public static IReadOnlyDictionary<string, Currency> NameMap => _nameMap.Value;
+    public static IReadOnlyDictionary<int, Currency> NumberMap => _numberMap.Value;
 }
