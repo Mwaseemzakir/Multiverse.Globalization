@@ -28,6 +28,7 @@
       <PackagePath>\</PackagePath>
     </None>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="logo.jpg" Pack="true" PackagePath="\" />
   </ItemGroup>
 	
   <ItemGroup>
