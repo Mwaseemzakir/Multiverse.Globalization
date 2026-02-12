@@ -2,9 +2,10 @@
 
 namespace Multiverse.Globalization.Languages;
 
-internal static class LanguageHelper
+public static class LanguageHelper
 {
     public static readonly Language Afar = new Language("aa", "aar", "Afar");
+
     public static readonly Language Abkhazian = new Language("ab", "abk", "Abkhazian");
     public static readonly Language Afrikaans = new Language("af", "afr", "Afrikaans");
     public static readonly Language Akan = new Language("ak", "aka", "Akan");
@@ -296,7 +297,7 @@ internal static class LanguageHelper
     public static readonly Language Mohawk = new Language("", "moh", "Mohawk");
     public static readonly Language Mongolian = new Language("mn", "mon", "Mongolian");
     public static readonly Language Mossi = new Language("", "mos", "Mossi");
-    public static readonly Language Maori = new Language("", "mri", "Maori");
+    public static readonly Language Maori = new Language("mi", "mri", "Maori");
     public static readonly Language MultipleLanguages = new Language("", "mul", "Multiple languages");
     public static readonly Language MundaLanguages = new Language("", "mun", "Munda languages");
     public static readonly Language Creek = new Language("", "mus", "Creek");
@@ -1086,6 +1087,7 @@ internal static class LanguageHelper
         { Marathi.Alpha3Code.ToLowerInvariant(), Marathi },
         { Maltese.Alpha3Code.ToLowerInvariant(), Maltese },
         { Mongolian.Alpha3Code.ToLowerInvariant(), Mongolian },
+        { Maori.Alpha3Code.ToLowerInvariant(), Maori },
         { Nauru.Alpha3Code.ToLowerInvariant(), Nauru },
         { Navajo.Alpha3Code.ToLowerInvariant(), Navajo },
         { NdebeleSouth.Alpha3Code.ToLowerInvariant(), NdebeleSouth },
@@ -1262,6 +1264,7 @@ internal static class LanguageHelper
         { Marathi.Alpha2Code.ToLowerInvariant(), Marathi },
         { Maltese.Alpha2Code.ToLowerInvariant(), Maltese },
         { Mongolian.Alpha2Code.ToLowerInvariant(), Mongolian },
+        { Maori.Alpha2Code.ToLowerInvariant(), Maori },
         { Nauru.Alpha2Code.ToLowerInvariant(), Nauru },
         { Navajo.Alpha2Code.ToLowerInvariant(), Navajo },
         { NdebeleSouth.Alpha2Code.ToLowerInvariant(), NdebeleSouth },
@@ -1314,7 +1317,6 @@ internal static class LanguageHelper
         { Tagalog.Alpha2Code.ToLowerInvariant(), Tagalog },
         { Tswana.Alpha2Code.ToLowerInvariant(), Tswana },
         { TongaIslands.Alpha2Code.ToLowerInvariant(), TongaIslands },
-        { TongaNyasa.Alpha2Code.ToLowerInvariant(), TongaNyasa },
         { Turkish.Alpha2Code.ToLowerInvariant(), Turkish },
         { Tsonga.Alpha2Code.ToLowerInvariant(), Tsonga },
         { Tatar.Alpha2Code.ToLowerInvariant(), Tatar },
@@ -1438,6 +1440,7 @@ internal static class LanguageHelper
         { Marathi.Name.ToLowerInvariant(), Marathi },
         { Maltese.Name.ToLowerInvariant(), Maltese },
         { Mongolian.Name.ToLowerInvariant(), Mongolian },
+        { Maori.Name.ToLowerInvariant(), Maori },
         { Nauru.Name.ToLowerInvariant(), Nauru },
         { Navajo.Name.ToLowerInvariant(), Navajo },
         { NdebeleSouth.Name.ToLowerInvariant(), NdebeleSouth },

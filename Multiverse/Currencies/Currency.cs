@@ -87,23 +87,4 @@ public sealed class Currency
     /// Retrieves a list of all available Currency objects.
     /// </summary>
     public static List<Currency> GetAll() => CurrencyHelper.GetAll();
-
-    /// <summary>
-    /// Retrieves a Currency object based on the provided currency number. 
-    /// Returns null if not found.
-    /// </summary>
-    public static Currency? GetCurrencyOrDefaultByNumber(int currencyNumber) =>
-        NumberMap.ContainsKey(currencyNumber) ? NumberMap[currencyNumber] : default;
-
-    /// <summary>
-    /// Retrieves a Currency object based on the provided currency number. 
-    /// Throws an exception if not found.
-    /// </summary>
-    public static Currency GetCurrencyByNumber(int currencyNumber)
-    {
-        if(!NumberMap.ContainsKey(currencyNumber))
-            throw new CurrencyNotFoundException($"Currency with number '{currencyNumber}' was not found.");
-
-        return NumberMap[currencyNumber];
-    }
 }

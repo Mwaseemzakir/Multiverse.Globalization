@@ -80,13 +80,15 @@ public sealed class Country
     /// </summary>
     public static bool IsValid(string identifier)
     {
+        if (string.IsNullOrWhiteSpace(identifier))
+            return false;
+
         identifier = identifier.ToLowerInvariant();
 
-        return !string.IsNullOrWhiteSpace(identifier) && (
-            Alpha2CodeMap.ContainsKey(identifier) ||
+        return Alpha2CodeMap.ContainsKey(identifier) ||
             Alpha3CodeMap.ContainsKey(identifier) ||
             NumericCodeMap.ContainsKey(identifier) ||
-            NameMap.ContainsKey(identifier));
+            NameMap.ContainsKey(identifier);
     }
 
     /// <summary>

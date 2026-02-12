@@ -6,20 +6,28 @@
     <Title>Multiverse</Title>
     <Authors>Muhammad Waseem</Authors>
     <Description>This NuGet package provides comprehensive language codes, country codes, and currency codes from around the globe, making it an essential tool for internationalization and localization in .NET projects.</Description>
-    <AssemblyVersion>2.0</AssemblyVersion>
+    <Version>2.0.1</Version>
+    <AssemblyVersion>2.0.1.0</AssemblyVersion>
+    <FileVersion>2.0.1.0</FileVersion>
     <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse.Globalization</RepositoryUrl>
-    <Copyright>Muhammad Waseem - $(Year)</Copyright>
+    <Copyright>Muhammad Waseem - $([System.DateTime]::Now.Year)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	<PackageTags>internationalization; localization; language codes; country codes; currency codes; .NET; globalization</PackageTags>
 	<PackageId>Multiverse</PackageId>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Holidays\**" />
+    <EmbeddedResource Remove="Holidays\**" />
+    <None Remove="Holidays\**" />
+  </ItemGroup>
 	
   <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 	
   <ItemGroup>
@@ -27,6 +35,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
 
 	<PropertyGroup>

@@ -2,7 +2,7 @@
 
 namespace Multiverse.Globalization.Currencies;
 
-internal static class CurrencyHelper
+public static class CurrencyHelper
 {
     #region List
     public static readonly Currency None = new Currency(0, string.Empty, string.Empty, string.Empty);

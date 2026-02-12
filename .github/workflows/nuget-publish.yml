@@ -11,6 +11,7 @@ jobs:
 
     env:
       PROJECT_NAME: "Multiverse"
+      PROJECT_PATH: "Multiverse/Multiverse.Globalization.csproj"
       PACKAGE_SOURCE: "https://api.nuget.org/v3/index.json"
       PACKAGE_VERSION: "2.0.1"
 
@@ -18,19 +19,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET 8 & 9
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0
-            9.0
+          dotnet-version: 8.0
 
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Update Version in .csproj
         run: |
-          find . -name "*.csproj" -exec sed -i "s|<Version>.*</Version>|<Version>${{ env.PACKAGE_VERSION }}</Version>|" {} +
+          sed -i "s|<Version>.*</Version>|<Version>${{ env.PACKAGE_VERSION }}</Version>|" "${{ env.PROJECT_PATH }}"
+          sed -i "s|<AssemblyVersion>.*</AssemblyVersion>|<AssemblyVersion>${{ env.PACKAGE_VERSION }}.0</AssemblyVersion>|" "${{ env.PROJECT_PATH }}"
+          sed -i "s|<FileVersion>.*</FileVersion>|<FileVersion>${{ env.PACKAGE_VERSION }}.0</FileVersion>|" "${{ env.PROJECT_PATH }}"
 
       - name: Build project
         run: dotnet build --configuration Release --no-restore
@@ -39,7 +40,7 @@ jobs:
         run: dotnet test --configuration Release --no-build --verbosity normal
 
       - name: Pack package
-        run: dotnet pack --configuration Release --no-build --output nupkgs --property:PackageVersion=${{ env.PACKAGE_VERSION }}
+        run: dotnet pack "${{ env.PROJECT_PATH }}" --configuration Release --no-build --output nupkgs --property:PackageVersion=${{ env.PACKAGE_VERSION }}
 
       - name: Push NuGet Package
         run: dotnet nuget push "nupkgs/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "${{ env.PACKAGE_SOURCE }}" --skip-duplicate

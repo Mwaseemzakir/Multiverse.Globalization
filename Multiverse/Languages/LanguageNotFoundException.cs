@@ -3,7 +3,7 @@
 namespace Multiverse.Globalization.Languages;
 
 [Serializable]
-internal class LanguageNotFoundException : Exception
+public class LanguageNotFoundException : Exception
 {
     public LanguageNotFoundException()
     {
