@@ -41,6 +41,7 @@
 - [Exception Handling](#exception-handling)
 - [Best Practices](#best-practices)
 - [API Reference Summary](#api-reference-summary)
+- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -535,6 +536,13 @@ Country.GetCountry("Us");
 
 ### Currency
 
+| Property / Method | Returns | Description |
+|---|---|---|
+| `Name` | `string` | Currency name |
+| `Code` | `string` | ISO 4217 alphabetic code |
+| `Number` | `int` | ISO 4217 numeric code |
+| `Symbol` | `string` | Currency symbol |
+
 | Method | Returns | Throws | Description |
 |---|---|---|---|
 | `GetCurrency(string)` | `Currency` | `CurrencyNotFoundException`, `ArgumentNullException` | Strict lookup by code or name |
@@ -547,12 +555,92 @@ Country.GetCountry("Us");
 
 ### Language
 
+| Property / Method | Returns | Description |
+|---|---|---|
+| `Name` | `string` | Language name (may include alternates) |
+| `Alpha2Code` | `string` | ISO 639-1 code (2-letter, may be empty) |
+| `Alpha3Code` | `string` | ISO 639-2 code (3-letter) |
+
 | Method | Returns | Throws | Description |
 |---|---|---|---|
 | `GetLanguage(string)` | `Language` | `LanguageNotFoundException`, `ArgumentNullException` | Strict lookup by alpha-2, alpha-3, or name |
 | `GetLanguageOrDefault(string)` | `Language?` | — | Safe lookup; returns `null` if not found |
 | `IsValid(string)` | `bool` | — | Check if identifier maps to a known language |
 | `GetAll()` | `List<Language>` | — | All 475+ languages |
+
+### CountryHelper
+
+| Member | Type | Description |
+|---|---|---|
+| `None` | `Country` | Empty sentinel value representing no country |
+| `GetAll()` | `List<Country>` | Returns a new list of all 250 countries, ordered by name |
+| `Alpha2CodeMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by ISO 3166-1 alpha-2 code (case-insensitive keys) |
+| `Alpha3CodeMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by ISO 3166-1 alpha-3 code (case-insensitive keys) |
+| `NumericCodeMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by ISO 3166-1 numeric code |
+| `NameMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by country name (case-insensitive keys) |
+| `Pakistan`, `France`, ... | `Country` | 250 static readonly fields — one per country |
+
+### CurrencyHelper
+
+| Member | Type | Description |
+|---|---|---|
+| `None` | `Currency` | Empty sentinel value representing no currency |
+| `GetAll()` | `List<Currency>` | Returns a new list of all currencies, ordered by name |
+| `CodeMap` | `IReadOnlyDictionary<string, Currency>` | O(1) lookup by ISO 4217 code (case-insensitive keys) |
+| `NameMap` | `IReadOnlyDictionary<string, Currency>` | O(1) lookup by currency name (case-insensitive keys) |
+| `NumberMap` | `IReadOnlyDictionary<int, Currency>` | O(1) lookup by ISO 4217 numeric code |
+| `UsDollar`, `Euro`, ... | `Currency` | 150+ static readonly fields — one per currency |
+
+### LanguageHelper
+
+| Member | Type | Description |
+|---|---|---|
+| `None` | `Language` | Empty sentinel value representing no language |
+| `GetAll()` | `List<Language>` | Returns a new list of all languages |
+| `Alpha2CodeMap` | `IReadOnlyDictionary<string, Language>` | O(1) lookup by ISO 639-1 code (lowercase keys) |
+| `Alpha3CodeMap` | `IReadOnlyDictionary<string, Language>` | O(1) lookup by ISO 639-2 code (lowercase keys) |
+| `NameMap` | `IReadOnlyDictionary<string, Language>` | O(1) lookup by language name (lowercase keys) |
+| `English`, `Urdu`, ... | `Language` | 475+ static readonly fields — one per language |
+
+---
+
+## Testing
+
+The project includes a comprehensive test suite with **202 unit tests** covering every public API, edge case, and data integrity check across the entire library.
+
+### Running Tests
+
+```bash
+dotnet test
+```
+
+### Test Structure
+
+| Test Class | Tests | Covers |
+|---|---|---|
+| `CountryTests` | 46 | `Country` API, `CountryHelper` maps, data integrity across all 250 countries |
+| `CurrencyTests` | 38 | `Currency` API (string & int overloads), `CurrencyHelper` maps, data integrity |
+| `LanguageTests` | 36 | `Language` API, `LanguageHelper` maps, data integrity |
+| `ExceptionTests` | 18 | All three custom exception types — constructors, inheritance, and throw behavior |
+
+### What's Tested
+
+- **All lookup methods** — `GetCountry`, `GetCurrency`, `GetLanguage` and their `OrDefault` variants, by every supported identifier type (alpha-2, alpha-3, numeric code, name)
+- **Validation** — `IsValid()` for valid codes, invalid codes, `null`, empty strings, whitespace, and case variations
+- **Exception paths** — `ArgumentNullException` for null/empty input, domain-specific `NotFoundException` for unknown identifiers
+- **Case insensitivity** — lookups work with any casing (`"us"`, `"US"`, `"Us"`)
+- **Helper maps** — `Alpha2CodeMap`, `Alpha3CodeMap`, `NameMap`, `NumericCodeMap`, `CodeMap`, `NumberMap` all contain expected entries
+- **Data integrity** — no duplicate codes/names, all required properties are non-empty, regions come from a known set, calling codes start with `+`, currency codes are uppercase 3-letter, alpha codes have correct lengths
+- **Relationships** — `Country.Currency` matches `CurrencyCode`, `Country.OfficialLanguages` returns correct languages, `Country.Flag` is derived from `Alpha2Code`
+- **Collection behavior** — `GetAll()` returns new list instances each time, lists are ordered, singletons are reference-equal across lookups
+
+### Test Dependencies
+
+| Package | Purpose |
+|---|---|
+| [xUnit](https://xunit.net/) | Test framework |
+| [FluentAssertions](https://fluentassertions.com/) | Assertion library |
+| [NSubstitute](https://nsubstitute.github.io/) | Mocking framework |
 
 ---
 
