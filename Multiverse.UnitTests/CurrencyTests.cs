@@ -1,14 +1,16 @@
-﻿using Multiverse.Globalization.Currencies;
+using Multiverse.Globalization.Currencies;
 using Xunit;
 
 namespace Multiverse.Globalization.UnitTests;
 
 public class CurrencyTests
 {
+    #region GetAll
+
     [Fact]
     public void GetAll_Should_ReturnAllCurrencies()
     {
-        List<Currency>? currencies = Currency.GetAll();
+        List<Currency> currencies = Currency.GetAll();
 
         Assert.NotNull(currencies);
         Assert.NotEmpty(currencies);
@@ -19,64 +21,340 @@ public class CurrencyTests
     }
 
     [Fact]
-    public void IsValid_Should_ReturnTrueForValidCode()
+    public void GetAll_Should_ReturnNewListEachTime()
     {
-        // Test major currencies
-        Assert.True(Currency.IsValid(CurrencyHelper.UsDollar.Code));
-        Assert.True(Currency.IsValid(CurrencyHelper.Euro.Code));
-        Assert.True(Currency.IsValid(CurrencyHelper.PoundSterling.Code));
-        Assert.True(Currency.IsValid(CurrencyHelper.PakistanRupee.Code));
-        Assert.True(Currency.IsValid(CurrencyHelper.Yen.Code));
-        Assert.True(Currency.IsValid(CurrencyHelper.SwissFranc.Code));
+        var list1 = Currency.GetAll();
+        var list2 = Currency.GetAll();
 
-        // Test major currencies by number
-        Assert.True(Currency.IsValid(CurrencyHelper.UsDollar.Number));
-        Assert.True(Currency.IsValid(CurrencyHelper.Euro.Number));
-        Assert.True(Currency.IsValid(CurrencyHelper.PoundSterling.Number));
-        Assert.True(Currency.IsValid(CurrencyHelper.PakistanRupee.Number));
-        Assert.True(Currency.IsValid(CurrencyHelper.Yen.Number));
-        Assert.True(Currency.IsValid(CurrencyHelper.SwissFranc.Number));
+        Assert.NotSame(list1, list2);
+        Assert.Equal(list1.Count, list2.Count);
     }
 
     [Fact]
-    public void IsValid_Should_ReturnFalseForInvalidCode()
+    public void GetAll_Should_BeOrderedByName()
     {
-        Assert.False(Currency.IsValid("XXX")); // Invalid 3-letter code
-        Assert.False(Currency.IsValid("XX")); // Too short
-        Assert.False(Currency.IsValid("USDD")); // Too long
-        Assert.False(Currency.IsValid("")); // Empty string
-        Assert.False(Currency.IsValid("123")); // Numeric code
-        Assert.False(Currency.IsValid("!@#")); // Special characters
+        var currencies = Currency.GetAll();
+        var names = currencies.Select(c => c.Name).ToList();
+        var sorted = names.OrderBy(n => n).ToList();
+
+        Assert.Equal(sorted, names);
     }
 
     [Fact]
-    public void IsValid_Should_IgnoreCaseSensitivity()
+    public void GetAll_Should_NotContainNone()
     {
-        // Test with different cases
-        Assert.True(Currency.IsValid(CurrencyHelper.UsDollar.Code.ToLower()));
-        Assert.True(Currency.IsValid(CurrencyHelper.UsDollar.Code.ToUpper()));
+        var currencies = Currency.GetAll();
+        Assert.DoesNotContain(currencies, c => c.Code == string.Empty && c.Name == string.Empty && c.Number == 0);
+    }
+
+    [Fact]
+    public void GetAll_Should_NotContainDuplicateCodes()
+    {
+        var currencies = Currency.GetAll();
+        var codes = currencies
+            .Select(c => c.Code.ToLowerInvariant())
+            .Where(code => !string.IsNullOrEmpty(code))
+            .ToList();
+
+        Assert.Equal(codes.Count, codes.Distinct().Count());
+    }
+
+    [Fact]
+    public void GetAll_Should_NotContainDuplicateNames()
+    {
+        var currencies = Currency.GetAll();
+        var names = currencies
+            .Select(c => c.Name.ToLowerInvariant())
+            .Where(n => !string.IsNullOrEmpty(n))
+            .ToList();
+
+        Assert.Equal(names.Count, names.Distinct().Count());
+    }
+
+    #endregion
+
+    #region IsValid (string)
+
+    [Fact]
+    public void IsValid_String_Should_ReturnTrueForValidCode()
+    {
+        Assert.True(Currency.IsValid("USD"));
+        Assert.True(Currency.IsValid("EUR"));
+        Assert.True(Currency.IsValid("GBP"));
+        Assert.True(Currency.IsValid("PKR"));
+        Assert.True(Currency.IsValid("JPY"));
+        Assert.True(Currency.IsValid("CHF"));
+    }
+
+    [Fact]
+    public void IsValid_String_Should_ReturnTrueForValidName()
+    {
+        Assert.True(Currency.IsValid("US Dollar"));
+        Assert.True(Currency.IsValid("Euro"));
+        Assert.True(Currency.IsValid("Pound Sterling"));
+        Assert.True(Currency.IsValid("Pakistan Rupee"));
+    }
+
+    [Fact]
+    public void IsValid_String_Should_ReturnFalseForInvalidCode()
+    {
+        Assert.False(Currency.IsValid("XXX"));
+        Assert.False(Currency.IsValid("XX"));
+        Assert.False(Currency.IsValid("USDD"));
+        Assert.False(Currency.IsValid(""));
+        Assert.False(Currency.IsValid("123"));
+        Assert.False(Currency.IsValid("!@#"));
+        Assert.False(Currency.IsValid("Nonexistent Currency"));
+    }
+
+    [Fact]
+    public void IsValid_String_Should_ReturnFalseForNullOrWhitespace()
+    {
+        Assert.False(Currency.IsValid((string)null!));
+        Assert.False(Currency.IsValid(""));
+        Assert.False(Currency.IsValid(" "));
+        Assert.False(Currency.IsValid("  "));
+        Assert.False(Currency.IsValid("\t"));
+    }
+
+    [Fact]
+    public void IsValid_String_Should_IgnoreCaseSensitivity()
+    {
+        Assert.True(Currency.IsValid("usd"));
+        Assert.True(Currency.IsValid("USD"));
         Assert.True(Currency.IsValid("uSd"));
         Assert.True(Currency.IsValid("eUr"));
+        Assert.True(Currency.IsValid("us dollar"));
+        Assert.True(Currency.IsValid("US DOLLAR"));
+    }
+
+    #endregion
+
+    #region IsValid (int)
+
+    [Fact]
+    public void IsValid_Int_Should_ReturnTrueForValidNumber()
+    {
+        Assert.True(Currency.IsValid(840)); // USD
+        Assert.True(Currency.IsValid(978)); // EUR
+        Assert.True(Currency.IsValid(826)); // GBP
+        Assert.True(Currency.IsValid(586)); // PKR
+        Assert.True(Currency.IsValid(392)); // JPY
+        Assert.True(Currency.IsValid(0));   // None
     }
 
     [Fact]
-    public void Currency_Properties_Should_BeCorrect()
+    public void IsValid_Int_Should_ReturnFalseForInvalidNumber()
     {
-        // Test USD properties
+        Assert.False(Currency.IsValid(-1));
+        Assert.False(Currency.IsValid(99999));
+        Assert.False(Currency.IsValid(1));
+        Assert.False(Currency.IsValid(int.MaxValue));
+    }
+
+    #endregion
+
+    #region GetCurrency (string)
+
+    [Fact]
+    public void GetCurrency_String_Should_ReturnByCode()
+    {
+        var currency = Currency.GetCurrency("USD");
+        Assert.Equal("US Dollar", currency.Name);
+        Assert.Same(CurrencyHelper.UsDollar, currency);
+    }
+
+    [Fact]
+    public void GetCurrency_String_Should_ReturnByName()
+    {
+        var currency = Currency.GetCurrency("Euro");
+        Assert.Equal("EUR", currency.Code);
+        Assert.Same(CurrencyHelper.Euro, currency);
+    }
+
+    [Fact]
+    public void GetCurrency_String_Should_BeCaseInsensitive()
+    {
+        var c1 = Currency.GetCurrency("usd");
+        var c2 = Currency.GetCurrency("USD");
+        var c3 = Currency.GetCurrency("Usd");
+
+        Assert.Same(c1, c2);
+        Assert.Same(c2, c3);
+    }
+
+    [Fact]
+    public void GetCurrency_String_Should_ThrowForNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => Currency.GetCurrency((string)null!));
+    }
+
+    [Fact]
+    public void GetCurrency_String_Should_ThrowForInvalidIdentifier()
+    {
+        Assert.Throws<CurrencyNotFoundException>(() => Currency.GetCurrency("XXX"));
+        Assert.Throws<CurrencyNotFoundException>(() => Currency.GetCurrency("Nonexistent"));
+    }
+
+    [Theory]
+    [InlineData("USD", "US Dollar", 840)]
+    [InlineData("EUR", "Euro", 978)]
+    [InlineData("GBP", "Pound Sterling", 826)]
+    [InlineData("JPY", "Yen", 392)]
+    [InlineData("PKR", "Pakistan Rupee", 586)]
+    [InlineData("INR", "Indian Rupee", 356)]
+    [InlineData("AUD", "Australian Dollar", 36)]
+    [InlineData("CAD", "Canadian Dollar", 124)]
+    public void GetCurrency_String_Should_ReturnCorrectProperties(string code, string expectedName, int expectedNumber)
+    {
+        var currency = Currency.GetCurrency(code);
+        Assert.Equal(code, currency.Code);
+        Assert.Equal(expectedName, currency.Name);
+        Assert.Equal(expectedNumber, currency.Number);
+    }
+
+    #endregion
+
+    #region GetCurrency (int)
+
+    [Fact]
+    public void GetCurrency_Int_Should_ReturnByNumber()
+    {
+        var currency = Currency.GetCurrency(840);
+        Assert.Equal("USD", currency.Code);
+        Assert.Equal("US Dollar", currency.Name);
+        Assert.Same(CurrencyHelper.UsDollar, currency);
+    }
+
+    [Fact]
+    public void GetCurrency_Int_Should_ReturnNoneForZero()
+    {
+        var currency = Currency.GetCurrency(0);
+        Assert.Same(CurrencyHelper.None, currency);
+    }
+
+    [Fact]
+    public void GetCurrency_Int_Should_ThrowForInvalidNumber()
+    {
+        Assert.Throws<CurrencyNotFoundException>(() => Currency.GetCurrency(-1));
+        Assert.Throws<CurrencyNotFoundException>(() => Currency.GetCurrency(99999));
+        Assert.Throws<CurrencyNotFoundException>(() => Currency.GetCurrency(1));
+    }
+
+    [Theory]
+    [InlineData(840, "USD")]
+    [InlineData(978, "EUR")]
+    [InlineData(826, "GBP")]
+    [InlineData(392, "JPY")]
+    [InlineData(586, "PKR")]
+    [InlineData(356, "INR")]
+    public void GetCurrency_Int_Should_ReturnCorrectCurrency(int number, string expectedCode)
+    {
+        var currency = Currency.GetCurrency(number);
+        Assert.Equal(expectedCode, currency.Code);
+        Assert.Equal(number, currency.Number);
+    }
+
+    #endregion
+
+    #region GetCurrencyOrDefault (string)
+
+    [Fact]
+    public void GetCurrencyOrDefault_String_Should_ReturnCurrencyForValidCode()
+    {
+        var currency = Currency.GetCurrencyOrDefault("USD");
+        Assert.NotNull(currency);
+        Assert.Equal("US Dollar", currency!.Name);
+    }
+
+    [Fact]
+    public void GetCurrencyOrDefault_String_Should_ReturnCurrencyForValidName()
+    {
+        var currency = Currency.GetCurrencyOrDefault("Euro");
+        Assert.NotNull(currency);
+        Assert.Equal("EUR", currency!.Code);
+    }
+
+    [Fact]
+    public void GetCurrencyOrDefault_String_Should_ReturnNullForInvalid()
+    {
+        Assert.Null(Currency.GetCurrencyOrDefault("XXX"));
+        Assert.Null(Currency.GetCurrencyOrDefault("Nonexistent"));
+    }
+
+    [Fact]
+    public void GetCurrencyOrDefault_String_Should_ReturnNullForNullOrWhitespace()
+    {
+        Assert.Null(Currency.GetCurrencyOrDefault(null!));
+        Assert.Null(Currency.GetCurrencyOrDefault(""));
+        Assert.Null(Currency.GetCurrencyOrDefault(" "));
+    }
+
+    [Fact]
+    public void GetCurrencyOrDefault_String_Should_BeCaseInsensitive()
+    {
+        var c1 = Currency.GetCurrencyOrDefault("usd");
+        var c2 = Currency.GetCurrencyOrDefault("USD");
+
+        Assert.NotNull(c1);
+        Assert.Same(c1, c2);
+    }
+
+    #endregion
+
+    #region GetCurrencyOrDefault (int)
+
+    [Fact]
+    public void GetCurrencyOrDefault_Int_Should_ReturnCurrencyForValidNumber()
+    {
+        var currency = Currency.GetCurrencyOrDefault(840);
+        Assert.NotNull(currency);
+        Assert.Equal("USD", currency!.Code);
+    }
+
+    [Fact]
+    public void GetCurrencyOrDefault_Int_Should_ReturnNoneForZero()
+    {
+        var currency = Currency.GetCurrencyOrDefault(0);
+        Assert.NotNull(currency);
+        Assert.Same(CurrencyHelper.None, currency);
+    }
+
+    [Fact]
+    public void GetCurrencyOrDefault_Int_Should_ReturnNullForInvalidNumber()
+    {
+        Assert.Null(Currency.GetCurrencyOrDefault(-1));
+        Assert.Null(Currency.GetCurrencyOrDefault(99999));
+        Assert.Null(Currency.GetCurrencyOrDefault(1));
+    }
+
+    #endregion
+
+    #region Currency Properties
+
+    [Fact]
+    public void Currency_Properties_Should_BeCorrectForUSD()
+    {
         var usd = CurrencyHelper.UsDollar;
         Assert.Equal("USD", usd.Code);
         Assert.Equal("US Dollar", usd.Name);
         Assert.Equal("$", usd.Symbol);
         Assert.Equal(840, usd.Number);
+    }
 
-        // Test EUR properties
+    [Fact]
+    public void Currency_Properties_Should_BeCorrectForEUR()
+    {
         var eur = CurrencyHelper.Euro;
         Assert.Equal("EUR", eur.Code);
         Assert.Equal("Euro", eur.Name);
         Assert.Equal("€", eur.Symbol);
         Assert.Equal(978, eur.Number);
+    }
 
-        // Test GBP properties
+    [Fact]
+    public void Currency_Properties_Should_BeCorrectForGBP()
+    {
         var gbp = CurrencyHelper.PoundSterling;
         Assert.Equal("GBP", gbp.Code);
         Assert.Equal("Pound Sterling", gbp.Name);
@@ -85,14 +363,116 @@ public class CurrencyTests
     }
 
     [Fact]
-    public void GetAll_Should_NotContainDuplicateCodes()
+    public void Currency_None_Should_HaveEmptyProperties()
+    {
+        var none = CurrencyHelper.None;
+        Assert.Equal(string.Empty, none.Code);
+        Assert.Equal(string.Empty, none.Name);
+        Assert.Equal(string.Empty, none.Symbol);
+        Assert.Equal(0, none.Number);
+    }
+
+    #endregion
+
+    #region CurrencyHelper Maps
+
+    [Fact]
+    public void CurrencyHelper_CodeMap_Should_ContainValidCurrencies()
+    {
+        var map = CurrencyHelper.CodeMap;
+        Assert.NotNull(map);
+        Assert.True(map.Count > 0);
+        Assert.True(map.ContainsKey("usd"));
+        Assert.True(map.ContainsKey("eur"));
+        Assert.Same(CurrencyHelper.UsDollar, map["usd"]);
+    }
+
+    [Fact]
+    public void CurrencyHelper_CodeMap_Should_ContainNoneAsEmptyKey()
+    {
+        var map = CurrencyHelper.CodeMap;
+        Assert.True(map.ContainsKey(string.Empty));
+        Assert.Same(CurrencyHelper.None, map[string.Empty]);
+    }
+
+    [Fact]
+    public void CurrencyHelper_NameMap_Should_ContainValidCurrencies()
+    {
+        var map = CurrencyHelper.NameMap;
+        Assert.NotNull(map);
+        Assert.True(map.Count > 0);
+        Assert.True(map.ContainsKey("us dollar"));
+        Assert.True(map.ContainsKey("euro"));
+        Assert.Same(CurrencyHelper.UsDollar, map["us dollar"]);
+    }
+
+    [Fact]
+    public void CurrencyHelper_NumberMap_Should_ContainValidCurrencies()
+    {
+        var map = CurrencyHelper.NumberMap;
+        Assert.NotNull(map);
+        Assert.True(map.Count > 0);
+        Assert.True(map.ContainsKey(840));
+        Assert.True(map.ContainsKey(978));
+        Assert.True(map.ContainsKey(0)); // None
+        Assert.Same(CurrencyHelper.UsDollar, map[840]);
+        Assert.Same(CurrencyHelper.None, map[0]);
+    }
+
+    #endregion
+
+    #region Data Integrity
+
+    [Fact]
+    public void AllCurrencies_Should_HaveNonEmptyCode()
     {
         var currencies = Currency.GetAll();
-        
-        // Check for duplicate codes
-        var codes = currencies.Select(c => c.Code.ToLowerInvariant())
-                            .Where(code => !string.IsNullOrEmpty(code))
-                            .ToList();
-        Assert.Equal(codes.Count, codes.Distinct().Count());
+        foreach (var currency in currencies)
+        {
+            Assert.False(string.IsNullOrEmpty(currency.Code), $"Currency '{currency.Name}' has empty Code");
+            Assert.Equal(3, currency.Code.Length);
+        }
     }
+
+    [Fact]
+    public void AllCurrencies_Should_HaveNonEmptyName()
+    {
+        var currencies = Currency.GetAll();
+        foreach (var currency in currencies)
+        {
+            Assert.False(string.IsNullOrEmpty(currency.Name), $"Currency with code '{currency.Code}' has empty Name");
+        }
+    }
+
+    [Fact]
+    public void AllCurrencies_Should_HaveNonEmptySymbol()
+    {
+        var currencies = Currency.GetAll();
+        foreach (var currency in currencies)
+        {
+            Assert.False(string.IsNullOrEmpty(currency.Symbol), $"Currency '{currency.Name}' has empty Symbol");
+        }
+    }
+
+    [Fact]
+    public void AllCurrencies_Should_HavePositiveNumber()
+    {
+        var currencies = Currency.GetAll();
+        foreach (var currency in currencies)
+        {
+            Assert.True(currency.Number > 0, $"Currency '{currency.Name}' has non-positive Number: {currency.Number}");
+        }
+    }
+
+    [Fact]
+    public void AllCurrencies_Should_HaveUppercaseCode()
+    {
+        var currencies = Currency.GetAll();
+        foreach (var currency in currencies)
+        {
+            Assert.Equal(currency.Code, currency.Code.ToUpperInvariant());
+        }
+    }
+
+    #endregion
 }
