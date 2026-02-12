@@ -40,7 +40,7 @@
 
 	<PropertyGroup>
 		<PackageIcon>logo.png</PackageIcon>
-		<Readme>README.md</Readme>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/mwaseemzakir/Multiverse.Globalization</RepositoryUrl>
 	</PropertyGroup>
 
