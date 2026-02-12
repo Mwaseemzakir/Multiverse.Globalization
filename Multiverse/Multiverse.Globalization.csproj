@@ -6,9 +6,9 @@
     <Title>Multiverse</Title>
     <Authors>Muhammad Waseem</Authors>
     <Description>This NuGet package provides comprehensive language codes, country codes, and currency codes from around the globe, making it an essential tool for internationalization and localization in .NET projects.</Description>
-    <Version>2.0.1</Version>
-    <AssemblyVersion>2.0.1.0</AssemblyVersion>
-    <FileVersion>2.0.1.0</FileVersion>
+    <Version>2.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
     <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse.Globalization</RepositoryUrl>
     <Copyright>Muhammad Waseem - $([System.DateTime]::Now.Year)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
