@@ -36,6 +36,10 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
 	<PropertyGroup>
 		<PackageIcon>logo.jpg</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
