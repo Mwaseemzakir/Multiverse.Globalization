@@ -1,4 +1,4 @@
-## v2.0.41 — Holidays, SubRegion, Demonym & TLD
+## Holidays, SubRegion, Demonym & TLD
 
 - Holidays support — fixed-date public holidays for 190+ countries, accessible via Country.Holidays
 - Holiday model with Name, Month, Day, Type, Date, GetDate(), IsOnDate(), ToString()
