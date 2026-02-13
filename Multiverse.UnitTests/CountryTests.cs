@@ -704,4 +704,150 @@ public class CountryTests
     }
 
     #endregion
+
+    #region SubRegion
+
+    [Theory]
+    [InlineData("US", "Northern America")]
+    [InlineData("PK", "Southern Asia")]
+    [InlineData("JP", "Eastern Asia")]
+    [InlineData("GB", "Northern Europe")]
+    [InlineData("BR", "South America")]
+    [InlineData("AU", "Australia and New Zealand")]
+    [InlineData("DE", "Western Europe")]
+    [InlineData("NG", "Western Africa")]
+    public void Country_SubRegion_Should_BeCorrect(string alpha2, string expectedSubRegion)
+    {
+        var country = Country.GetCountry(alpha2);
+        Assert.Equal(expectedSubRegion, country.SubRegion);
+    }
+
+    [Fact]
+    public void Country_SubRegion_Should_BeEmptyForNone()
+    {
+        Assert.Equal(string.Empty, CountryHelper.None.SubRegion);
+    }
+
+    [Fact]
+    public void AllCountries_ExceptNone_Should_HaveNonEmptySubRegion()
+    {
+        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        foreach (var country in countries)
+        {
+            Assert.False(string.IsNullOrEmpty(country.SubRegion), $"Country '{country.Name}' has empty SubRegion");
+        }
+    }
+
+    #endregion
+
+    #region Demonym
+
+    [Theory]
+    [InlineData("US", "American")]
+    [InlineData("PK", "Pakistani")]
+    [InlineData("JP", "Japanese")]
+    [InlineData("GB", "British")]
+    [InlineData("BR", "Brazilian")]
+    [InlineData("AU", "Australian")]
+    [InlineData("DE", "German")]
+    [InlineData("NG", "Nigerian")]
+    public void Country_Demonym_Should_BeCorrect(string alpha2, string expectedDemonym)
+    {
+        var country = Country.GetCountry(alpha2);
+        Assert.Equal(expectedDemonym, country.Demonym);
+    }
+
+    [Fact]
+    public void Country_Demonym_Should_BeEmptyForNone()
+    {
+        Assert.Equal(string.Empty, CountryHelper.None.Demonym);
+    }
+
+    [Fact]
+    public void AllCountries_ExceptNoneAndAntarctica_Should_HaveNonEmptyDemonym()
+    {
+        var countries = Country.GetAll().Where(c => c != CountryHelper.None && c != CountryHelper.Antarctica);
+        foreach (var country in countries)
+        {
+            Assert.False(string.IsNullOrEmpty(country.Demonym), $"Country '{country.Name}' has empty Demonym");
+        }
+    }
+
+    #endregion
+
+    #region TLD
+
+    [Theory]
+    [InlineData("US", ".us")]
+    [InlineData("PK", ".pk")]
+    [InlineData("JP", ".jp")]
+    [InlineData("GB", ".uk")]
+    [InlineData("BR", ".br")]
+    [InlineData("AU", ".au")]
+    [InlineData("DE", ".de")]
+    [InlineData("NG", ".ng")]
+    public void Country_TLD_Should_BeCorrect(string alpha2, string expectedTld)
+    {
+        var country = Country.GetCountry(alpha2);
+        Assert.Equal(expectedTld, country.TLD);
+    }
+
+    [Fact]
+    public void Country_TLD_Should_BeEmptyForNone()
+    {
+        Assert.Equal(string.Empty, CountryHelper.None.TLD);
+    }
+
+    [Fact]
+    public void AllCountries_ExceptNone_Should_HaveNonEmptyTLD()
+    {
+        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        foreach (var country in countries)
+        {
+            Assert.False(string.IsNullOrEmpty(country.TLD), $"Country '{country.Name}' has empty TLD");
+        }
+    }
+
+    [Fact]
+    public void AllCountries_TLD_Should_StartWithDot()
+    {
+        var countries = Country.GetAll().Where(c => !string.IsNullOrEmpty(c.TLD));
+        foreach (var country in countries)
+        {
+            Assert.StartsWith(".", country.TLD);
+        }
+    }
+
+    #endregion
+
+    #region SetExtendedData Properties on Known Countries
+
+    [Fact]
+    public void Country_Properties_Should_IncludeExtendedDataForUS()
+    {
+        var us = CountryHelper.UnitedStatesOfAmerica;
+        Assert.Equal("Northern America", us.SubRegion);
+        Assert.Equal("American", us.Demonym);
+        Assert.Equal(".us", us.TLD);
+    }
+
+    [Fact]
+    public void Country_Properties_Should_IncludeExtendedDataForUK()
+    {
+        var uk = CountryHelper.UnitedKingdom;
+        Assert.Equal("Northern Europe", uk.SubRegion);
+        Assert.Equal("British", uk.Demonym);
+        Assert.Equal(".uk", uk.TLD);
+    }
+
+    [Fact]
+    public void Country_None_Should_HaveEmptyExtendedProperties()
+    {
+        var none = CountryHelper.None;
+        Assert.Equal(string.Empty, none.SubRegion);
+        Assert.Equal(string.Empty, none.Demonym);
+        Assert.Equal(string.Empty, none.TLD);
+    }
+
+    #endregion
 }

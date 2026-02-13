@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Multiverse.Globalization.Currencies;
+using Multiverse.Globalization.Holidays;
 using Multiverse.Globalization.Languages;
 using static Multiverse.Globalization.Countries.CountryHelper;
 
@@ -52,6 +53,15 @@ public sealed class Country
     /// <summary>Geographic region/continent, e.g. "Asia", "Europe", "Americas", "Africa", "Oceania", "Antarctic".</summary>
     public string Region { get; private set; } = string.Empty;
 
+    /// <summary>UN M49 sub-region, e.g. "Southern Asia", "Western Europe", "Caribbean".</summary>
+    public string SubRegion { get; private set; } = string.Empty;
+
+    /// <summary>Demonym — what residents of the country are called, e.g. "American", "Pakistani", "Japanese".</summary>
+    public string Demonym { get; private set; } = string.Empty;
+
+    /// <summary>Country-code top-level domain, e.g. ".us", ".pk", ".jp".</summary>
+    public string TLD { get; private set; } = string.Empty;
+
     /// <summary>Primary currency used in this country.</summary>
     public Currency? Currency { get; private set; }
 
@@ -60,6 +70,34 @@ public sealed class Country
 
     /// <summary>Official languages of this country.</summary>
     public IReadOnlyList<Language> OfficialLanguages { get; private set; } = Array.Empty<Language>();
+
+    /// <summary>Public holidays observed in this country (fixed-date holidays only).</summary>
+    public IReadOnlyList<Holiday> Holidays => HolidayHelper.GetHolidaysForCountry(Alpha2Code);
+
+    /// <summary>
+    /// Returns holidays filtered by the specified <see cref="HolidayType"/>.
+    /// </summary>
+    public IReadOnlyList<Holiday> GetHolidaysByType(HolidayType type)
+        => Holidays.Where(h => h.Type == type).ToList().AsReadOnly();
+
+    /// <summary>
+    /// Checks whether the given date falls on any public holiday in this country (month and day match, ignoring year).
+    /// </summary>
+    public bool IsPublicHoliday(DateTime date)
+        => Holidays.Any(h => h.IsOnDate(date));
+
+    /// <summary>
+    /// Returns the holiday that falls on the given date, or null if no holiday matches.
+    /// </summary>
+    public Holiday? GetHolidayOnDate(DateTime date)
+        => Holidays.FirstOrDefault(h => h.IsOnDate(date));
+
+    internal void SetExtendedData(string subRegion, string demonym, string tld)
+    {
+        SubRegion = subRegion;
+        Demonym = demonym;
+        TLD = tld;
+    }
 
     /// <summary>Unicode flag emoji derived from the Alpha-2 code.</summary>
     public string Flag =>

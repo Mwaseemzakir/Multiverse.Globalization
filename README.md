@@ -21,6 +21,7 @@
   - [Country Properties](#country-properties)
   - [Accessing a Country's Currency](#accessing-a-countrys-currency)
   - [Accessing a Country's Official Languages](#accessing-a-countrys-official-languages)
+  - [Accessing a Country's Holidays](#accessing-a-countrys-holidays)
   - [Lookup by Identifier](#lookup-country-by-identifier)
   - [Validation](#validate-a-country-identifier)
   - [Get All Countries](#get-all-countries)
@@ -38,6 +39,12 @@
   - [Validation](#validate-a-language-identifier)
   - [Get All Languages](#get-all-languages)
   - [Direct Access via LanguageHelper](#direct-access-via-languagehelper)
+- [Holidays](#holidays)
+  - [Holiday Properties](#holiday-properties)
+  - [Accessing Holidays from a Country](#accessing-holidays-from-a-country)
+  - [Filtering Holidays by Type](#filtering-holidays-by-type)
+  - [Checking if a Date is a Holiday](#checking-if-a-date-is-a-holiday)
+  - [Holiday Types](#holiday-types)
 - [Exception Handling](#exception-handling)
 - [Best Practices](#best-practices)
 - [API Reference Summary](#api-reference-summary)
@@ -51,9 +58,10 @@
 
 | Capability | Standard | Coverage |
 |---|---|---|
-| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 250 countries & territories with capitals, regions, currencies, official languages & flag emojis |
+| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 250 countries & territories with capitals, regions, sub-regions, demonyms, TLDs, currencies, official languages, holidays & flag emojis |
 | **Currencies** | ISO 4217 (code, numeric) | 150+ world currencies |
 | **Languages** | ISO 639-1 & ISO 639-2 (alpha-2, alpha-3) | 475+ languages |
+| **Holidays** | Fixed-date public holidays | Public, national, religious, bank & observance holidays for 190+ countries |
 
 - **Country-centric design** — each `Country` carries its `Currency` and `OfficialLanguages`; one lookup gives you everything
 - **Fast lookups** — pre-built dictionary maps for O(1) retrieval by code, name, or number
@@ -91,7 +99,7 @@ dotnet add package Multiverse
 
 ### PackageReference
 ```xml
-<PackageReference Include="Multiverse" Version="3.0.0" />
+<PackageReference Include="Multiverse" Version="2.0.40" />
 ```
 
 ---
@@ -108,6 +116,9 @@ var pakistan = Country.GetCountry("PK");
 Console.WriteLine($"{pakistan.Flag} {pakistan.Name}");          // 🇵🇰 Pakistan
 Console.WriteLine($"Capital: {pakistan.Capital}");              // Capital: Islamabad
 Console.WriteLine($"Region: {pakistan.Region}");                // Region: Asia
+Console.WriteLine($"Sub-Region: {pakistan.SubRegion}");         // Sub-Region: Southern Asia
+Console.WriteLine($"Demonym: {pakistan.Demonym}");              // Demonym: Pakistani
+Console.WriteLine($"TLD: {pakistan.TLD}");                      // TLD: .pk
 Console.WriteLine($"Calling Code: {pakistan.CallingCode}");     // Calling Code: +92
 
 // Currency — accessed directly from the country
@@ -148,9 +159,13 @@ The `Country` class is the **central entity** of Multiverse. Each country object
 | `CallingCode` | `string` | International dialing code (E.164) | `"+92"` |
 | `Capital` | `string` | Capital city name | `"Islamabad"` |
 | `Region` | `string` | Geographic region / continent | `"Asia"` |
+| `SubRegion` | `string` | UN M49 sub-region | `"Southern Asia"` |
+| `Demonym` | `string` | What residents of the country are called | `"Pakistani"` |
+| `TLD` | `string` | Country-code top-level domain | `".pk"` |
 | `Currency` | `Currency?` | Full currency object (nullable for territories with no currency) | `CurrencyHelper.PakistanRupee` |
 | `CurrencyCode` | `string` | ISO 4217 code derived from `Currency` (empty if no currency) | `"PKR"` |
 | `OfficialLanguages` | `IReadOnlyList<Language>` | Official languages of the country | `[Urdu, English]` |
+| `Holidays` | `IReadOnlyList<Holiday>` | Public holidays observed in the country | `[Pakistan Day, Independence Day, ...]` |
 | `Flag` | `string` | Unicode flag emoji (computed from Alpha2Code) | 🇵🇰 |
 
 ### Accessing a Country's Currency
@@ -198,6 +213,40 @@ Console.WriteLine($"{france.Name}: {france.OfficialLanguages[0].Name}"); // Fran
 // Antarctica has no official languages
 var aq = CountryHelper.Antarctica;
 Console.WriteLine(aq.OfficialLanguages.Count); // 0
+```
+
+### Accessing a Country's Holidays
+
+Each country carries its public holidays as an `IReadOnlyList<Holiday>`:
+
+```csharp
+var usa = Country.GetCountry("US");
+
+Console.WriteLine($"{usa.Name} has {usa.Holidays.Count} holidays:");
+foreach (var holiday in usa.Holidays)
+    Console.WriteLine($"  {holiday.Name} — {holiday.Month:D2}/{holiday.Day:D2} ({holiday.Type})");
+// United States of America has 10 holidays:
+//   New Year's Day — 01/01 (Public)
+//   Martin Luther King Jr. Day — 01/20 (Public)
+//   ...
+//   Independence Day — 07/04 (National)
+//   Christmas Day — 12/25 (Religious)
+
+// Filter by type
+var nationalHolidays = usa.GetHolidaysByType(HolidayType.National);
+Console.WriteLine($"National holidays: {nationalHolidays.Count}"); // 1 (Independence Day)
+
+// Check if a date is a holiday
+bool isHoliday = usa.IsPublicHoliday(new DateTime(2026, 7, 4)); // true
+bool isNotHoliday = usa.IsPublicHoliday(new DateTime(2026, 3, 15)); // false
+
+// Get the holiday on a given date
+var holiday = usa.GetHolidayOnDate(new DateTime(2026, 7, 4));
+Console.WriteLine(holiday?.Name); // Independence Day
+
+// Countries with no holiday data return an empty list
+var none = CountryHelper.None;
+Console.WriteLine(none.Holidays.Count); // 0
 ```
 
 ### Lookup Country by Identifier
@@ -249,11 +298,15 @@ Console.WriteLine(pakistan.NumericCode);                  // 586
 Console.WriteLine(pakistan.CallingCode);                  // +92
 Console.WriteLine(pakistan.Capital);                      // Islamabad
 Console.WriteLine(pakistan.Region);                       // Asia
+Console.WriteLine(pakistan.SubRegion);                    // Southern Asia
+Console.WriteLine(pakistan.Demonym);                      // Pakistani
+Console.WriteLine(pakistan.TLD);                          // .pk
 Console.WriteLine(pakistan.CurrencyCode);                 // PKR
 Console.WriteLine(pakistan.Currency!.Name);               // Pakistan Rupee
 Console.WriteLine(pakistan.Currency.Symbol);              // ₨
 Console.WriteLine(pakistan.OfficialLanguages[0].Name);    // Urdu
 Console.WriteLine(pakistan.OfficialLanguages[1].Name);    // English
+Console.WriteLine(pakistan.Holidays.Count);                // 6
 Console.WriteLine(pakistan.Flag);                         // 🇵🇰
 
 var none = CountryHelper.None; // Empty sentinel value
@@ -410,6 +463,93 @@ var none = LanguageHelper.None; // Empty sentinel value
 
 ---
 
+## Holidays
+
+Namespace: `Multiverse.Globalization.Holidays`
+
+The `Holiday` class provides access to **fixed-date public holidays** for **190+ countries** around the world. Holidays are accessed directly through the `Country` object — each country carries its own holidays.
+
+> **Tip:** You can reach a country's holidays directly via `Country.Holidays` — see [Accessing a Country's Holidays](#accessing-a-countrys-holidays).
+
+### Holiday Properties
+
+| Property | Type | Description | Example |
+|---|---|---|---|
+| `Name` | `string` | Holiday name | `"Independence Day"` |
+| `Month` | `int` | Month of the holiday (1–12) | `7` |
+| `Day` | `int` | Day of the holiday (1–31) | `4` |
+| `Type` | `HolidayType` | Category of the holiday | `HolidayType.National` |
+| `Date` | `DateTime` | The holiday date in the current year | `2026-07-04` |
+
+### Accessing Holidays from a Country
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+
+foreach (var holiday in pakistan.Holidays)
+    Console.WriteLine($"{holiday.Name} — {holiday.Month:D2}/{holiday.Day:D2} ({holiday.Type})");
+// Kashmir Day — 02/05 (Observance)
+// Pakistan Day — 03/23 (National)
+// Labour Day — 05/01 (Public)
+// Independence Day — 08/14 (National)
+// Iqbal Day — 11/09 (National)
+// Quaid-e-Azam Day — 12/25 (National)
+
+var japan = Country.GetCountry("JP");
+Console.WriteLine($"Japan has {japan.Holidays.Count} holidays"); // Japan has 12 holidays
+```
+
+### Filtering Holidays by Type
+
+```csharp
+var france = Country.GetCountry("FR");
+
+// Get only national holidays
+var national = france.GetHolidaysByType(HolidayType.National);
+foreach (var h in national)
+    Console.WriteLine($"{h.Name} — {h.Month:D2}/{h.Day:D2}");
+// Victory in Europe Day — 05/08
+// Bastille Day — 07/14
+// Armistice Day — 11/11
+
+// Get religious holidays
+var religious = france.GetHolidaysByType(HolidayType.Religious);
+Console.WriteLine(religious.Count); // 3 (Assumption, All Saints', Christmas)
+```
+
+### Checking if a Date is a Holiday
+
+```csharp
+var india = Country.GetCountry("IN");
+
+// Check if a date falls on a holiday
+bool isHoliday = india.IsPublicHoliday(new DateTime(2026, 1, 26)); // true (Republic Day)
+bool isNot = india.IsPublicHoliday(new DateTime(2026, 3, 15));     // false
+
+// Get the specific holiday on a date
+var holiday = india.GetHolidayOnDate(new DateTime(2026, 8, 15));
+Console.WriteLine(holiday?.Name); // Independence Day
+
+// Get the date of a holiday in a specific year
+var republicDay = india.Holidays.First(h => h.Name == "Republic Day");
+Console.WriteLine(republicDay.GetDate(2026)); // 2026-01-26
+
+// Check using Holiday.IsOnDate()
+Console.WriteLine(republicDay.IsOnDate(new DateTime(2026, 1, 26))); // true
+```
+
+### Holiday Types
+
+| Type | Description |
+|---|---|
+| `Public` | A national public holiday observed across the entire country |
+| `Bank` | A bank/government holiday — offices close, but not all businesses |
+| `Religious` | A religious or observance-based holiday |
+| `National` | A national/independence/republic day |
+| `Observance` | A commemoration or remembrance day |
+
+---
+
 ## Exception Handling
 
 Each domain has a dedicated exception type that inherits from `System.Exception`:
@@ -522,9 +662,13 @@ Country.GetCountry("Us");
 | `CallingCode` | `string` | International dialing code (E.164) |
 | `Capital` | `string` | Capital city |
 | `Region` | `string` | Geographic region / continent |
+| `SubRegion` | `string` | UN M49 sub-region (e.g. "Southern Asia", "Western Europe") |
+| `Demonym` | `string` | Demonym — what residents are called (e.g. "Pakistani", "American") |
+| `TLD` | `string` | Country-code top-level domain (e.g. ".pk", ".us") |
 | `Currency` | `Currency?` | Full currency object (null for territories with no currency) |
 | `CurrencyCode` | `string` | ISO 4217 code derived from `Currency` |
 | `OfficialLanguages` | `IReadOnlyList<Language>` | Official languages of the country |
+| `Holidays` | `IReadOnlyList<Holiday>` | Public holidays observed in this country |
 | `Flag` | `string` | Unicode flag emoji |
 
 | Method | Returns | Throws | Description |
@@ -533,6 +677,12 @@ Country.GetCountry("Us");
 | `GetCountryOrDefault(string)` | `Country?` | — | Safe lookup; returns `null` if not found |
 | `IsValid(string)` | `bool` | — | Check if identifier maps to a known country |
 | `GetAll()` | `List<Country>` | — | All 250 countries |
+
+| Method | Returns | Description |
+|---|---|---|
+| `GetHolidaysByType(HolidayType)` | `IReadOnlyList<Holiday>` | Filter holidays by type |
+| `IsPublicHoliday(DateTime)` | `bool` | Check if date falls on any holiday |
+| `GetHolidayOnDate(DateTime)` | `Holiday?` | Get the holiday on a given date, or null |
 
 ### Currency
 
@@ -602,11 +752,30 @@ Country.GetCountry("Us");
 | `NameMap` | `IReadOnlyDictionary<string, Language>` | O(1) lookup by language name (lowercase keys) |
 | `English`, `Urdu`, ... | `Language` | 475+ static readonly fields — one per language |
 
+### Holiday
+
+| Property / Method | Returns | Description |
+|---|---|---|
+| `Name` | `string` | Holiday name |
+| `Month` | `int` | Month (1–12) |
+| `Day` | `int` | Day (1–31) |
+| `Type` | `HolidayType` | Category (Public, Bank, Religious, National, Observance) |
+| `Date` | `DateTime` | Date in the current year |
+| `GetDate(int)` | `DateTime` | Date in a specific year |
+| `IsOnDate(DateTime)` | `bool` | Check if month/day matches a given date |
+| `ToString()` | `string` | Formatted string, e.g. `"Christmas Day (12/25)"` |
+
+### HolidayHelper
+
+| Member | Type | Description |
+|---|---|---|
+| `All` | `IReadOnlyDictionary<string, List<Holiday>>` | Complete mapping of alpha-2 codes to holiday lists |
+
 ---
 
 ## Testing
 
-The project includes a comprehensive test suite with **202 unit tests** covering every public API, edge case, and data integrity check across the entire library.
+The project includes a comprehensive test suite with **312 unit tests** covering every public API, edge case, and data integrity check across the entire library.
 
 ### Running Tests
 
@@ -618,10 +787,11 @@ dotnet test
 
 | Test Class | Tests | Covers |
 |---|---|---|
-| `CountryTests` | 46 | `Country` API, `CountryHelper` maps, data integrity across all 250 countries |
-| `CurrencyTests` | 38 | `Currency` API (string & int overloads), `CurrencyHelper` maps, data integrity |
-| `LanguageTests` | 36 | `Language` API, `LanguageHelper` maps, data integrity |
-| `ExceptionTests` | 18 | All three custom exception types — constructors, inheritance, and throw behavior |
+| `CountryTests` | 119 | `Country` API, `CountryHelper` maps, SubRegion, Demonym, TLD, data integrity across all 250 countries |
+| `CurrencyTests` | 56 | `Currency` API (string & int overloads), `CurrencyHelper` maps, data integrity |
+| `LanguageTests` | 42 | `Language` API, `LanguageHelper` maps, data integrity |
+| `ExceptionTests` | 19 | All three custom exception types — constructors, inheritance, and throw behavior |
+| `HolidayTests` | 76 | `Holiday` model, `HolidayType` enum, `Country.Holidays`, filtering, date checks, data integrity |
 
 ### What's Tested
 
@@ -630,9 +800,10 @@ dotnet test
 - **Exception paths** — `ArgumentNullException` for null/empty input, domain-specific `NotFoundException` for unknown identifiers
 - **Case insensitivity** — lookups work with any casing (`"us"`, `"US"`, `"Us"`)
 - **Helper maps** — `Alpha2CodeMap`, `Alpha3CodeMap`, `NameMap`, `NumericCodeMap`, `CodeMap`, `NumberMap` all contain expected entries
-- **Data integrity** — no duplicate codes/names, all required properties are non-empty, regions come from a known set, calling codes start with `+`, currency codes are uppercase 3-letter, alpha codes have correct lengths
-- **Relationships** — `Country.Currency` matches `CurrencyCode`, `Country.OfficialLanguages` returns correct languages, `Country.Flag` is derived from `Alpha2Code`
+- **Data integrity** — no duplicate codes/names, all required properties are non-empty, regions come from a known set, calling codes start with `+`, currency codes are uppercase 3-letter, alpha codes have correct lengths, SubRegions/Demonyms/TLDs populated for all countries
+- **Relationships** — `Country.Currency` matches `CurrencyCode`, `Country.OfficialLanguages` returns correct languages, `Country.Flag` is derived from `Alpha2Code`, `Country.Holidays` returns correct holidays with filtering and date-check methods
 - **Collection behavior** — `GetAll()` returns new list instances each time, lists are ordered, singletons are reference-equal across lookups
+- **Holiday data** — all holidays have valid names, months, days, and types; no duplicate names per country; consistent across accesses
 
 ### Test Dependencies
 

@@ -13,14 +13,11 @@
     <Copyright>Muhammad Waseem - $([System.DateTime]::Now.Year)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageTags>internationalization; localization; language codes; country codes; currency codes; .NET; globalization</PackageTags>
+	<PackageTags>internationalization; localization; language codes; country codes; currency codes; .NET; globalization; holidays</PackageTags>
 	<PackageId>Multiverse</PackageId>
+	<PackageReleaseNotes>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\..\RELEASE_NOTES.md'))</PackageReleaseNotes>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Holidays\**" />
-    <EmbeddedResource Remove="Holidays\**" />
-    <None Remove="Holidays\**" />
-  </ItemGroup>
+
 	
   <ItemGroup>
     <None Include="..\LICENSE">
