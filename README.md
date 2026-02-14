@@ -22,6 +22,7 @@
   - [Accessing a Country's Currency](#accessing-a-countrys-currency)
   - [Accessing a Country's Official Languages](#accessing-a-countrys-official-languages)
   - [Accessing a Country's Holidays](#accessing-a-countrys-holidays)
+  - [Accessing a Country's Time Zones](#accessing-a-countrys-time-zones)
   - [Lookup by Identifier](#lookup-country-by-identifier)
   - [Validation](#validate-a-country-identifier)
   - [Get All Countries](#get-all-countries)
@@ -45,10 +46,17 @@
   - [Filtering Holidays by Type](#filtering-holidays-by-type)
   - [Checking if a Date is a Holiday](#checking-if-a-date-is-a-holiday)
   - [Holiday Types](#holiday-types)
+- [Time Zones](#time-zones)
+  - [Time Zone Properties](#time-zone-properties)
+  - [Accessing Time Zones from a Country](#accessing-time-zones-from-a-country)
+  - [Multi-Zone Countries](#multi-zone-countries)
+  - [DST Support](#dst-support)
+  - [UTC Offsets](#utc-offsets)
 - [Exception Handling](#exception-handling)
 - [Best Practices](#best-practices)
 - [API Reference Summary](#api-reference-summary)
 - [Testing](#testing)
+- [Release Notes](RELEASE_NOTES.md)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -58,10 +66,11 @@
 
 | Capability | Standard | Coverage |
 |---|---|---|
-| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 250 countries & territories with capitals, regions, sub-regions, demonyms, TLDs, currencies, official languages, holidays & flag emojis |
+| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 250 countries & territories with capitals, regions, sub-regions, demonyms, TLDs, currencies, official languages, holidays, time zones & flag emojis |
 | **Currencies** | ISO 4217 (code, numeric) | 150+ world currencies |
 | **Languages** | ISO 639-1 & ISO 639-2 (alpha-2, alpha-3) | 475+ languages |
 | **Holidays** | Fixed-date public holidays | Public, national, religious, bank & observance holidays for 190+ countries |
+| **Time Zones** | IANA Time Zone Database | UTC offsets, DST support, and country-to-zone mapping for 250 countries & territories |
 
 - **Country-centric design** — each `Country` carries its `Currency` and `OfficialLanguages`; one lookup gives you everything
 - **Fast lookups** — pre-built dictionary maps for O(1) retrieval by code, name, or number
@@ -166,6 +175,8 @@ The `Country` class is the **central entity** of Multiverse. Each country object
 | `CurrencyCode` | `string` | ISO 4217 code derived from `Currency` (empty if no currency) | `"PKR"` |
 | `OfficialLanguages` | `IReadOnlyList<Language>` | Official languages of the country | `[Urdu, English]` |
 | `Holidays` | `IReadOnlyList<Holiday>` | Public holidays observed in the country | `[Pakistan Day, Independence Day, ...]` |
+| `TimeZones` | `IReadOnlyList<CountryTimeZone>` | IANA time zones observed in the country | `[Asia/Karachi (UTC+05:00)]` |
+| `HasMultipleTimeZones` | `bool` | Whether the country spans more than one time zone | `false` |
 | `Flag` | `string` | Unicode flag emoji (computed from Alpha2Code) | 🇵🇰 |
 
 ### Accessing a Country's Currency
@@ -249,6 +260,43 @@ var none = CountryHelper.None;
 Console.WriteLine(none.Holidays.Count); // 0
 ```
 
+### Accessing a Country's Time Zones
+
+Each country carries its IANA time zones as an `IReadOnlyList<CountryTimeZone>`:
+
+```csharp
+var usa = Country.GetCountry("US");
+
+Console.WriteLine($"{usa.Name} has {usa.TimeZones.Count} time zones:");
+foreach (var tz in usa.TimeZones)
+    Console.WriteLine($"  {tz.IanaId} — {tz.UtcOffsetString}{(tz.ObservesDst ? " (DST)" : "")}");
+// United States of America has 7 time zones:
+//   America/New_York — UTC-05:00 (DST)
+//   America/Chicago — UTC-06:00 (DST)
+//   America/Denver — UTC-07:00 (DST)
+//   America/Los_Angeles — UTC-08:00 (DST)
+//   America/Anchorage — UTC-09:00 (DST)
+//   Pacific/Honolulu — UTC-10:00
+//   America/Phoenix — UTC-07:00
+
+// Single-zone countries
+var pakistan = Country.GetCountry("PK");
+Console.WriteLine($"{pakistan.Name}: {pakistan.GetPrimaryTimeZone()}");
+// Pakistan: Asia/Karachi (UTC+05:00)
+
+// Check if country spans multiple zones
+Console.WriteLine(usa.HasMultipleTimeZones);     // True
+Console.WriteLine(pakistan.HasMultipleTimeZones); // False
+
+// Get zones that observe DST
+var dstZones = usa.GetTimeZonesWithDst();
+Console.WriteLine($"{dstZones.Count} zones observe DST"); // 5 zones observe DST
+
+// Get distinct UTC offsets
+var offsets = usa.GetUtcOffsets();
+Console.WriteLine($"{offsets.Count} distinct offsets"); // 6 distinct offsets
+```
+
 ### Lookup Country by Identifier
 
 An **identifier** can be any of: alpha-2 code, alpha-3 code, numeric code, or the full country name.
@@ -307,6 +355,9 @@ Console.WriteLine(pakistan.Currency.Symbol);              // ₨
 Console.WriteLine(pakistan.OfficialLanguages[0].Name);    // Urdu
 Console.WriteLine(pakistan.OfficialLanguages[1].Name);    // English
 Console.WriteLine(pakistan.Holidays.Count);                // 6
+Console.WriteLine(pakistan.TimeZones[0].IanaId);           // Asia/Karachi
+Console.WriteLine(pakistan.TimeZones[0].UtcOffsetString);  // UTC+05:00
+Console.WriteLine(pakistan.HasMultipleTimeZones);          // False
 Console.WriteLine(pakistan.Flag);                         // 🇵🇰
 
 var none = CountryHelper.None; // Empty sentinel value
@@ -550,6 +601,113 @@ Console.WriteLine(republicDay.IsOnDate(new DateTime(2026, 1, 26))); // true
 
 ---
 
+## Time Zones
+
+Namespace: `Multiverse.Globalization.TimeZones`
+
+The `CountryTimeZone` class provides access to **IANA time zone data** for all **250 countries and territories**. Time zones are accessed directly through the `Country` object — each country carries its own time zone list.
+
+> **Standard:** Uses the [IANA Time Zone Database](https://www.iana.org/time-zones) (also known as the Olson database / tz database), the global standard for time zone identifiers used by Linux, macOS, Java, JavaScript, Go, Python, and .NET 6+.
+
+> **Tip:** You can reach a country's time zones directly via `Country.TimeZones` — see [Accessing a Country's Time Zones](#accessing-a-countrys-time-zones).
+
+### Time Zone Properties
+
+| Property | Type | Description | Example |
+|---|---|---|---|
+| `IanaId` | `string` | IANA time zone identifier | `"America/New_York"` |
+| `UtcOffsetHours` | `double` | Standard UTC offset in hours | `-5.0` |
+| `ObservesDst` | `bool` | Whether this zone observes Daylight Saving Time | `true` |
+| `UtcOffset` | `TimeSpan` | UTC offset as a `TimeSpan` | `-05:00:00` |
+| `UtcOffsetString` | `string` | Formatted UTC offset string | `"UTC-05:00"` |
+
+### Accessing Time Zones from a Country
+
+```csharp
+var usa = Country.GetCountry("US");
+
+foreach (var tz in usa.TimeZones)
+    Console.WriteLine($"{tz.IanaId} — {tz.UtcOffsetString}{(tz.ObservesDst ? " (DST)" : "")}");
+// America/New_York — UTC-05:00 (DST)
+// America/Chicago — UTC-06:00 (DST)
+// America/Denver — UTC-07:00 (DST)
+// America/Los_Angeles — UTC-08:00 (DST)
+// America/Anchorage — UTC-09:00 (DST)
+// Pacific/Honolulu — UTC-10:00
+// America/Phoenix — UTC-07:00
+
+// Get the primary (capital-city) time zone
+var primary = usa.GetPrimaryTimeZone();
+Console.WriteLine(primary);  // America/New_York (UTC-05:00, DST)
+
+// Single-zone countries
+var japan = Country.GetCountry("JP");
+Console.WriteLine(japan.TimeZones[0]); // Asia/Tokyo (UTC+09:00)
+```
+
+### Multi-Zone Countries
+
+```csharp
+// Check if a country spans multiple time zones
+var russia = Country.GetCountry("RU");
+Console.WriteLine(russia.HasMultipleTimeZones);  // True
+Console.WriteLine($"Russia has {russia.TimeZones.Count} time zones"); // 11
+
+var pakistan = Country.GetCountry("PK");
+Console.WriteLine(pakistan.HasMultipleTimeZones); // False
+
+// Countries with no time zone data return an empty list
+var none = CountryHelper.None;
+Console.WriteLine(none.TimeZones.Count); // 0
+```
+
+### DST Support
+
+```csharp
+var usa = Country.GetCountry("US");
+
+// Get only time zones that observe DST
+var dstZones = usa.GetTimeZonesWithDst();
+Console.WriteLine($"{dstZones.Count} zones observe DST"); // 5
+
+foreach (var tz in dstZones)
+    Console.WriteLine($"  {tz.IanaId}");
+// America/New_York
+// America/Chicago
+// America/Denver
+// America/Los_Angeles
+// America/Anchorage
+
+// Honolulu and Phoenix do NOT observe DST
+var japan = Country.GetCountry("JP");
+Console.WriteLine(japan.GetTimeZonesWithDst().Count); // 0 (Japan doesn't observe DST)
+```
+
+### UTC Offsets
+
+```csharp
+var usa = Country.GetCountry("US");
+
+// Get distinct UTC offsets across all time zones
+var offsets = usa.GetUtcOffsets();
+Console.WriteLine($"US has {offsets.Count} distinct UTC offsets"); // 6
+// -05:00, -06:00, -07:00, -08:00, -09:00, -10:00
+
+// Fractional offsets
+var india = Country.GetCountry("IN");
+Console.WriteLine(india.TimeZones[0].UtcOffsetString); // UTC+05:30
+
+var nepal = Country.GetCountry("NP");
+Console.WriteLine(nepal.TimeZones[0].UtcOffsetString); // UTC+05:45
+
+// Access the TimeSpan directly
+var offset = india.TimeZones[0].UtcOffset;
+Console.WriteLine(offset.TotalHours);  // 5.5
+Console.WriteLine(offset.TotalMinutes); // 330
+```
+
+---
+
 ## Exception Handling
 
 Each domain has a dedicated exception type that inherits from `System.Exception`:
@@ -669,6 +827,8 @@ Country.GetCountry("Us");
 | `CurrencyCode` | `string` | ISO 4217 code derived from `Currency` |
 | `OfficialLanguages` | `IReadOnlyList<Language>` | Official languages of the country |
 | `Holidays` | `IReadOnlyList<Holiday>` | Public holidays observed in this country |
+| `TimeZones` | `IReadOnlyList<CountryTimeZone>` | IANA time zones observed in this country |
+| `HasMultipleTimeZones` | `bool` | Whether the country spans more than one time zone |
 | `Flag` | `string` | Unicode flag emoji |
 
 | Method | Returns | Throws | Description |
@@ -683,6 +843,9 @@ Country.GetCountry("Us");
 | `GetHolidaysByType(HolidayType)` | `IReadOnlyList<Holiday>` | Filter holidays by type |
 | `IsPublicHoliday(DateTime)` | `bool` | Check if date falls on any holiday |
 | `GetHolidayOnDate(DateTime)` | `Holiday?` | Get the holiday on a given date, or null |
+| `GetPrimaryTimeZone()` | `CountryTimeZone?` | Get the primary (capital-city) time zone, or null |
+| `GetTimeZonesWithDst()` | `IReadOnlyList<CountryTimeZone>` | Get all time zones that observe DST |
+| `GetUtcOffsets()` | `IReadOnlyList<TimeSpan>` | Get distinct UTC offsets across all time zones |
 
 ### Currency
 
@@ -771,11 +934,28 @@ Country.GetCountry("Us");
 |---|---|---|
 | `All` | `IReadOnlyDictionary<string, List<Holiday>>` | Complete mapping of alpha-2 codes to holiday lists |
 
+### CountryTimeZone
+
+| Property / Method | Returns | Description |
+|---|---|---|
+| `IanaId` | `string` | IANA time zone identifier (e.g. "America/New_York") |
+| `UtcOffsetHours` | `double` | Standard UTC offset in hours (e.g. -5.0, +5.5, +5.75) |
+| `ObservesDst` | `bool` | Whether this time zone observes Daylight Saving Time |
+| `UtcOffset` | `TimeSpan` | UTC offset as a `TimeSpan` |
+| `UtcOffsetString` | `string` | Formatted offset string (e.g. "UTC-05:00", "UTC+05:45") |
+| `ToString()` | `string` | Formatted string, e.g. `"America/New_York (UTC-05:00, DST)"` |
+
+### TimeZoneHelper
+
+| Member | Type | Description |
+|---|---|---|
+| `All` | `IReadOnlyDictionary<string, List<CountryTimeZone>>` | Complete mapping of alpha-2 codes to time zone lists |
+
 ---
 
 ## Testing
 
-The project includes a comprehensive test suite with **312 unit tests** covering every public API, edge case, and data integrity check across the entire library.
+The project includes a comprehensive test suite with **410 unit tests** covering every public API, edge case, and data integrity check across the entire library.
 
 ### Running Tests
 
@@ -792,6 +972,7 @@ dotnet test
 | `LanguageTests` | 42 | `Language` API, `LanguageHelper` maps, data integrity |
 | `ExceptionTests` | 19 | All three custom exception types — constructors, inheritance, and throw behavior |
 | `HolidayTests` | 76 | `Holiday` model, `HolidayType` enum, `Country.Holidays`, filtering, date checks, data integrity |
+| `TimeZoneTests` | 98 | `CountryTimeZone` model, `Country.TimeZones`, DST support, UTC offsets, multi-zone countries, data integrity |
 
 ### What's Tested
 
@@ -804,6 +985,7 @@ dotnet test
 - **Relationships** — `Country.Currency` matches `CurrencyCode`, `Country.OfficialLanguages` returns correct languages, `Country.Flag` is derived from `Alpha2Code`, `Country.Holidays` returns correct holidays with filtering and date-check methods
 - **Collection behavior** — `GetAll()` returns new list instances each time, lists are ordered, singletons are reference-equal across lookups
 - **Holiday data** — all holidays have valid names, months, days, and types; no duplicate names per country; consistent across accesses
+- **Time zone data** — all IANA IDs are non-empty and contain "/", UTC offsets in valid range (−12 to +14), no duplicate IANA IDs per country, all country codes exist in CountryHelper, fractional offsets formatted correctly
 
 ### Test Dependencies
 

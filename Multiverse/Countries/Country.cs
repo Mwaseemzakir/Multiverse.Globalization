@@ -4,6 +4,7 @@ using System.Linq;
 using Multiverse.Globalization.Currencies;
 using Multiverse.Globalization.Holidays;
 using Multiverse.Globalization.Languages;
+using Multiverse.Globalization.TimeZones;
 using static Multiverse.Globalization.Countries.CountryHelper;
 
 namespace Multiverse.Globalization.Countries;
@@ -91,6 +92,32 @@ public sealed class Country
     /// </summary>
     public Holiday? GetHolidayOnDate(DateTime date)
         => Holidays.FirstOrDefault(h => h.IsOnDate(date));
+
+    // ── Time Zones ──────────────────────────────────────────────────
+
+    /// <summary>IANA time zones observed in this country.</summary>
+    public IReadOnlyList<CountryTimeZone> TimeZones => TimeZoneHelper.GetTimeZonesForCountry(Alpha2Code);
+
+    /// <summary>Whether this country spans more than one time zone.</summary>
+    public bool HasMultipleTimeZones => TimeZones.Count > 1;
+
+    /// <summary>
+    /// Returns the primary (first-listed / capital-city) time zone, or null if none defined.
+    /// </summary>
+    public CountryTimeZone? GetPrimaryTimeZone()
+        => TimeZones.Count > 0 ? TimeZones[0] : null;
+
+    /// <summary>
+    /// Returns all time zones in this country that observe Daylight Saving Time.
+    /// </summary>
+    public IReadOnlyList<CountryTimeZone> GetTimeZonesWithDst()
+        => TimeZones.Where(tz => tz.ObservesDst).ToList().AsReadOnly();
+
+    /// <summary>
+    /// Returns the distinct UTC offsets observed in this country.
+    /// </summary>
+    public IReadOnlyList<TimeSpan> GetUtcOffsets()
+        => TimeZones.Select(tz => tz.UtcOffset).Distinct().ToList().AsReadOnly();
 
     internal void SetExtendedData(string subRegion, string demonym, string tld)
     {
