@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Multiverse.Globalization.Languages;
 
@@ -504,7 +505,11 @@ public static class LanguageHelper
 
     public static readonly Language None = new Language(string.Empty, string.Empty, string.Empty);
 
-    public static List<Language> GetAll()
+    private static readonly Lazy<IReadOnlyList<Language>> _all = new(() => InitializeAll());
+
+    public static IReadOnlyList<Language> GetAll() => _all.Value;
+
+    private static List<Language> InitializeAll()
     {
         return new List<Language>
         {

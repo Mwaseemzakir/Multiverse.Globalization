@@ -12,7 +12,7 @@ public class CountryTests
     [Fact]
     public void GetAll_Should_ReturnAllCountries()
     {
-        List<Country> countries = Country.GetAll();
+        IReadOnlyList<Country> countries = Country.GetAll();
 
         Assert.NotNull(countries);
         Assert.NotEmpty(countries);
@@ -23,12 +23,12 @@ public class CountryTests
     }
 
     [Fact]
-    public void GetAll_Should_ReturnNewListEachTime()
+    public void GetAll_Should_ReturnSameCachedInstance()
     {
         var list1 = Country.GetAll();
         var list2 = Country.GetAll();
 
-        Assert.NotSame(list1, list2);
+        Assert.Same(list1, list2);
         Assert.Equal(list1.Count, list2.Count);
     }
 
@@ -847,6 +847,158 @@ public class CountryTests
         Assert.Equal(string.Empty, none.SubRegion);
         Assert.Equal(string.Empty, none.Demonym);
         Assert.Equal(string.Empty, none.TLD);
+    }
+
+    #endregion
+
+    #region ToString
+
+    [Fact]
+    public void ToString_Should_ReturnNameAndAlpha2Code()
+    {
+        var us = CountryHelper.UnitedStatesOfAmerica;
+        Assert.Equal("United States of America (US)", us.ToString());
+    }
+
+    [Fact]
+    public void ToString_Should_ReturnNameAndAlpha2CodeForUK()
+    {
+        var uk = CountryHelper.UnitedKingdom;
+        Assert.Equal("United Kingdom (GB)", uk.ToString());
+    }
+
+    [Fact]
+    public void ToString_None_Should_ReturnEmptyParens()
+    {
+        var none = CountryHelper.None;
+        Assert.Equal(" ()", none.ToString());
+    }
+
+    [Theory]
+    [InlineData("PK", "Pakistan (PK)")]
+    [InlineData("JP", "Japan (JP)")]
+    [InlineData("DE", "Germany (DE)")]
+    [InlineData("FR", "France (FR)")]
+    [InlineData("BR", "Brazil (BR)")]
+    public void ToString_Should_FormatCorrectly(string alpha2, string expected)
+    {
+        var country = Country.GetCountry(alpha2);
+        Assert.Equal(expected, country.ToString());
+    }
+
+    #endregion
+
+    #region Equals and GetHashCode
+
+    [Fact]
+    public void Equals_SameCountry_Should_ReturnTrue()
+    {
+        var us1 = Country.GetCountry("US");
+        var us2 = Country.GetCountry("USA");
+
+        Assert.Equal(us1, us2);
+        Assert.True(us1.Equals(us2));
+    }
+
+    [Fact]
+    public void Equals_DifferentCountry_Should_ReturnFalse()
+    {
+        var us = Country.GetCountry("US");
+        var uk = Country.GetCountry("GB");
+
+        Assert.NotEqual(us, uk);
+        Assert.False(us.Equals(uk));
+    }
+
+    [Fact]
+    public void Equals_Null_Should_ReturnFalse()
+    {
+        var us = Country.GetCountry("US");
+        Assert.False(us.Equals(null));
+    }
+
+    [Fact]
+    public void Equals_NonCountryObject_Should_ReturnFalse()
+    {
+        var us = Country.GetCountry("US");
+        Assert.False(us.Equals("US"));
+    }
+
+    [Fact]
+    public void GetHashCode_SameCountry_Should_ReturnSameHash()
+    {
+        var us1 = Country.GetCountry("US");
+        var us2 = Country.GetCountry("USA");
+
+        Assert.Equal(us1.GetHashCode(), us2.GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_DifferentCountries_Should_ReturnDifferentHash()
+    {
+        var us = Country.GetCountry("US");
+        var uk = Country.GetCountry("GB");
+
+        Assert.NotEqual(us.GetHashCode(), uk.GetHashCode());
+    }
+
+    [Fact]
+    public void Countries_Should_WorkInHashSet()
+    {
+        var set = new HashSet<Country>
+        {
+            Country.GetCountry("US"),
+            Country.GetCountry("USA"),
+            Country.GetCountry("United States of America")
+        };
+
+        Assert.Single(set);
+    }
+
+    [Fact]
+    public void Countries_Should_WorkAsDictionaryKeys()
+    {
+        var dict = new Dictionary<Country, string>
+        {
+            { Country.GetCountry("US"), "United States" }
+        };
+
+        Assert.True(dict.ContainsKey(Country.GetCountry("USA")));
+        Assert.Equal("United States", dict[Country.GetCountry("840")]);
+    }
+
+    #endregion
+
+    #region Cached Properties
+
+    [Fact]
+    public void Holidays_Should_ReturnSameCachedInstance()
+    {
+        var us = CountryHelper.UnitedStatesOfAmerica;
+        var holidays1 = us.Holidays;
+        var holidays2 = us.Holidays;
+
+        Assert.Same(holidays1, holidays2);
+    }
+
+    [Fact]
+    public void TimeZones_Should_ReturnSameCachedInstance()
+    {
+        var us = CountryHelper.UnitedStatesOfAmerica;
+        var tz1 = us.TimeZones;
+        var tz2 = us.TimeZones;
+
+        Assert.Same(tz1, tz2);
+    }
+
+    [Fact]
+    public void Flag_Should_ReturnSameCachedInstance()
+    {
+        var us = CountryHelper.UnitedStatesOfAmerica;
+        var flag1 = us.Flag;
+        var flag2 = us.Flag;
+
+        Assert.Same(flag1, flag2);
     }
 
     #endregion

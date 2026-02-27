@@ -32,14 +32,14 @@ public sealed class Language
 
         identifier = identifier.ToLowerInvariant();
 
-        if(Alpha2CodeMap.ContainsKey(identifier))
-            return Alpha2CodeMap[identifier];
+        if(Alpha2CodeMap.TryGetValue(identifier, out var byAlpha2))
+            return byAlpha2;
 
-        if(Alpha3CodeMap.ContainsKey(identifier))
-            return Alpha3CodeMap[identifier];
+        if(Alpha3CodeMap.TryGetValue(identifier, out var byAlpha3))
+            return byAlpha3;
 
-        if(NameMap.ContainsKey(identifier))
-            return NameMap[identifier];
+        if(NameMap.TryGetValue(identifier, out var byName))
+            return byName;
 
         return default;
     }
@@ -51,20 +51,10 @@ public sealed class Language
     public static Language GetLanguage(string identifier)
     {
         if(string.IsNullOrWhiteSpace(identifier))
-            throw new ArgumentNullException("Must provide the identifier value");
+            throw new ArgumentNullException(nameof(identifier));
 
-        if(!IsValid(identifier))
-            throw new LanguageNotFoundException($"Language with identifier '{identifier}' was not found.");
-
-        identifier = identifier.ToLowerInvariant();
-
-        return identifier switch
-        {
-            _ when Alpha2CodeMap.ContainsKey(identifier) => Alpha2CodeMap[identifier],
-            _ when Alpha3CodeMap.ContainsKey(identifier) => Alpha3CodeMap[identifier],
-            _ when NameMap.ContainsKey(identifier) => NameMap[identifier],
-            _ => throw new LanguageNotFoundException($"Language with identifier '{identifier}' was not found.")
-        };
+        return GetLanguageOrDefault(identifier)
+            ?? throw new LanguageNotFoundException($"Language with identifier '{identifier}' was not found.");
     }
 
     /// <summary>
@@ -85,5 +75,14 @@ public sealed class Language
     /// <summary>
     /// Retrieves a list of all available Language objects.
     /// </summary>
-    public static List<Language> GetAll() => LanguageHelper.GetAll();
+    public static IReadOnlyList<Language> GetAll() => LanguageHelper.GetAll();
+
+    /// <inheritdoc />
+    public override string ToString() => $"{Name} ({Alpha3Code})";
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj) => obj is Language other && Alpha3Code == other.Alpha3Code;
+
+    /// <inheritdoc />
+    public override int GetHashCode() => Alpha3Code.GetHashCode();
 }

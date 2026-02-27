@@ -11,6 +11,10 @@ namespace Multiverse.Globalization.Countries;
 
 public sealed class Country
 {
+    private IReadOnlyList<Holiday>? _holidays;
+    private IReadOnlyList<CountryTimeZone>? _timeZones;
+    private string? _flag;
+
     internal Country(
         string name,
         string numericCode,
@@ -72,8 +76,11 @@ public sealed class Country
     /// <summary>Official languages of this country.</summary>
     public IReadOnlyList<Language> OfficialLanguages { get; private set; } = Array.Empty<Language>();
 
-    /// <summary>Public holidays observed in this country (fixed-date holidays only).</summary>
-    public IReadOnlyList<Holiday> Holidays => HolidayHelper.GetHolidaysForCountry(Alpha2Code);
+    /// <summary>
+    /// Public holidays observed in this country (fixed-date holidays only).
+    /// Movable holidays (e.g. Easter, Eid, Diwali, Thanksgiving) are not included.
+    /// </summary>
+    public IReadOnlyList<Holiday> Holidays => _holidays ??= HolidayHelper.GetHolidaysForCountry(Alpha2Code);
 
     /// <summary>
     /// Returns holidays filtered by the specified <see cref="HolidayType"/>.
@@ -96,7 +103,7 @@ public sealed class Country
     // ── Time Zones ──────────────────────────────────────────────────
 
     /// <summary>IANA time zones observed in this country.</summary>
-    public IReadOnlyList<CountryTimeZone> TimeZones => TimeZoneHelper.GetTimeZonesForCountry(Alpha2Code);
+    public IReadOnlyList<CountryTimeZone> TimeZones => _timeZones ??= TimeZoneHelper.GetTimeZonesForCountry(Alpha2Code);
 
     /// <summary>Whether this country spans more than one time zone.</summary>
     public bool HasMultipleTimeZones => TimeZones.Count > 1;
@@ -127,10 +134,9 @@ public sealed class Country
     }
 
     /// <summary>Unicode flag emoji derived from the Alpha-2 code.</summary>
-    public string Flag =>
-        string.IsNullOrEmpty(Alpha2Code)
-            ? string.Empty
-            : string.Concat(Alpha2Code.ToUpperInvariant().Select(c => char.ConvertFromUtf32(c - 'A' + 0x1F1E6)));
+    public string Flag => _flag ??= string.IsNullOrEmpty(Alpha2Code)
+        ? string.Empty
+        : string.Concat(Alpha2Code.ToUpperInvariant().Select(c => char.ConvertFromUtf32(c - 'A' + 0x1F1E6)));
 
     /// <summary>
     /// Retrieves a Country object based on the provided identifier, which can be an Alpha-2 code, 
@@ -143,17 +149,17 @@ public sealed class Country
 
         identifier = identifier.ToLowerInvariant();
 
-        if (Alpha2CodeMap.ContainsKey(identifier))
-            return Alpha2CodeMap[identifier];
+        if (Alpha2CodeMap.TryGetValue(identifier, out var byAlpha2))
+            return byAlpha2;
 
-        if (identifier.All(char.IsDigit) && NumericCodeMap.ContainsKey(identifier))
-            return NumericCodeMap[identifier];
+        if (identifier.All(char.IsDigit) && NumericCodeMap.TryGetValue(identifier, out var byNumeric))
+            return byNumeric;
 
-        if (Alpha3CodeMap.ContainsKey(identifier))
-            return Alpha3CodeMap[identifier];
+        if (Alpha3CodeMap.TryGetValue(identifier, out var byAlpha3))
+            return byAlpha3;
 
-        if (NameMap.ContainsKey(identifier))
-            return NameMap[identifier];
+        if (NameMap.TryGetValue(identifier, out var byName))
+            return byName;
 
         return default;
     }
@@ -165,21 +171,10 @@ public sealed class Country
     public static Country GetCountry(string identifier)
     {
         if (string.IsNullOrWhiteSpace(identifier))
-            throw new ArgumentNullException("Must provide the identifier value");
+            throw new ArgumentNullException(nameof(identifier));
 
-        if (!IsValid(identifier))
-            throw new CountryNotFoundException($"Country with identifier '{identifier}' was not found.");
-
-        identifier = identifier.ToLowerInvariant();
-
-        return identifier switch
-        {
-            _ when Alpha2CodeMap.ContainsKey(identifier) => Alpha2CodeMap[identifier],
-            _ when identifier.All(char.IsDigit) && NumericCodeMap.ContainsKey(identifier) => NumericCodeMap[identifier],
-            _ when Alpha3CodeMap.ContainsKey(identifier) => Alpha3CodeMap[identifier],
-            _ when NameMap.ContainsKey(identifier) => NameMap[identifier],
-            _ => throw new CountryNotFoundException($"Country with identifier '{identifier}' was not found.")
-        };
+        return GetCountryOrDefault(identifier)
+            ?? throw new CountryNotFoundException($"Country with identifier '{identifier}' was not found.");
     }
 
     /// <summary>
@@ -202,5 +197,14 @@ public sealed class Country
     /// <summary>
     /// Retrieves a list of all available Country objects.
     /// </summary>
-    public static List<Country> GetAll() => CountryHelper.GetAll();
+    public static IReadOnlyList<Country> GetAll() => CountryHelper.GetAll();
+
+    /// <inheritdoc />
+    public override string ToString() => $"{Name} ({Alpha2Code})";
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj) => obj is Country other && Alpha2Code == other.Alpha2Code;
+
+    /// <inheritdoc />
+    public override int GetHashCode() => Alpha2Code.GetHashCode();
 }

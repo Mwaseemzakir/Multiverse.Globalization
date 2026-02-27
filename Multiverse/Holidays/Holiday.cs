@@ -3,8 +3,13 @@ using System;
 namespace Multiverse.Globalization.Holidays;
 
 /// <summary>
-/// Represents a public holiday within a country.
-/// A holiday has a fixed month/day (for fixed-date holidays) and a type classification.
+/// Represents a fixed-date public holiday within a country.
+/// A holiday has a fixed month/day and a type classification.
+/// <para>
+/// Note: Only fixed-date holidays are supported. Movable holidays
+/// (e.g. Easter, Eid al-Fitr, Diwali, Chinese New Year, Thanksgiving)
+/// whose dates vary by year are not included.
+/// </para>
 /// </summary>
 public sealed class Holiday
 {
