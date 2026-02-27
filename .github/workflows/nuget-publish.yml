@@ -33,8 +33,8 @@ jobs:
       - name: Stamp version into csproj
         run: |
           sed -i "s|<Version>.*</Version>|<Version>${{ env.PACKAGE_VERSION }}</Version>|" "${{ env.PROJECT_PATH }}"
-          sed -i "s|<AssemblyVersion>.*</AssemblyVersion>|<AssemblyVersion>${{ env.PACKAGE_VERSION }}.0</AssemblyVersion>|" "${{ env.PROJECT_PATH }}"
-          sed -i "s|<FileVersion>.*</FileVersion>|<FileVersion>${{ env.PACKAGE_VERSION }}.0</FileVersion>|" "${{ env.PROJECT_PATH }}"
+          sed -i "s|<AssemblyVersion>.*</AssemblyVersion>|<AssemblyVersion>${{ env.PACKAGE_VERSION }}</AssemblyVersion>|" "${{ env.PROJECT_PATH }}"
+          sed -i "s|<FileVersion>.*</FileVersion>|<FileVersion>${{ env.PACKAGE_VERSION }}</FileVersion>|" "${{ env.PROJECT_PATH }}"
 
       - name: Restore dependencies
         run: dotnet restore
