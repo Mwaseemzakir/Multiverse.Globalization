@@ -26,9 +26,10 @@ jobs:
         id: version
         run: |
           BASE_VERSION=$(grep -oP '<Version>\K[^<]+' "${{ env.PROJECT_PATH }}")
-          FULL_VERSION="${BASE_VERSION}.${{ github.run_number }}"
-          echo "PACKAGE_VERSION=${FULL_VERSION}" >> $GITHUB_ENV
-          echo "Package version: ${FULL_VERSION}"
+          MAJOR_MINOR=$(echo "$BASE_VERSION" | cut -d. -f1,2)
+          PACKAGE_VERSION="${MAJOR_MINOR}.${{ github.run_number }}"
+          echo "PACKAGE_VERSION=${PACKAGE_VERSION}" >> $GITHUB_ENV
+          echo "Package version: ${PACKAGE_VERSION}"
 
       - name: Stamp version into csproj
         run: |
