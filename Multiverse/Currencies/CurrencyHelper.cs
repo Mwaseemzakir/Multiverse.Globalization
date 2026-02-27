@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#if NET8_0_OR_GREATER
+using System.Collections.Frozen;
+#endif
 
 namespace Multiverse.Globalization.Currencies;
 
@@ -181,7 +184,11 @@ public static class CurrencyHelper
         var map = new Dictionary<string, Currency> { { string.Empty, None } };
         foreach (var c in _all.Value)
             map[c.Code.ToLowerInvariant()] = c;
+#if NET8_0_OR_GREATER
+        return map.ToFrozenDictionary();
+#else
         return map;
+#endif
     });
 
     private static readonly Lazy<IReadOnlyDictionary<string, Currency>> _nameMap = new(() =>
@@ -189,7 +196,11 @@ public static class CurrencyHelper
         var map = new Dictionary<string, Currency> { { string.Empty, None } };
         foreach (var c in _all.Value)
             map[c.Name.ToLowerInvariant()] = c;
+#if NET8_0_OR_GREATER
+        return map.ToFrozenDictionary();
+#else
         return map;
+#endif
     });
 
     private static readonly Lazy<IReadOnlyDictionary<int, Currency>> _numberMap = new(() =>
@@ -197,10 +208,14 @@ public static class CurrencyHelper
         var map = new Dictionary<int, Currency> { { 0, None } };
         foreach (var c in _all.Value)
             map[c.Number] = c;
+#if NET8_0_OR_GREATER
+        return map.ToFrozenDictionary();
+#else
         return map;
+#endif
     });
 
-    public static List<Currency> GetAll() => new(_all.Value);
+    public static IReadOnlyList<Currency> GetAll() => _all.Value;
     public static IReadOnlyDictionary<string, Currency> CodeMap => _codeMap.Value;
     public static IReadOnlyDictionary<string, Currency> NameMap => _nameMap.Value;
     public static IReadOnlyDictionary<int, Currency> NumberMap => _numberMap.Value;

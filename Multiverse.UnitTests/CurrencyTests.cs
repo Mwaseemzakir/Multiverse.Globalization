@@ -10,7 +10,7 @@ public class CurrencyTests
     [Fact]
     public void GetAll_Should_ReturnAllCurrencies()
     {
-        List<Currency> currencies = Currency.GetAll();
+        IReadOnlyList<Currency> currencies = Currency.GetAll();
 
         Assert.NotNull(currencies);
         Assert.NotEmpty(currencies);
@@ -21,12 +21,12 @@ public class CurrencyTests
     }
 
     [Fact]
-    public void GetAll_Should_ReturnNewListEachTime()
+    public void GetAll_Should_ReturnSameCachedInstance()
     {
         var list1 = Currency.GetAll();
         var list2 = Currency.GetAll();
 
-        Assert.NotSame(list1, list2);
+        Assert.Same(list1, list2);
         Assert.Equal(list1.Count, list2.Count);
     }
 
@@ -472,6 +472,123 @@ public class CurrencyTests
         {
             Assert.Equal(currency.Code, currency.Code.ToUpperInvariant());
         }
+    }
+
+    #endregion
+
+    #region ToString
+
+    [Fact]
+    public void ToString_Should_ReturnNameAndCode()
+    {
+        var usd = CurrencyHelper.UsDollar;
+        Assert.Equal("US Dollar (USD)", usd.ToString());
+    }
+
+    [Fact]
+    public void ToString_Should_ReturnNameAndCodeForEuro()
+    {
+        var eur = CurrencyHelper.Euro;
+        Assert.Equal("Euro (EUR)", eur.ToString());
+    }
+
+    [Fact]
+    public void ToString_None_Should_ReturnEmptyParens()
+    {
+        var none = CurrencyHelper.None;
+        Assert.Equal(" ()", none.ToString());
+    }
+
+    [Theory]
+    [InlineData("GBP", "Pound Sterling (GBP)")]
+    [InlineData("JPY", "Yen (JPY)")]
+    [InlineData("PKR", "Pakistan Rupee (PKR)")]
+    [InlineData("CHF", "Swiss Franc (CHF)")]
+    public void ToString_Should_FormatCorrectly(string code, string expected)
+    {
+        var currency = Currency.GetCurrency(code);
+        Assert.Equal(expected, currency.ToString());
+    }
+
+    #endregion
+
+    #region Equals and GetHashCode
+
+    [Fact]
+    public void Equals_SameCurrency_Should_ReturnTrue()
+    {
+        var usd1 = Currency.GetCurrency("USD");
+        var usd2 = Currency.GetCurrency(840);
+
+        Assert.Equal(usd1, usd2);
+        Assert.True(usd1.Equals(usd2));
+    }
+
+    [Fact]
+    public void Equals_DifferentCurrency_Should_ReturnFalse()
+    {
+        var usd = Currency.GetCurrency("USD");
+        var eur = Currency.GetCurrency("EUR");
+
+        Assert.NotEqual(usd, eur);
+        Assert.False(usd.Equals(eur));
+    }
+
+    [Fact]
+    public void Equals_Null_Should_ReturnFalse()
+    {
+        var usd = Currency.GetCurrency("USD");
+        Assert.False(usd.Equals(null));
+    }
+
+    [Fact]
+    public void Equals_NonCurrencyObject_Should_ReturnFalse()
+    {
+        var usd = Currency.GetCurrency("USD");
+        Assert.False(usd.Equals("USD"));
+    }
+
+    [Fact]
+    public void GetHashCode_SameCurrency_Should_ReturnSameHash()
+    {
+        var usd1 = Currency.GetCurrency("USD");
+        var usd2 = Currency.GetCurrency(840);
+
+        Assert.Equal(usd1.GetHashCode(), usd2.GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_DifferentCurrencies_Should_ReturnDifferentHash()
+    {
+        var usd = Currency.GetCurrency("USD");
+        var eur = Currency.GetCurrency("EUR");
+
+        Assert.NotEqual(usd.GetHashCode(), eur.GetHashCode());
+    }
+
+    [Fact]
+    public void Currencies_Should_WorkInHashSet()
+    {
+        var set = new HashSet<Currency>
+        {
+            Currency.GetCurrency("USD"),
+            Currency.GetCurrency("US Dollar"),
+            Currency.GetCurrency(840)
+        };
+
+        Assert.Single(set);
+    }
+
+    [Fact]
+    public void Currencies_Should_WorkAsDictionaryKeys()
+    {
+        var dict = new Dictionary<Currency, string>
+        {
+            { Currency.GetCurrency("USD"), "Dollar" }
+        };
+
+        Assert.True(dict.ContainsKey(Currency.GetCurrency(840)));
+        Assert.Equal("Dollar", dict[Currency.GetCurrency("US Dollar")]);
     }
 
     #endregion

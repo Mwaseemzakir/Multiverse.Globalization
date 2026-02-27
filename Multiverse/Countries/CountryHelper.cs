@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#if NET8_0_OR_GREATER
+using System.Collections.Frozen;
+#endif
 
 namespace Multiverse.Globalization.Countries;
 
@@ -312,19 +315,35 @@ public static partial class CountryHelper
             .ToList());
 
     private static readonly Lazy<IReadOnlyDictionary<string, Country>> _alpha2CodeMap = new(() =>
+#if NET8_0_OR_GREATER
+        _all.Value.ToFrozenDictionary(c => c.Alpha2Code.ToLowerInvariant()));
+#else
         _all.Value.ToDictionary(c => c.Alpha2Code.ToLowerInvariant()));
+#endif
 
     private static readonly Lazy<IReadOnlyDictionary<string, Country>> _alpha3CodeMap = new(() =>
+#if NET8_0_OR_GREATER
+        _all.Value.ToFrozenDictionary(c => c.Alpha3Code.ToLowerInvariant()));
+#else
         _all.Value.ToDictionary(c => c.Alpha3Code.ToLowerInvariant()));
+#endif
 
     private static readonly Lazy<IReadOnlyDictionary<string, Country>> _nameMap = new(() =>
+#if NET8_0_OR_GREATER
+        _all.Value.ToFrozenDictionary(c => c.Name.ToLowerInvariant()));
+#else
         _all.Value.ToDictionary(c => c.Name.ToLowerInvariant()));
+#endif
 
     private static readonly Lazy<IReadOnlyDictionary<string, Country>> _numericCodeMap = new(() =>
+#if NET8_0_OR_GREATER
+        _all.Value.ToFrozenDictionary(c => c.NumericCode));
+#else
         _all.Value.ToDictionary(c => c.NumericCode));
+#endif
 
-    /// <summary>Returns a new list containing all countries.</summary>
-    public static List<Country> GetAll() => new(_all.Value);
+    /// <summary>Returns a cached read-only list containing all countries.</summary>
+    public static IReadOnlyList<Country> GetAll() => _all.Value;
 
     /// <summary>Lookup by ISO 3166-1 alpha-2 code (case-insensitive).</summary>
     public static IReadOnlyDictionary<string, Country> Alpha2CodeMap => _alpha2CodeMap.Value;

@@ -10,7 +10,7 @@ public class LanguageTests
     [Fact]
     public void GetAll_Should_ReturnAllLanguages()
     {
-        List<Language> languages = Language.GetAll();
+        IReadOnlyList<Language> languages = Language.GetAll();
 
         Assert.NotNull(languages);
         Assert.NotEmpty(languages);
@@ -21,12 +21,12 @@ public class LanguageTests
     }
 
     [Fact]
-    public void GetAll_Should_ReturnNewListEachTime()
+    public void GetAll_Should_ReturnSameCachedInstance()
     {
         var list1 = Language.GetAll();
         var list2 = Language.GetAll();
 
-        Assert.NotSame(list1, list2);
+        Assert.Same(list1, list2);
         Assert.Equal(list1.Count, list2.Count);
     }
 
@@ -391,6 +391,123 @@ public class LanguageTests
         {
             Assert.Equal(language.Alpha2Code, language.Alpha2Code.ToLowerInvariant());
         }
+    }
+
+    #endregion
+
+    #region ToString
+
+    [Fact]
+    public void ToString_Should_ReturnNameAndAlpha3Code()
+    {
+        var english = LanguageHelper.English;
+        Assert.Equal("English (eng)", english.ToString());
+    }
+
+    [Fact]
+    public void ToString_Should_ReturnNameAndAlpha3CodeForFrench()
+    {
+        var french = LanguageHelper.French;
+        Assert.Equal("French (fre)", french.ToString());
+    }
+
+    [Fact]
+    public void ToString_None_Should_ReturnEmptyParens()
+    {
+        var none = LanguageHelper.None;
+        Assert.Equal(" ()", none.ToString());
+    }
+
+    [Theory]
+    [InlineData("es", "Spanish; Castilian (spa)")]
+    [InlineData("ur", "Urdu (urd)")]
+    [InlineData("de", "German (ger)")]
+    [InlineData("ja", "Japanese (jpn)")]
+    public void ToString_Should_FormatCorrectly(string alpha2, string expected)
+    {
+        var language = Language.GetLanguage(alpha2);
+        Assert.Equal(expected, language.ToString());
+    }
+
+    #endregion
+
+    #region Equals and GetHashCode
+
+    [Fact]
+    public void Equals_SameLanguage_Should_ReturnTrue()
+    {
+        var eng1 = Language.GetLanguage("en");
+        var eng2 = Language.GetLanguage("eng");
+
+        Assert.Equal(eng1, eng2);
+        Assert.True(eng1.Equals(eng2));
+    }
+
+    [Fact]
+    public void Equals_DifferentLanguage_Should_ReturnFalse()
+    {
+        var eng = Language.GetLanguage("en");
+        var fre = Language.GetLanguage("fr");
+
+        Assert.NotEqual(eng, fre);
+        Assert.False(eng.Equals(fre));
+    }
+
+    [Fact]
+    public void Equals_Null_Should_ReturnFalse()
+    {
+        var eng = Language.GetLanguage("en");
+        Assert.False(eng.Equals(null));
+    }
+
+    [Fact]
+    public void Equals_NonLanguageObject_Should_ReturnFalse()
+    {
+        var eng = Language.GetLanguage("en");
+        Assert.False(eng.Equals("en"));
+    }
+
+    [Fact]
+    public void GetHashCode_SameLanguage_Should_ReturnSameHash()
+    {
+        var eng1 = Language.GetLanguage("en");
+        var eng2 = Language.GetLanguage("eng");
+
+        Assert.Equal(eng1.GetHashCode(), eng2.GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_DifferentLanguages_Should_ReturnDifferentHash()
+    {
+        var eng = Language.GetLanguage("en");
+        var fre = Language.GetLanguage("fr");
+
+        Assert.NotEqual(eng.GetHashCode(), fre.GetHashCode());
+    }
+
+    [Fact]
+    public void Languages_Should_WorkInHashSet()
+    {
+        var set = new HashSet<Language>
+        {
+            Language.GetLanguage("en"),
+            Language.GetLanguage("eng"),
+            Language.GetLanguage("English")
+        };
+
+        Assert.Single(set);
+    }
+
+    [Fact]
+    public void Languages_Should_WorkAsDictionaryKeys()
+    {
+        var dict = new Dictionary<Language, string>
+        {
+            { Language.GetLanguage("en"), "English Language" }
+        };
+
+        Assert.True(dict.ContainsKey(Language.GetLanguage("eng")));
+        Assert.Equal("English Language", dict[Language.GetLanguage("English")]);
     }
 
     #endregion

@@ -1,4 +1,19 @@
-## Holidays, SubRegion, Demonym & TLD
+
+## Time Zones
+
+- Time Zones — IANA Time Zone Database support for all 250 countries & territories
+- CountryTimeZone model with IanaId, UtcOffsetHours, ObservesDst, UtcOffset, UtcOffsetString, ToString()
+- TimeZoneHelper.All — complete dictionary of alpha-2 codes to time zone lists
+- Country.TimeZones — IANA time zones for the country, accessed directly from the Country object
+- Country.HasMultipleTimeZones — whether the country spans more than one time zone
+- Country.GetPrimaryTimeZone() — capital-city / primary time zone
+- Country.GetTimeZonesWithDst() — filter to DST-observing zones
+- Country.GetUtcOffsets() — distinct UTC offsets across all zones
+- Fractional UTC offsets supported (e.g. +5:30 India, +5:45 Nepal, -3:30 Newfoundland)
+- DST flagged per zone (e.g. US Eastern = DST, Hawaii = no DST)
+- Multi-zone countries: US (7), Russia (11), Canada (7), Australia (8), Brazil (8), Antarctica (10), and more
+
+## Time Zones, Holidays, SubRegion, Demonym & TLD
 
 - Holidays support — fixed-date public holidays for 190+ countries, accessible via Country.Holidays
 - Holiday model with Name, Month, Day, Type, Date, GetDate(), IsOnDate(), ToString()
@@ -9,6 +24,7 @@
 - Demonym — what residents of each country are called (e.g. Pakistani, American)
 - TLD — country-code top-level domain for every country (e.g. .pk, .us, .jp)
 - 312 unit tests covering holidays, SubRegion, Demonym, TLD, and all existing APIs
+- 98 additional unit tests for time zones (410 total)
 
 ## Country-Centric Architecture
 
