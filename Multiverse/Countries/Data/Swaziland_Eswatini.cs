@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Swaziland_Eswatini country.</summary>
     public static readonly Country Swaziland_Eswatini =
         new Country(
             CountryNames.Swaziland_Eswatini, "748", "SZ", "SWZ",

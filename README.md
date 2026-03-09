@@ -52,6 +52,17 @@
   - [Multi-Zone Countries](#multi-zone-countries)
   - [DST Support](#dst-support)
   - [UTC Offsets](#utc-offsets)
+- [Extended Country Data](#extended-country-data)
+  - [Geographic Data](#geographic-data)
+  - [Political Data](#political-data)
+  - [Transport Data](#transport-data)
+  - [Electrical Systems](#electrical-systems)
+  - [Emergency Numbers](#emergency-numbers)
+  - [Phone Formats](#phone-formats)
+  - [Locale & Formatting](#locale--formatting)
+  - [Translations](#translations)
+  - [Subdivisions](#subdivisions)
+  - [Movable Holidays](#movable-holidays)
 - [Exception Handling](#exception-handling)
 - [Best Practices](#best-practices)
 - [API Reference Summary](#api-reference-summary)
@@ -67,10 +78,18 @@
 | Capability | Standard | Coverage |
 |---|---|---|
 | **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 250 countries & territories with capitals, regions, sub-regions, demonyms, TLDs, currencies, official languages, holidays, time zones & flag emojis |
-| **Currencies** | ISO 4217 (code, numeric) | 150+ world currencies |
-| **Languages** | ISO 639-1 & ISO 639-2 (alpha-2, alpha-3) | 475+ languages |
+| **Extended Country Data** | Geographic, political & transport metadata | Population, area, capital coordinates, bordering countries, driving side, speed units, independence dates, UN membership, landlocked status for all 250 countries |
+| **Currencies** | ISO 4217 (code, numeric) | 150+ world currencies with decimal places (minor units) and reverse country lookup |
+| **Languages** | ISO 639-1 & ISO 639-2 (alpha-2, alpha-3) | 475+ languages with native names, scripts & text direction (LTR/RTL) |
 | **Holidays** | Fixed-date public holidays | Public, national, religious, bank & observance holidays for 190+ countries |
+| **Movable Holidays** | Date-varies-by-year holidays | Easter, Thanksgiving, and other movable holidays for 40+ countries |
 | **Time Zones** | IANA Time Zone Database | UTC offsets, DST support, and country-to-zone mapping for 250 countries & territories |
+| **Electrical Systems** | Plug types, voltage & frequency | Electrical system data for all 250 countries |
+| **Emergency Numbers** | Emergency telephone numbers | Police, fire, ambulance numbers for all 250 countries |
+| **Phone Formats** | International phone formatting | Calling codes, trunk prefixes, phone number lengths for all 250 countries |
+| **Locale & Formatting** | Date, number & measurement formats | Date format, number separators, measurement systems, postal code formats for all 250 countries |
+| **Translations** | Country name translations | Country names in 10+ languages for all 250 countries |
+| **Subdivisions** | ISO 3166-2 | States, provinces, regions for 50+ countries |
 
 - **Country-centric design** — each `Country` carries its `Currency` and `OfficialLanguages`; one lookup gives you everything
 - **Fast lookups** — pre-built dictionary maps for O(1) retrieval by code, name, or number
@@ -78,15 +97,15 @@
 - **Null-safe** — `OrDefault` variants return `null` instead of throwing
 - **Zero dependencies** — no third-party packages required
 - **Immutable data** — all entries are `readonly` singletons; thread-safe by design
-- **Cross-platform** — targets `net8.0`, `netstandard2.0`, and `net462`
+- **Cross-platform** — targets `net9.0`, `net8.0`, `net7.0`, `net6.0`, `netstandard2.0`, and `net462`
 
 ---
 
 ## Supported Frameworks
 
-| Target | Minimum Version |
+| Target | Supported Versions |
 |---|---|
-| .NET | 8.0 |
+| .NET | 6.0, 7.0, 8.0, 9.0 |
 | .NET Standard | 2.0 |
 | .NET Framework | 4.6.2 |
 
@@ -129,6 +148,11 @@ Console.WriteLine($"Sub-Region: {pakistan.SubRegion}");         // Sub-Region: S
 Console.WriteLine($"Demonym: {pakistan.Demonym}");              // Demonym: Pakistani
 Console.WriteLine($"TLD: {pakistan.TLD}");                      // TLD: .pk
 Console.WriteLine($"Calling Code: {pakistan.CallingCode}");     // Calling Code: +92
+
+// Extended data — geographic, political, transport
+Console.WriteLine($"Population: {pakistan.Population:N0}");     // Population: 231,402,117
+Console.WriteLine($"UN Member: {pakistan.IsUnMember}");          // UN Member: True
+Console.WriteLine($"Drives on: {pakistan.DrivingSide}");         // Drives on: Left
 
 // Currency — accessed directly from the country
 Console.WriteLine($"Currency: {pakistan.Currency!.Name}");      // Currency: Pakistan Rupee
@@ -178,6 +202,23 @@ The `Country` class is the **central entity** of Multiverse. Each country object
 | `TimeZones` | `IReadOnlyList<CountryTimeZone>` | IANA time zones observed in the country | `[Asia/Karachi (UTC+05:00)]` |
 | `HasMultipleTimeZones` | `bool` | Whether the country spans more than one time zone | `false` |
 | `Flag` | `string` | Unicode flag emoji (computed from Alpha2Code) | 🇵🇰 |
+| `Population` | `long` | Approximate population count | `231402117` |
+| `AreaInSquareKilometers` | `double` | Total area in square kilometers | `881912.0` |
+| `CapitalCoordinates` | `GeoCoordinate?` | Latitude/longitude of the capital city | `(33.6844, 73.0479)` |
+| `BorderingCountries` | `IReadOnlyList<string>` | Alpha-2 codes of bordering countries | `["AF","CN","IN","IR"]` |
+| `IsLandlocked` | `bool` | Whether the country has no coastline | `false` |
+| `IsUnMember` | `bool` | Whether the country is a UN member | `true` |
+| `IndependenceDate` | `DateTime?` | Date of independence (null for territories) | `1947-08-14` |
+| `DrivingSide` | `DrivingSide` | Which side of the road vehicles drive on | `DrivingSide.Left` |
+| `SpeedUnit` | `string` | Speed unit used in the country | `"km/h"` |
+| `AlternativeTlds` | `IReadOnlyList<string>` | Alternative country-code TLDs | `[".uk"]` (for GB) |
+| `ElectricalSystem` | `ElectricalSystem?` | Plug types, voltage & frequency | `230V, 50Hz, [C, D]` |
+| `EmergencyNumbers` | `IReadOnlyList<string>` | Emergency telephone numbers | `["15","115","1122"]` |
+| `PhoneFormat` | `PhoneFormat?` | Phone number format information | `+92, 0, [10]` |
+| `Locale` | `CountryLocale?` | Locale & formatting conventions | `dd/MM/yyyy, Metric` |
+| `Translations` | `IReadOnlyDictionary<string, string>` | Country name in multiple languages | `{"fr":"Pakistan","es":"Pakistán"}` |
+| `Subdivisions` | `IReadOnlyList<Subdivision>` | ISO 3166-2 administrative subdivisions | `[Punjab, Sindh, ...]` |
+| `MovableHolidays` | `IReadOnlyList<MovableHoliday>` | Movable holidays (dates vary by year) | `[Shab-e-Meraj, ...]` |
 
 ### Accessing a Country's Currency
 
@@ -381,6 +422,7 @@ The `Currency` class provides access to **150+ world currencies** based on the *
 | `Code` | `string` | ISO 4217 alphabetic code | `"USD"` |
 | `Number` | `int` | ISO 4217 numeric code | `840` |
 | `Symbol` | `string` | Currency symbol | `"$"` |
+| `DecimalPlaces` | `int` | Minor units (decimal places) | `2` (most currencies), `0` (JPY), `3` (KWD) |
 
 ### Lookup Currency by Identifier
 
@@ -460,6 +502,9 @@ The `Language` class provides access to **475+ languages** based on the **ISO 63
 | `Name` | `string` | Language name (may include alternates) | `"Spanish; Castilian"` |
 | `Alpha2Code` | `string` | ISO 639-1 code (2-letter, may be empty) | `"es"` |
 | `Alpha3Code` | `string` | ISO 639-2 code (3-letter) | `"spa"` |
+| `NativeName` | `string` | Native name of the language | `"Español"` |
+| `Script` | `string` | Primary writing script | `"Latin"`, `"Arabic"`, `"Cyrillic"` |
+| `TextDirection` | `TextDirection` | Text direction (LTR or RTL) | `TextDirection.LeftToRight` |
 
 > **Note:** Not all languages have an alpha-2 code. Languages that only exist in ISO 639-2 will have an empty `Alpha2Code`.
 
@@ -708,6 +753,171 @@ Console.WriteLine(offset.TotalMinutes); // 330
 
 ---
 
+## Extended Country Data
+
+Every `Country` object provides access to rich extended data — geographic, political, transport, electrical, emergency, phone format, locale, translations, subdivisions, and movable holidays. All data is lazily loaded on first access.
+
+### Geographic Data
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+
+Console.WriteLine($"Population: {pakistan.Population:N0}");        // Population: 231,402,117
+Console.WriteLine($"Area: {pakistan.AreaInSquareKilometers:N0} km²"); // Area: 881,912 km²
+Console.WriteLine($"Landlocked: {pakistan.IsLandlocked}");         // Landlocked: False
+
+// Capital coordinates
+var coords = pakistan.CapitalCoordinates;
+Console.WriteLine($"Capital: {coords?.Latitude}, {coords?.Longitude}"); // Capital: 33.6844, 73.0479
+
+// Bordering countries
+Console.WriteLine($"Borders: {string.Join(", ", pakistan.BorderingCountries)}"); // Borders: AF, CN, IN, IR
+```
+
+### Political Data
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+
+Console.WriteLine($"UN Member: {pakistan.IsUnMember}");             // UN Member: True
+Console.WriteLine($"Independence: {pakistan.IndependenceDate:d}");  // Independence: 8/14/1947
+
+// Territories have no independence date
+var aq = Country.GetCountry("AQ");
+Console.WriteLine(aq.IndependenceDate is null); // True
+```
+
+### Transport Data
+
+```csharp
+var uk = Country.GetCountry("GB");
+Console.WriteLine($"Drives on: {uk.DrivingSide}");  // Drives on: Left
+Console.WriteLine($"Speed unit: {uk.SpeedUnit}");    // Speed unit: mph
+
+var germany = Country.GetCountry("DE");
+Console.WriteLine($"Drives on: {germany.DrivingSide}"); // Drives on: Right
+Console.WriteLine($"Speed unit: {germany.SpeedUnit}");   // Speed unit: km/h
+```
+
+### Electrical Systems
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+var elec = pakistan.ElectricalSystem;
+
+Console.WriteLine($"Voltage: {elec?.Voltage}V");       // Voltage: 230V
+Console.WriteLine($"Frequency: {elec?.Frequency}Hz");   // Frequency: 50Hz
+Console.WriteLine($"Plugs: {string.Join(", ", elec?.PlugTypes ?? Array.Empty<PlugType>())}");
+// Plugs: C, D
+```
+
+### Emergency Numbers
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+Console.WriteLine($"Emergency: {string.Join(", ", pakistan.EmergencyNumbers)}");
+// Emergency: 15, 115, 1122
+
+var usa = Country.GetCountry("US");
+Console.WriteLine($"Emergency: {string.Join(", ", usa.EmergencyNumbers)}");
+// Emergency: 911
+```
+
+### Phone Formats
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+var phone = pakistan.PhoneFormat;
+
+Console.WriteLine($"Calling code: {phone?.CallingCode}"); // Calling code: +92
+Console.WriteLine($"Trunk prefix: {phone?.TrunkPrefix}"); // Trunk prefix: 0
+Console.WriteLine($"Lengths: {string.Join(", ", phone?.PhoneNumberLengths ?? Array.Empty<int>())}");
+// Lengths: 10
+```
+
+### Locale & Formatting
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+var locale = pakistan.Locale;
+
+Console.WriteLine($"Date format: {locale?.DateFormat}");         // Date format: dd/MM/yyyy
+Console.WriteLine($"Measurement: {locale?.MeasurementSystem}");  // Measurement: Metric
+Console.WriteLine($"Decimal: '{locale?.NumberDecimalSeparator}'"); // Decimal: '.'
+Console.WriteLine($"Grouping: '{locale?.NumberGroupSeparator}'"); // Grouping: ','
+Console.WriteLine($"Postal code: {locale?.PostalCodeFormat}");   // Postal code: #####
+```
+
+### Translations
+
+```csharp
+var pakistan = Country.GetCountry("PK");
+
+// Get all translations
+foreach (var (lang, name) in pakistan.Translations)
+    Console.WriteLine($"  {lang}: {name}");
+// fr: Pakistan
+// es: Pakistán
+// de: Pakistan
+// ar: باكستان
+// zh: 巴基斯坦
+// ja: パキスタン
+// ...
+
+// Get name in a specific language
+Console.WriteLine(pakistan.GetNameInLanguage("fr")); // Pakistan
+Console.WriteLine(pakistan.GetNameInLanguage("ar")); // باكستان
+Console.WriteLine(pakistan.GetNameInLanguage("zh")); // 巴基斯坦
+Console.WriteLine(pakistan.GetNameInLanguage("xx")); // (null — not found)
+```
+
+### Subdivisions
+
+```csharp
+var usa = Country.GetCountry("US");
+
+Console.WriteLine($"{usa.Name} has {usa.Subdivisions.Count} subdivisions:");
+foreach (var sub in usa.Subdivisions.Take(5))
+    Console.WriteLine($"  {sub.Code}: {sub.Name} ({sub.Type})");
+// United States of America has 56 subdivisions:
+//   US-AL: Alabama (State)
+//   US-AK: Alaska (State)
+//   US-AZ: Arizona (State)
+//   US-AR: Arkansas (State)
+//   US-CA: California (State)
+
+// Countries without subdivision data return an empty list
+var mc = Country.GetCountry("MC");
+Console.WriteLine(mc.Subdivisions.Count); // 0
+```
+
+### Movable Holidays
+
+Movable holidays have dates that vary by year (e.g. Easter, Thanksgiving). Use `GetDate(year)` to compute the actual date:
+
+```csharp
+var usa = Country.GetCountry("US");
+
+foreach (var mh in usa.MovableHolidays)
+    Console.WriteLine($"  {mh.Name}: {mh.GetDate(2026):yyyy-MM-dd}");
+// Martin Luther King Jr. Day: 2026-01-19
+// Presidents' Day: 2026-02-16
+// Easter Sunday: 2026-04-05
+// Memorial Day: 2026-05-25
+// Labor Day: 2026-09-07
+// Columbus Day: 2026-10-12
+// Thanksgiving Day: 2026-11-26
+
+// Check if a specific date is a movable holiday
+bool isThanksgiving = usa.MovableHolidays.Any(h => h.IsOnDate(new DateTime(2026, 11, 26))); // true
+
+// Get ALL holidays (fixed + movable) on a date
+var allOnDate = usa.GetAllHolidaysOnDate(new DateTime(2026, 11, 26));
+Console.WriteLine(string.Join(", ", allOnDate)); // Thanksgiving Day
+```
+
+---
+
 ## Exception Handling
 
 Each domain has a dedicated exception type that inherits from `System.Exception`:
@@ -830,6 +1040,23 @@ Country.GetCountry("Us");
 | `TimeZones` | `IReadOnlyList<CountryTimeZone>` | IANA time zones observed in this country |
 | `HasMultipleTimeZones` | `bool` | Whether the country spans more than one time zone |
 | `Flag` | `string` | Unicode flag emoji |
+| `Population` | `long` | Approximate population count |
+| `AreaInSquareKilometers` | `double` | Total area in km² |
+| `CapitalCoordinates` | `GeoCoordinate?` | Capital city latitude/longitude |
+| `BorderingCountries` | `IReadOnlyList<string>` | Alpha-2 codes of neighboring countries |
+| `IsLandlocked` | `bool` | Whether the country has no coastline |
+| `IsUnMember` | `bool` | Whether the country is a UN member |
+| `IndependenceDate` | `DateTime?` | Date of independence |
+| `DrivingSide` | `DrivingSide` | Left or Right driving side |
+| `SpeedUnit` | `string` | Speed measurement unit (km/h or mph) |
+| `AlternativeTlds` | `IReadOnlyList<string>` | Alternative country-code TLDs |
+| `ElectricalSystem` | `ElectricalSystem?` | Voltage, frequency & plug types |
+| `EmergencyNumbers` | `IReadOnlyList<string>` | Emergency telephone numbers |
+| `PhoneFormat` | `PhoneFormat?` | Phone number format info |
+| `Locale` | `CountryLocale?` | Date, number & measurement formats |
+| `Translations` | `IReadOnlyDictionary<string, string>` | Country name translations |
+| `Subdivisions` | `IReadOnlyList<Subdivision>` | ISO 3166-2 subdivisions |
+| `MovableHolidays` | `IReadOnlyList<MovableHoliday>` | Movable holidays |
 
 | Method | Returns | Throws | Description |
 |---|---|---|---|
@@ -846,6 +1073,8 @@ Country.GetCountry("Us");
 | `GetPrimaryTimeZone()` | `CountryTimeZone?` | Get the primary (capital-city) time zone, or null |
 | `GetTimeZonesWithDst()` | `IReadOnlyList<CountryTimeZone>` | Get all time zones that observe DST |
 | `GetUtcOffsets()` | `IReadOnlyList<TimeSpan>` | Get distinct UTC offsets across all time zones |
+| `GetAllHolidaysOnDate(DateTime)` | `IReadOnlyList<string>` | Get all holidays (fixed + movable) on a date |
+| `GetNameInLanguage(string)` | `string?` | Get country name in the specified language |
 
 ### Currency
 
@@ -855,6 +1084,7 @@ Country.GetCountry("Us");
 | `Code` | `string` | ISO 4217 alphabetic code |
 | `Number` | `int` | ISO 4217 numeric code |
 | `Symbol` | `string` | Currency symbol |
+| `DecimalPlaces` | `int` | Minor units (decimal places) |
 
 | Method | Returns | Throws | Description |
 |---|---|---|---|
@@ -865,6 +1095,7 @@ Country.GetCountry("Us");
 | `IsValid(string)` | `bool` | — | Check if code/name maps to a known currency |
 | `IsValid(int)` | `bool` | — | Check if numeric code maps to a known currency |
 | `GetAll()` | `List<Currency>` | — | All 150+ currencies |
+| `GetCountriesUsingCurrency()` | `IReadOnlyList<Country>` | — | All countries using this currency |
 
 ### Language
 
@@ -873,6 +1104,9 @@ Country.GetCountry("Us");
 | `Name` | `string` | Language name (may include alternates) |
 | `Alpha2Code` | `string` | ISO 639-1 code (2-letter, may be empty) |
 | `Alpha3Code` | `string` | ISO 639-2 code (3-letter) |
+| `NativeName` | `string` | Native name of the language |
+| `Script` | `string` | Primary writing script |
+| `TextDirection` | `TextDirection` | Text direction (LeftToRight or RightToLeft) |
 
 | Method | Returns | Throws | Description |
 |---|---|---|---|
@@ -955,7 +1189,7 @@ Country.GetCountry("Us");
 
 ## Testing
 
-The project includes a comprehensive test suite with **410 unit tests** covering every public API, edge case, and data integrity check across the entire library.
+The project includes a comprehensive test suite with **692 unit tests** covering every public API, edge case, and data integrity check across the entire library.
 
 ### Running Tests
 
@@ -973,6 +1207,19 @@ dotnet test
 | `ExceptionTests` | 19 | All three custom exception types — constructors, inheritance, and throw behavior |
 | `HolidayTests` | 76 | `Holiday` model, `HolidayType` enum, `Country.Holidays`, filtering, date checks, data integrity |
 | `TimeZoneTests` | 98 | `CountryTimeZone` model, `Country.TimeZones`, DST support, UTC offsets, multi-zone countries, data integrity |
+| `GeographicDataTests` | 49 | Population, area, capital coordinates, bordering countries, landlocked status |
+| `PoliticalDataTests` | 14 | UN membership, independence dates |
+| `TransportDataTests` | 18 | Driving side, speed units, DrivingSide enum |
+| `ElectricalSystemTests` | 24 | Voltage, frequency, plug types, PlugType enum |
+| `EmergencyNumberTests` | 10 | Emergency telephone numbers |
+| `PhoneFormatTests` | 15 | Phone number formatting, calling codes, trunk prefixes |
+| `LocaleTests` | 21 | Date/number formats, measurement systems, postal codes |
+| `TranslationTests` | 17 | Country name translations, GetNameInLanguage |
+| `SubdivisionTests` | 18 | ISO 3166-2 subdivisions, code uniqueness |
+| `MovableHolidayTests` | 26 | Easter calculation, nth-weekday holidays, date computation |
+| `CurrencyExtendedTests` | 24 | Decimal places, reverse country lookup |
+| `LanguageExtendedTests` | 24 | Native names, scripts, text direction |
+| `CountryIntegrationTests` | 22 | Alternative TLDs, full property integration |
 
 ### What's Tested
 
@@ -986,6 +1233,9 @@ dotnet test
 - **Collection behavior** — `GetAll()` returns new list instances each time, lists are ordered, singletons are reference-equal across lookups
 - **Holiday data** — all holidays have valid names, months, days, and types; no duplicate names per country; consistent across accesses
 - **Time zone data** — all IANA IDs are non-empty and contain "/", UTC offsets in valid range (−12 to +14), no duplicate IANA IDs per country, all country codes exist in CountryHelper, fractional offsets formatted correctly
+- **Extended country data** — geographic data (population, area, coordinates, borders, landlocked), political data (UN membership, independence dates), transport data (driving side, speed units), electrical systems (voltage, frequency, plug types), emergency numbers, phone formats, locale/formatting (date/number formats, measurement systems, postal codes), translations (country names in 10+ languages), subdivisions (ISO 3166-2), and movable holidays (Easter, Thanksgiving, etc.)
+- **Currency extensions** — decimal places (minor units) for all currencies, reverse lookup via `GetCountriesUsingCurrency()`
+- **Language extensions** — native names, scripts, text direction (LTR/RTL) for all languages
 
 ### Test Dependencies
 

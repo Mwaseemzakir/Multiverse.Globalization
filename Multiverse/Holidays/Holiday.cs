@@ -57,5 +57,6 @@ public sealed class Holiday
     /// </summary>
     public bool IsOnDate(DateTime date) => date.Month == Month && date.Day == Day;
 
+    /// <inheritdoc/>
     public override string ToString() => $"{Name} ({Month:D2}/{Day:D2})";
 }

@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Seychelles country.</summary>
     public static readonly Country Seychelles =
         new Country(
             CountryNames.Seychelles, "690", "SC", "SYC",

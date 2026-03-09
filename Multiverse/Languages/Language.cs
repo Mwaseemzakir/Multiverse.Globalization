@@ -5,11 +5,33 @@ using static Multiverse.Globalization.Languages.LanguageHelper;
 
 namespace Multiverse.Globalization.Languages;
 
+/// <summary>
+/// Represents an ISO 639 language with its alpha-2/alpha-3 codes, name, and extended data.
+/// </summary>
 public sealed class Language
 {
+    /// <summary>Full English name of the language.</summary>
     public string Name { get; private set; }
+    /// <summary>ISO 639-1 two-letter language code, e.g. "en", "fr".</summary>
     public string Alpha2Code { get; private set; } = string.Empty;
+    /// <summary>ISO 639-2/T three-letter language code, e.g. "eng", "fra".</summary>
     public string Alpha3Code { get; private set; } = string.Empty;
+
+    /// <summary>Native name of the language, e.g. "Deutsch" for German, "العربية" for Arabic.</summary>
+    public string NativeName { get; private set; } = string.Empty;
+
+    /// <summary>Primary writing script, e.g. "Latin", "Arabic", "Cyrillic", "Devanagari", "Han".</summary>
+    public string Script { get; private set; } = string.Empty;
+
+    /// <summary>Text direction of the language (LeftToRight or RightToLeft).</summary>
+    public TextDirection TextDirection { get; private set; } = TextDirection.LeftToRight;
+
+    internal void SetExtendedData(string nativeName, string script, TextDirection direction)
+    {
+        NativeName = nativeName ?? string.Empty;
+        Script = script ?? string.Empty;
+        TextDirection = direction;
+    }
 
     internal Language(
         string alpha2Code,

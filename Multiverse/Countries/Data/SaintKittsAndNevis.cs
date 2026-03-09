@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Saint Kitts And Nevis country.</summary>
     public static readonly Country SaintKittsAndNevis =
         new Country(
             CountryNames.SaintKittsAndNevis, "659", "KN", "KNA",

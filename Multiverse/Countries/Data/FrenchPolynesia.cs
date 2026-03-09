@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The French Polynesia country.</summary>
     public static readonly Country FrenchPolynesia =
         new Country(
             CountryNames.FrenchPolynesia, "258", "PF", "PYF",

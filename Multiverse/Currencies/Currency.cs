@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Multiverse.Globalization.Currencies.CurrencyHelper;
 
 namespace Multiverse.Globalization.Currencies;
 
+/// <summary>
+/// Represents an ISO 4217 currency with its code, name, number, and symbol.
+/// </summary>
 public sealed class Currency
 {  
     internal Currency(
@@ -18,10 +22,22 @@ public sealed class Currency
         Symbol = symbol;
     }
 
+    /// <summary>ISO 4217 numeric code.</summary>
     public int Number { get; private set; }
+    /// <summary>ISO 4217 three-letter currency code, e.g. "USD".</summary>
     public string Code { get; private set; } = string.Empty;
+    /// <summary>Full name of the currency, e.g. "US Dollar".</summary>
     public string Name { get; private set; } = string.Empty;
+    /// <summary>Currency symbol, e.g. "$", "€", "£".</summary>
     public string Symbol { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Number of decimal places (minor units) for this currency.
+    /// Most currencies use 2 (e.g. USD, EUR). Some use 0 (e.g. JPY), 3 (e.g. KWD, BHD), or 4 (e.g. CLF).
+    /// </summary>
+    public int DecimalPlaces { get; private set; } = 2;
+
+    internal void SetDecimalPlaces(int places) => DecimalPlaces = places;
 
     /// <summary>
     /// Checks if the provided identifier is valid. 
@@ -99,6 +115,15 @@ public sealed class Currency
     /// Retrieves a list of all available Currency objects.
     /// </summary>
     public static IReadOnlyList<Currency> GetAll() => CurrencyHelper.GetAll();
+
+    /// <summary>
+    /// Returns all countries that use this currency as their primary currency.
+    /// </summary>
+    public IReadOnlyList<Countries.Country> GetCountriesUsingCurrency()
+        => Countries.Country.GetAll()
+            .Where(c => c.Currency != null && c.Currency.Code == Code)
+            .ToList()
+            .AsReadOnly();
 
     /// <inheritdoc />
     public override string ToString() => $"{Name} ({Code})";

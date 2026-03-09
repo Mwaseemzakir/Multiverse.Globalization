@@ -19,11 +19,12 @@ public static partial class CountryHelper
 
     /// <summary>
     /// Static constructor — runs after all static field initializers (the 250 country objects)
-    /// have been created, enriching each country with sub-region, demonym, and TLD data.
+    /// have been created, enriching each country with sub-region, demonym, TLD, and additional data.
     /// </summary>
     static CountryHelper()
     {
         InitializeExtendedData();
+        InitializeAdditionalData();
     }
 
     private static void InitializeExtendedData()
