@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Russian Federation country.</summary>
     public static readonly Country RussianFederation =
         new Country(
             CountryNames.RussianFederation, "643", "RU", "RUS",

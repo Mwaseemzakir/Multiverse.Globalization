@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Micronesia Federated States Of country.</summary>
     public static readonly Country MicronesiaFederatedStatesOf =
         new Country(
             CountryNames.MicronesiaFederatedStatesOf, "583", "FM", "FSM",

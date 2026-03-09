@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Guernsey country.</summary>
     public static readonly Country Guernsey =
         new Country(
             CountryNames.Guernsey, "831", "GG", "GGY",

@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Netherlands country.</summary>
     public static readonly Country Netherlands =
         new Country(
             CountryNames.Netherlands, "528", "NL", "NLD",

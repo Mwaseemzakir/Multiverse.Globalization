@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Turks And Caicos Islands country.</summary>
     public static readonly Country TurksAndCaicosIslands =
         new Country(
             CountryNames.TurksAndCaicosIslands, "796", "TC", "TCA",

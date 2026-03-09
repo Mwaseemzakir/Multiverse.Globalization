@@ -46,5 +46,6 @@ public sealed class CountryTimeZone
         }
     }
 
+    /// <inheritdoc/>
     public override string ToString() => $"{IanaId} ({UtcOffsetString}{(ObservesDst ? ", DST" : "")})";
 }

@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Wallis And Futuna Islands country.</summary>
     public static readonly Country WallisAndFutunaIslands =
         new Country(
             CountryNames.WallisAndFutunaIslands, "876", "WF", "WLF",

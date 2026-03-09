@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Antigua And Barbuda country.</summary>
     public static readonly Country AntiguaAndBarbuda =
         new Country(
             CountryNames.AntiguaAndBarbuda, "028", "AG", "ATG",

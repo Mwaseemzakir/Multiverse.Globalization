@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Lao PDR country.</summary>
     public static readonly Country LaoPDR =
         new Country(
             CountryNames.LaoPDR, "418", "LA", "LAO",

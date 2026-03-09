@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Canada country.</summary>
     public static readonly Country Canada =
         new Country(
             CountryNames.Canada, "124", "CA", "CAN",

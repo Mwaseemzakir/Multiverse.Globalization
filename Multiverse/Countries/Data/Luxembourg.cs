@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Luxembourg country.</summary>
     public static readonly Country Luxembourg =
         new Country(
             CountryNames.Luxembourg, "442", "LU", "LUX",

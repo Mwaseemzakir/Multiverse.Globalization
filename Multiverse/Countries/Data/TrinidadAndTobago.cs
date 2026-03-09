@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Trinidad And Tobago country.</summary>
     public static readonly Country TrinidadAndTobago =
         new Country(
             CountryNames.TrinidadAndTobago, "780", "TT", "TTO",

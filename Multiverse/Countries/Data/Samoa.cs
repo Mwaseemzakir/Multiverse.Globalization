@@ -5,6 +5,7 @@ namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
+    /// <summary>The Samoa country.</summary>
     public static readonly Country Samoa =
         new Country(
             CountryNames.Samoa, "882", "WS", "WSM",
