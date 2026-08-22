@@ -38,6 +38,41 @@ public class CountryTests
     }
 
     [Fact]
+    public void GetCurrent_Should_ReturnOnly249OfficiallyAssignedRecords()
+    {
+        var countries = Country.GetCurrent();
+
+        Assert.Equal(249, countries.Count);
+        Assert.All(countries, country =>
+        {
+            Assert.Equal(CountryCodeStatus.OfficiallyAssigned, country.CodeStatus);
+            Assert.True(country.IsCurrent);
+        });
+        Assert.DoesNotContain(CountryHelper.None, countries);
+        Assert.DoesNotContain(CountryHelper.NetherlandsAntilles, countries);
+        Assert.Same(countries, CountryHelper.GetCurrent());
+    }
+
+    [Fact]
+    public void GetLegacy_Should_ReturnFormerNetherlandsAntillesRecord()
+    {
+        var countries = Country.GetLegacy();
+
+        var country = Assert.Single(countries);
+        Assert.Same(CountryHelper.NetherlandsAntilles, country);
+        Assert.Equal(CountryCodeStatus.FormerlyAssigned, country.CodeStatus);
+        Assert.False(country.IsCurrent);
+        Assert.Same(countries, CountryHelper.GetLegacy());
+    }
+
+    [Fact]
+    public void None_Should_HaveUnspecifiedCodeStatus()
+    {
+        Assert.Equal(CountryCodeStatus.Unspecified, CountryHelper.None.CodeStatus);
+        Assert.False(CountryHelper.None.IsCurrent);
+    }
+
+    [Fact]
     public void GetAll_Should_NotContainDuplicateAlpha2Codes()
     {
         var countries = Country.GetAll();

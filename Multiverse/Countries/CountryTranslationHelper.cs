@@ -27,6 +27,9 @@ public static class CountryTranslationHelper
         return null;
     }
 
+    /// <summary>All country-name translations keyed by country or supplemental area code.</summary>
+    public static IReadOnlyDictionary<string, Dictionary<string, string>> All => _data;
+
     private static Dictionary<string, Dictionary<string, string>> InitializeData()
     {
         var d = new Dictionary<string, Dictionary<string, string>>();

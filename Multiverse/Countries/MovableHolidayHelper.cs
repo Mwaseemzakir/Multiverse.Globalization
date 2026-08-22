@@ -16,6 +16,9 @@ public static class MovableHolidayHelper
             : new List<MovableHoliday>();
     }
 
+    /// <summary>All movable-holiday rules keyed by country alpha-2 code.</summary>
+    public static IReadOnlyDictionary<string, List<MovableHoliday>> All => _data;
+
     private static Dictionary<string, List<MovableHoliday>> InitializeData()
     {
         var d = new Dictionary<string, List<MovableHoliday>>();

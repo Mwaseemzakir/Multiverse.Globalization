@@ -1,8 +1,9 @@
 namespace Multiverse.Globalization.TimeZones;
 
 /// <summary>
-/// Provides IANA time zone data for all 250 countries and territories.
-/// Each entry maps an ISO 3166-1 alpha-2 code to a list of time zones observed in that country.
+/// Provides IANA time-zone identifiers for the 250 compatibility country/territory records,
+/// plus the widely used supplemental XK code for Kosovo. Bundled offsets are standard snapshots;
+/// date-aware rules come from the operating system through <see cref="CountryTimeZone"/>.
 /// </summary>
 public static class TimeZoneHelper
 {

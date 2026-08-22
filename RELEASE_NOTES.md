@@ -1,3 +1,13 @@
+## Data Integrity, Catalog Status & Date-Aware Time Zones
+
+- Distinguished 249 current ISO 3166-1 records from the formerly assigned Netherlands Antilles (`AN`) compatibility record
+- Added `Country.CodeStatus`, `Country.IsCurrent`, `Country.GetCurrent()`, and `Country.GetLegacy()`
+- Kept `Country.GetAll()` backward-compatible, including the `None` sentinel and legacy records
+- Documented supplemental `XK` data separately from the ISO 3166-1 country catalog
+- Added date-aware `CountryTimeZone.GetUtcOffset()` and `IsDaylightSavingTime()` APIs backed by host operating-system rules
+- Corrected NuGet repository/project metadata and refreshed coverage claims
+- Added packaged `DATA_SOURCES.md` with authoritative references, exact keyed coverage, and known limitations
+
 ## Extended Country Data, Multi-Framework Support & Test Reorganization
 
 ### Multi-Framework Support

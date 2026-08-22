@@ -40,6 +40,40 @@ public class TimeZoneTests
         Assert.Throws<ArgumentNullException>(() => new CountryTimeZone("   ", 0, false));
     }
 
+    [Fact]
+    public void TryGetSystemTimeZone_Karachi_ShouldResolveInstalledRules()
+    {
+        var tz = new CountryTimeZone("Asia/Karachi", 5, false);
+
+        Assert.True(tz.TryGetSystemTimeZone(out var systemTimeZone));
+        Assert.NotNull(systemTimeZone);
+    }
+
+    [Fact]
+    public void DateAwareOffset_NewYork_ShouldApplyDstForTheInstant()
+    {
+        var tz = new CountryTimeZone("America/New_York", -5, true);
+        var winter = new DateTimeOffset(2026, 1, 15, 12, 0, 0, TimeSpan.Zero);
+        var summer = new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero);
+
+        Assert.Equal(TimeSpan.FromHours(-5), tz.GetUtcOffset(winter));
+        Assert.Equal(TimeSpan.FromHours(-4), tz.GetUtcOffset(summer));
+        Assert.False(tz.IsDaylightSavingTime(winter));
+        Assert.True(tz.IsDaylightSavingTime(summer));
+    }
+
+    [Fact]
+    public void DateAwareMethods_UnknownZone_ShouldReportResolutionFailure()
+    {
+        var tz = new CountryTimeZone("Etc/Definitely_Not_A_Real_Zone", 0, false);
+        var instant = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
+        Assert.False(tz.TryGetSystemTimeZone(out var systemTimeZone));
+        Assert.Null(systemTimeZone);
+        Assert.Throws<TimeZoneNotFoundException>(() => tz.GetUtcOffset(instant));
+        Assert.Throws<TimeZoneNotFoundException>(() => tz.IsDaylightSavingTime(instant));
+    }
+
     #endregion
 
     #region CountryTimeZone Model — UtcOffset

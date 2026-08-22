@@ -3,7 +3,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/Multiverse.svg?logo=nuget&color=blue)](https://www.nuget.org/packages/Multiverse/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Multiverse.svg?logo=nuget&color=green)](https://www.nuget.org/packages/Multiverse/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build](https://github.com/Mwaseemzakir/Multiverse.Globalization/actions/workflows/nuget-publish.yml/badge.svg)](https://github.com/Mwaseemzakir/Multiverse.Globalization/actions)
+[![Build](https://github.com/Mwaseemzakir/Multiverse/actions/workflows/nuget-publish.yml/badge.svg)](https://github.com/Mwaseemzakir/Multiverse/actions)
 
 **Multiverse** is a lightweight, zero-dependency .NET library that provides a comprehensive, standards-compliant dataset of **countries**, **currencies**, and **languages** from around the globe — making it an essential building block for internationalization (i18n) and localization (l10n) in any .NET application.
 
@@ -69,6 +69,7 @@
 - [API Reference Summary](#api-reference-summary)
 - [Testing](#testing)
 - [Release Notes](RELEASE_NOTES.md)
+- [Data Sources and Coverage](DATA_SOURCES.md)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -78,19 +79,19 @@
 
 | Capability | Standard | Coverage |
 |---|---|---|
-| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 250 countries & territories with capitals, regions, sub-regions, demonyms, TLDs, currencies, official languages, holidays, time zones & flag emojis |
-| **Extended Country Data** | Geographic, political & transport metadata | Population, area, capital coordinates, bordering countries, driving side, speed units, independence dates, UN membership, landlocked status for all 250 countries |
+| **Countries** | ISO 3166-1 (alpha-2, alpha-3, numeric) + E.164 calling codes | 249 current country/area records plus the formerly assigned `AN` compatibility record |
+| **Extended Country Data** | Geographic, political & transport metadata | Population, area, capital coordinates, bordering countries, driving side, speed units, independence dates, UN membership & landlocked status |
 | **Currencies** | ISO 4217 (code, numeric) | 150+ world currencies with decimal places (minor units) and reverse country lookup |
 | **Languages** | ISO 639-1 & ISO 639-2 (alpha-2, alpha-3) | 475+ languages with native names, scripts & text direction (LTR/RTL) |
-| **Holidays** | Fixed-date public holidays | Public, national, religious, bank & observance holidays for 190+ countries |
-| **Movable Holidays** | Date-varies-by-year holidays | Easter, Thanksgiving, and other movable holidays for 40+ countries |
-| **Time Zones** | IANA Time Zone Database | UTC offsets, DST support, and country-to-zone mapping for 250 countries & territories |
-| **Electrical Systems** | Plug types, voltage & frequency | Electrical system data for all 250 countries |
+| **Holidays** | Fixed-date public holidays | Explicit records for 213 country/area codes |
+| **Movable Holidays** | Date-varies-by-year holidays | Explicit rules for 48 country/area codes |
+| **Time Zones** | IANA Time Zone Database | IANA identifiers for all 250 compatibility records plus supplemental `XK`; date-aware rules use the host OS |
+| **Electrical Systems** | Plug types, voltage & frequency | Explicit records for 247 country/area codes |
 | **Emergency Numbers** | Emergency telephone numbers | Police, fire, ambulance numbers for all 250 countries |
-| **Phone Formats** | International phone formatting | Calling codes, trunk prefixes, phone number lengths for all 250 countries |
-| **Locale & Formatting** | Date, number & measurement formats | Date format, number separators, measurement systems, postal code formats for all 250 countries |
-| **Translations** | Country name translations | Country names in 10+ languages for all 250 countries |
-| **Subdivisions** | ISO 3166-2 | States, provinces, regions for 50+ countries |
+| **Phone Formats** | International phone formatting | Explicit records for 233 country/area codes |
+| **Locale & Formatting** | Date, number & measurement formats | All 250 compatibility records plus supplemental `XK` |
+| **Translations** | Country name translations | All 250 compatibility records plus supplemental `XK` |
+| **Subdivisions** | ISO 3166-2 | Explicit records for 59 country/area codes |
 
 - **Country-centric design** — each `Country` carries its `Currency` and `OfficialLanguages`; one lookup gives you everything
 - **Fast lookups** — pre-built dictionary maps for O(1) retrieval by code, name, or number
@@ -128,7 +129,7 @@ dotnet add package Multiverse
 
 ### PackageReference
 ```xml
-<PackageReference Include="Multiverse" Version="2.0.40" />
+<PackageReference Include="Multiverse" Version="2.0.47" />
 ```
 
 ---
@@ -180,7 +181,9 @@ Console.WriteLine($"{french.Name} ({french.Alpha2Code})");     // French (fr)
 
 Namespace: `Multiverse.Globalization.Countries`
 
-The `Country` class is the **central entity** of Multiverse. Each country object provides access to **250 countries and territories** based on **ISO 3166-1**, and carries its own `Currency` and `OfficialLanguages` — so a single lookup gives you everything about a country.
+The `Country` class is the **central entity** of Multiverse. The catalog contains **249 current ISO 3166-1 countries/areas** and one formerly assigned Netherlands Antilles (`AN`) compatibility record. Each object carries its own `Currency` and `OfficialLanguages`.
+
+Use `Country.GetCurrent()` for the current ISO catalog. `Country.GetAll()` preserves the historical behavior of also returning `CountryHelper.None` and the legacy `AN` record. See [Data sources and coverage](DATA_SOURCES.md) for the exact scope and limitations.
 
 ### Country Properties
 
@@ -193,6 +196,8 @@ The `Country` class is the **central entity** of Multiverse. Each country object
 | `CallingCode` | `string` | International dialing code (E.164) | `"+92"` |
 | `Capital` | `string` | Capital city name | `"Islamabad"` |
 | `Region` | `string` | Geographic region / continent | `"Asia"` |
+| `CodeStatus` | `CountryCodeStatus` | Current, former, or unspecified ISO-code status | `OfficiallyAssigned` |
+| `IsCurrent` | `bool` | Whether the ISO 3166-1 code is currently assigned | `true` |
 | `SubRegion` | `string` | UN M49 sub-region | `"Southern Asia"` |
 | `Demonym` | `string` | What residents of the country are called | `"Pakistani"` |
 | `TLD` | `string` | Country-code top-level domain | `".pk"` |
@@ -581,7 +586,7 @@ var none = LanguageHelper.None; // Empty sentinel value
 
 Namespace: `Multiverse.Globalization.Holidays`
 
-The `Holiday` class provides access to **fixed-date public holidays** for **190+ countries** around the world. Holidays are accessed directly through the `Country` object — each country carries its own holidays.
+The `Holiday` class provides fixed-date public-holiday records for **213 country/area codes**. Holidays are accessed directly through the `Country` object; missing data returns an empty list.
 
 > **Tip:** You can reach a country's holidays directly via `Country.Holidays` — see [Accessing a Country's Holidays](#accessing-a-countrys-holidays).
 
@@ -668,9 +673,9 @@ Console.WriteLine(republicDay.IsOnDate(new DateTime(2026, 1, 26))); // true
 
 Namespace: `Multiverse.Globalization.TimeZones`
 
-The `CountryTimeZone` class provides access to **IANA time zone data** for all **250 countries and territories**. Time zones are accessed directly through the `Country` object — each country carries its own time zone list.
+The `CountryTimeZone` class provides IANA time-zone identifiers for all 250 compatibility records, plus supplemental `XK` data. Time zones are accessed directly through the `Country` object.
 
-> **Standard:** Uses the [IANA Time Zone Database](https://www.iana.org/time-zones) (also known as the Olson database / tz database), the global standard for time zone identifiers used by Linux, macOS, Java, JavaScript, Go, Python, and .NET 6+.
+> **Accuracy:** `UtcOffset` and `ObservesDst` are bundled standard-offset/support snapshots. Use `GetUtcOffset(instant)` and `IsDaylightSavingTime(instant)` for date-aware answers based on the host operating system's current rules.
 
 > **Tip:** You can reach a country's time zones directly via `Country.TimeZones` — see [Accessing a Country's Time Zones](#accessing-a-countrys-time-zones).
 
@@ -679,10 +684,13 @@ The `CountryTimeZone` class provides access to **IANA time zone data** for all *
 | Property | Type | Description | Example |
 |---|---|---|---|
 | `IanaId` | `string` | IANA time zone identifier | `"America/New_York"` |
-| `UtcOffsetHours` | `double` | Standard UTC offset in hours | `-5.0` |
-| `ObservesDst` | `bool` | Whether this zone observes Daylight Saving Time | `true` |
-| `UtcOffset` | `TimeSpan` | UTC offset as a `TimeSpan` | `-05:00:00` |
+| `UtcOffsetHours` | `double` | Bundled standard-offset snapshot in hours | `-5.0` |
+| `ObservesDst` | `bool` | Bundled DST-support snapshot | `true` |
+| `UtcOffset` | `TimeSpan` | Bundled standard-offset snapshot | `-05:00:00` |
 | `UtcOffsetString` | `string` | Formatted UTC offset string | `"UTC-05:00"` |
+| `GetUtcOffset(DateTimeOffset)` | `TimeSpan` | Date-aware offset from host system rules | `-04:00:00` |
+| `IsDaylightSavingTime(DateTimeOffset)` | `bool` | Whether DST applies at the instant | `true` |
+| `TryGetSystemTimeZone(out TimeZoneInfo?)` | `bool` | Resolve the installed system rules | `true` |
 
 ### Accessing Time Zones from a Country
 
@@ -702,6 +710,11 @@ foreach (var tz in usa.TimeZones)
 // Get the primary (capital-city) time zone
 var primary = usa.GetPrimaryTimeZone();
 Console.WriteLine(primary);  // America/New_York (UTC-05:00, DST)
+
+// Date-aware offsets use the rules installed on the host system
+var july = new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero);
+Console.WriteLine(primary!.GetUtcOffset(july));                 // -04:00:00
+Console.WriteLine(primary.IsDaylightSavingTime(july));         // True
 
 // Single-zone countries
 var japan = Country.GetCountry("JP");
@@ -1054,6 +1067,8 @@ Country.GetCountry("Us");
 | `CallingCode` | `string` | International dialing code (E.164) |
 | `Capital` | `string` | Capital city |
 | `Region` | `string` | Geographic region / continent |
+| `CodeStatus` | `CountryCodeStatus` | Current, former, or unspecified ISO-code status |
+| `IsCurrent` | `bool` | Whether the ISO 3166-1 code is currently assigned |
 | `SubRegion` | `string` | UN M49 sub-region (e.g. "Southern Asia", "Western Europe") |
 | `Demonym` | `string` | Demonym — what residents are called (e.g. "Pakistani", "American") |
 | `TLD` | `string` | Country-code top-level domain (e.g. ".pk", ".us") |
@@ -1087,7 +1102,9 @@ Country.GetCountry("Us");
 | `GetCountry(string)` | `Country` | `CountryNotFoundException`, `ArgumentNullException` | Strict lookup by alpha-2, alpha-3, numeric code, name, or common alias |
 | `GetCountryOrDefault(string)` | `Country?` | — | Safe lookup; returns `null` if not found |
 | `IsValid(string)` | `bool` | — | Check if identifier maps to a known country |
-| `GetAll()` | `List<Country>` | — | All 250 countries |
+| `GetCurrent()` | `IReadOnlyList<Country>` | — | 249 currently assigned ISO 3166-1 records |
+| `GetLegacy()` | `IReadOnlyList<Country>` | — | Formerly assigned compatibility records |
+| `GetAll()` | `IReadOnlyList<Country>` | — | Compatibility catalog, including `None` and legacy records |
 
 | Method | Returns | Description |
 |---|---|---|
@@ -1145,12 +1162,14 @@ Country.GetCountry("Us");
 | Member | Type | Description |
 |---|---|---|
 | `None` | `Country` | Empty sentinel value representing no country |
-| `GetAll()` | `List<Country>` | Returns a new list of all 250 countries, ordered by name |
+| `GetCurrent()` | `IReadOnlyList<Country>` | 249 currently assigned ISO 3166-1 records |
+| `GetLegacy()` | `IReadOnlyList<Country>` | Formerly assigned compatibility records |
+| `GetAll()` | `IReadOnlyList<Country>` | Cached compatibility catalog, including `None` and legacy records |
 | `Alpha2CodeMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by ISO 3166-1 alpha-2 code (case-insensitive keys) |
 | `Alpha3CodeMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by ISO 3166-1 alpha-3 code (case-insensitive keys) |
 | `NumericCodeMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by ISO 3166-1 numeric code |
 | `NameMap` | `IReadOnlyDictionary<string, Country>` | O(1) lookup by country name (case-insensitive keys) |
-| `Pakistan`, `France`, ... | `Country` | 250 static readonly fields — one per country |
+| `Pakistan`, `France`, ... | `Country` | 249 current fields plus the legacy Netherlands Antilles record |
 
 ### CurrencyHelper
 
@@ -1198,10 +1217,13 @@ Country.GetCountry("Us");
 | Property / Method | Returns | Description |
 |---|---|---|
 | `IanaId` | `string` | IANA time zone identifier (e.g. "America/New_York") |
-| `UtcOffsetHours` | `double` | Standard UTC offset in hours (e.g. -5.0, +5.5, +5.75) |
-| `ObservesDst` | `bool` | Whether this time zone observes Daylight Saving Time |
-| `UtcOffset` | `TimeSpan` | UTC offset as a `TimeSpan` |
+| `UtcOffsetHours` | `double` | Bundled standard-offset snapshot in hours (e.g. -5.0, +5.5, +5.75) |
+| `ObservesDst` | `bool` | Bundled DST-support snapshot |
+| `UtcOffset` | `TimeSpan` | Bundled standard-offset snapshot |
 | `UtcOffsetString` | `string` | Formatted offset string (e.g. "UTC-05:00", "UTC+05:45") |
+| `GetUtcOffset(DateTimeOffset)` | `TimeSpan` | Date-aware offset using installed system rules |
+| `IsDaylightSavingTime(DateTimeOffset)` | `bool` | Date-aware DST state using installed system rules |
+| `TryGetSystemTimeZone(out TimeZoneInfo?)` | `bool` | Try to resolve installed system rules |
 | `ToString()` | `string` | Formatted string, e.g. `"America/New_York (UTC-05:00, DST)"` |
 
 ### TimeZoneHelper
@@ -1226,7 +1248,7 @@ dotnet test
 
 | Test Class | Tests | Covers |
 |---|---|---|
-| `CountryTests` | 119 | `Country` API, `CountryHelper` maps, SubRegion, Demonym, TLD, data integrity across all 250 countries |
+| `CountryTests` | 119+ | `Country` API, current/legacy code status, lookup maps, SubRegion, Demonym, TLD, and catalog integrity |
 | `CurrencyTests` | 56 | `Currency` API (string & int overloads), `CurrencyHelper` maps, data integrity |
 | `LanguageTests` | 42 | `Language` API, `LanguageHelper` maps, data integrity |
 | `ExceptionTests` | 19 | All three custom exception types — constructors, inheritance, and throw behavior |
@@ -1274,7 +1296,7 @@ dotnet test
 
 ## Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/Mwaseemzakir/Multiverse.Globalization).
+Contributions, issues, and feature requests are welcome! Feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/Mwaseemzakir/Multiverse).
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/my-feature`)

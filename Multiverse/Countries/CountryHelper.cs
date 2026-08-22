@@ -7,7 +7,8 @@ namespace Multiverse.Globalization.Countries;
 public static partial class CountryHelper
 {
     /// <summary>Empty sentinel value representing no country.</summary>
-    public static readonly Country None = new Country("", "", "", "", "", "", "", null);
+    public static readonly Country None = new Country(
+        "", "", "", "", "", "", "", null, CountryCodeStatus.Unspecified);
 
     /// <summary>
     /// Cached reflection scan of every public static <see cref="Country"/> field on this type
@@ -313,6 +314,18 @@ public static partial class CountryHelper
             .OrderBy(c => c.Name)
             .ToList());
 
+    private static readonly Lazy<IReadOnlyList<Country>> _current = new(() =>
+        _all.Value
+            .Where(c => c.CodeStatus == CountryCodeStatus.OfficiallyAssigned)
+            .ToList()
+            .AsReadOnly());
+
+    private static readonly Lazy<IReadOnlyList<Country>> _legacy = new(() =>
+        _all.Value
+            .Where(c => c.CodeStatus == CountryCodeStatus.FormerlyAssigned)
+            .ToList()
+            .AsReadOnly());
+
     private static readonly Lazy<IReadOnlyDictionary<string, Country>> _alpha2CodeMap = new(() =>
 #if NET8_0_OR_GREATER
         _all.Value.ToFrozenDictionary(c => c.Alpha2Code.ToLowerInvariant()));
@@ -341,8 +354,17 @@ public static partial class CountryHelper
         _all.Value.ToDictionary(c => c.NumericCode));
 #endif
 
-    /// <summary>Returns a cached read-only list containing all countries.</summary>
+    /// <summary>
+    /// Returns the complete compatibility catalog, including <see cref="None"/> and formerly
+    /// assigned country-code records. Use <see cref="GetCurrent"/> for current ISO entries only.
+    /// </summary>
     public static IReadOnlyList<Country> GetAll() => _all.Value;
+
+    /// <summary>Returns the 249 records with currently assigned ISO 3166-1 codes.</summary>
+    public static IReadOnlyList<Country> GetCurrent() => _current.Value;
+
+    /// <summary>Returns formerly assigned country-code records retained for compatibility.</summary>
+    public static IReadOnlyList<Country> GetLegacy() => _legacy.Value;
 
     /// <summary>Lookup by ISO 3166-1 alpha-2 code (case-insensitive).</summary>
     public static IReadOnlyDictionary<string, Country> Alpha2CodeMap => _alpha2CodeMap.Value;

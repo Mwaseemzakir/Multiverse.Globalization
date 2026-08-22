@@ -28,6 +28,23 @@ public sealed class Country
         string region,
         Currency? currency,
         params Language[] officialLanguages)
+        : this(
+            name, numericCode, alpha2Code, alpha3Code, callingCode, capital, region,
+            currency, CountryCodeStatus.OfficiallyAssigned, officialLanguages)
+    {
+    }
+
+    internal Country(
+        string name,
+        string numericCode,
+        string alpha2Code,
+        string alpha3Code,
+        string callingCode,
+        string capital,
+        string region,
+        Currency? currency,
+        CountryCodeStatus codeStatus,
+        params Language[] officialLanguages)
     {
         Name = name;
         NumericCode = numericCode;
@@ -37,6 +54,7 @@ public sealed class Country
         Capital = capital;
         Region = region;
         Currency = currency;
+        CodeStatus = codeStatus;
         OfficialLanguages = officialLanguages ?? Array.Empty<Language>();
     }
 
@@ -60,6 +78,12 @@ public sealed class Country
 
     /// <summary>Geographic region/continent, e.g. "Asia", "Europe", "Americas", "Africa", "Oceania", "Antarctic".</summary>
     public string Region { get; private set; } = string.Empty;
+
+    /// <summary>Whether this record uses a current, former, or unspecified ISO 3166-1 code.</summary>
+    public CountryCodeStatus CodeStatus { get; }
+
+    /// <summary>Whether this record has a currently assigned ISO 3166-1 code.</summary>
+    public bool IsCurrent => CodeStatus == CountryCodeStatus.OfficiallyAssigned;
 
     /// <summary>UN M49 sub-region, e.g. "Southern Asia", "Western Europe", "Caribbean".</summary>
     public string SubRegion { get; private set; } = string.Empty;
@@ -373,6 +397,15 @@ public sealed class Country
     /// Retrieves a list of all available Country objects.
     /// </summary>
     public static IReadOnlyList<Country> GetAll() => CountryHelper.GetAll();
+
+    /// <summary>
+    /// Retrieves the 249 records with currently assigned ISO 3166-1 codes.
+    /// This excludes <see cref="CountryHelper.None"/> and formerly assigned compatibility records.
+    /// </summary>
+    public static IReadOnlyList<Country> GetCurrent() => CountryHelper.GetCurrent();
+
+    /// <summary>Retrieves formerly assigned country-code records retained for compatibility.</summary>
+    public static IReadOnlyList<Country> GetLegacy() => CountryHelper.GetLegacy();
 
     /// <inheritdoc />
     public override string ToString() => $"{Name} ({Alpha2Code})";
