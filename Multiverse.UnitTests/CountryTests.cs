@@ -1002,4 +1002,85 @@ public class CountryTests
     }
 
     #endregion
+
+    #region Name Aliases
+
+    [Theory]
+    [InlineData("USA", "US")]
+    [InlineData("United States", "US")]
+    [InlineData("UK", "GB")]
+    [InlineData("Britain", "GB")]
+    [InlineData("Great Britain", "GB")]
+    [InlineData("South Korea", "KR")]
+    [InlineData("North Korea", "KP")]
+    [InlineData("Russia", "RU")]
+    [InlineData("Ivory Coast", "CI")]
+    [InlineData("Czechia", "CZ")]
+    [InlineData("Burma", "MM")]
+    [InlineData("Eswatini", "SZ")]
+    [InlineData("Swaziland", "SZ")]
+    [InlineData("Syria", "SY")]
+    [InlineData("Tanzania", "TZ")]
+    [InlineData("Micronesia", "FM")]
+    [InlineData("Venezuela", "VE")]
+    [InlineData("Vatican", "VA")]
+    [InlineData("Vatican City", "VA")]
+    [InlineData("Holy See", "VA")]
+    [InlineData("Macedonia", "MK")]
+    [InlineData("North Macedonia", "MK")]
+    [InlineData("DR Congo", "CD")]
+    [InlineData("Democratic Republic of the Congo", "CD")]
+    [InlineData("Congo-Kinshasa", "CD")]
+    [InlineData("Republic of the Congo", "CG")]
+    [InlineData("Congo-Brazzaville", "CG")]
+    [InlineData("Iran", "IR")]
+    [InlineData("Brunei", "BN")]
+    [InlineData("Laos", "LA")]
+    [InlineData("Vietnam", "VN")]
+    [InlineData("East Timor", "TL")]
+    [InlineData("UAE", "AE")]
+    [InlineData("Cabo Verde", "CV")]
+    public void GetCountry_Should_ResolveCommonAlias(string alias, string expectedAlpha2)
+    {
+        var country = Country.GetCountry(alias);
+
+        Assert.Equal(expectedAlpha2, country.Alpha2Code);
+    }
+
+    [Theory]
+    [InlineData("uSa")]
+    [InlineData("RUSSIA")]
+    [InlineData("Ivory coast")]
+    public void GetCountry_Alias_Should_BeCaseInsensitive(string alias)
+    {
+        var exception = Record.Exception(() => Country.GetCountry(alias));
+
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void IsValid_Should_ReturnTrueForAlias()
+    {
+        Assert.True(Country.IsValid("USA"));
+        Assert.True(Country.IsValid("Russia"));
+    }
+
+    [Fact]
+    public void GetCountryOrDefault_UnknownAlias_Should_ReturnNull()
+    {
+        Assert.Null(Country.GetCountryOrDefault("Narnia"));
+    }
+
+    [Fact]
+    public void NameAliases_Should_AllResolveToKnownCountries()
+    {
+        foreach (var (alias, alpha2) in CountryHelper.NameAliases.Select(kvp => (kvp.Key, kvp.Value)))
+        {
+            Assert.True(
+                CountryHelper.Alpha2CodeMap.ContainsKey(alpha2.ToLowerInvariant()),
+                $"Alias '{alias}' points to unknown alpha-2 code '{alpha2}'.");
+        }
+    }
+
+    #endregion
 }

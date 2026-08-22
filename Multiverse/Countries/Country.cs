@@ -165,6 +165,25 @@ public sealed class Country
         return result.AsReadOnly();
     }
 
+    /// <summary>
+    /// Returns all holidays (both fixed and movable) that fall on the given date as
+    /// <see cref="HolidayOccurrence"/> objects, preserving each holiday's date, <see cref="HolidayType"/>,
+    /// and whether it came from a fixed-date or movable rule. Unlike <see cref="GetAllHolidaysOnDate"/>,
+    /// which returns bare names, this keeps the full detail available on <see cref="Holidays"/> and
+    /// <see cref="MovableHolidays"/> individually.
+    /// </summary>
+    public IReadOnlyList<HolidayOccurrence> GetHolidayOccurrencesOnDate(DateTime date)
+    {
+        var result = new List<HolidayOccurrence>();
+        result.AddRange(Holidays
+            .Where(h => h.IsOnDate(date))
+            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, isMovable: false)));
+        result.AddRange(MovableHolidays
+            .Where(h => h.IsOnDate(date))
+            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, isMovable: true)));
+        return result.AsReadOnly();
+    }
+
     // ── Time Zones ──────────────────────────────────────────────────
 
     /// <summary>IANA time zones observed in this country.</summary>
@@ -321,11 +340,15 @@ public sealed class Country
         if (NameMap.TryGetValue(identifier, out var byName))
             return byName;
 
+        if (NameAliases.TryGetValue(identifier, out var aliasAlpha2) &&
+            Alpha2CodeMap.TryGetValue(aliasAlpha2.ToLowerInvariant(), out var byAlias))
+            return byAlias;
+
         return default;
     }
 
     /// <summary>
-    /// Retrieves a Country object based on the provided identifier, which can be an Alpha-2 code, 
+    /// Retrieves a Country object based on the provided identifier, which can be an Alpha-2 code,
     /// Alpha-3 code, numeric code, or the name of the country. Throws an exception if not found.
     /// </summary>
     public static Country GetCountry(string identifier)
@@ -351,7 +374,8 @@ public sealed class Country
         return Alpha2CodeMap.ContainsKey(identifier) ||
             Alpha3CodeMap.ContainsKey(identifier) ||
             NumericCodeMap.ContainsKey(identifier) ||
-            NameMap.ContainsKey(identifier);
+            NameMap.ContainsKey(identifier) ||
+            NameAliases.ContainsKey(identifier);
     }
 
     /// <summary>

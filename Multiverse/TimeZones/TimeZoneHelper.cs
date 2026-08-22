@@ -378,6 +378,7 @@ public static class TimeZoneHelper
             ["CC"] = new List<CountryTimeZone> { new("Indian/Cocos", 6.5, false) },
             ["CK"] = new List<CountryTimeZone> { new("Pacific/Rarotonga", -10, false) },
             ["CW"] = new List<CountryTimeZone> { new("America/Curacao", -4, false) },
+            ["AN"] = new List<CountryTimeZone> { new("America/Curacao", -4, false) },
             ["FK"] = new List<CountryTimeZone> { new("Atlantic/Stanley", -3, false) },
             ["FO"] = new List<CountryTimeZone> { new("Atlantic/Faroe", 0, true) },
             ["GF"] = new List<CountryTimeZone> { new("America/Cayenne", -3, false) },
@@ -388,7 +389,11 @@ public static class TimeZoneHelper
                 new("Pacific/Gambier", -9, false)
             },
             ["TF"] = new List<CountryTimeZone> { new("Indian/Kerguelen", 5, false) },
+            ["HM"] = new List<CountryTimeZone> { new("Antarctica/Mawson", 5, false) },
             ["GI"] = new List<CountryTimeZone> { new("Europe/Gibraltar", 1, true) },
+            ["GG"] = new List<CountryTimeZone> { new("Europe/Guernsey", 0, true) },
+            ["JE"] = new List<CountryTimeZone> { new("Europe/Jersey", 0, true) },
+            ["IM"] = new List<CountryTimeZone> { new("Europe/Isle_of_Man", 0, true) },
             ["GL"] = new List<CountryTimeZone>
             {
                 new("America/Nuuk", -2, true),

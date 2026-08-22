@@ -1013,4 +1013,44 @@ public class TimeZoneTests
     }
 
     #endregion
+
+    #region Previously-Missing Territories (GG, JE, IM, HM, AN)
+
+    [Theory]
+    [InlineData("GG", "Europe/Guernsey")]
+    [InlineData("JE", "Europe/Jersey")]
+    [InlineData("IM", "Europe/Isle_of_Man")]
+    [InlineData("HM", "Antarctica/Mawson")]
+    [InlineData("AN", "America/Curacao")]
+    public void PreviouslyMissingTerritories_Should_HaveTimeZoneData(string alpha2, string expectedIanaId)
+    {
+        var timeZones = TimeZoneHelper.GetTimeZonesForCountry(alpha2);
+
+        Assert.NotEmpty(timeZones);
+        Assert.Contains(timeZones, tz => tz.IanaId == expectedIanaId);
+    }
+
+    [Fact]
+    public void ChannelIslandsAndIsleOfMan_Should_ObserveDst()
+    {
+        Assert.All(new[] { "GG", "JE", "IM" }, code =>
+        {
+            var tz = TimeZoneHelper.GetTimeZonesForCountry(code).Single();
+            Assert.Equal(0, tz.UtcOffsetHours);
+            Assert.True(tz.ObservesDst);
+        });
+    }
+
+    [Fact]
+    public void AllCountries_Should_HaveAtLeastOneTimeZone()
+    {
+        var missing = Country.GetAll()
+            .Where(c => c != CountryHelper.None && c.TimeZones.Count == 0)
+            .Select(c => c.Alpha2Code)
+            .ToList();
+
+        Assert.Empty(missing);
+    }
+
+    #endregion
 }

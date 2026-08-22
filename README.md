@@ -24,6 +24,7 @@
   - [Accessing a Country's Holidays](#accessing-a-countrys-holidays)
   - [Accessing a Country's Time Zones](#accessing-a-countrys-time-zones)
   - [Lookup by Identifier](#lookup-country-by-identifier)
+    - [Country Name Aliases](#country-name-aliases)
   - [Validation](#validate-a-country-identifier)
   - [Get All Countries](#get-all-countries)
   - [Direct Access via CountryHelper](#direct-access-via-countryhelper)
@@ -340,7 +341,7 @@ Console.WriteLine($"{offsets.Count} distinct offsets"); // 6 distinct offsets
 
 ### Lookup Country by Identifier
 
-An **identifier** can be any of: alpha-2 code, alpha-3 code, numeric code, or the full country name.
+An **identifier** can be any of: alpha-2 code, alpha-3 code, numeric code, the full country name, or a common alternate name (see [`CountryHelper.NameAliases`](#country-name-aliases)).
 
 ```csharp
 // Strict lookup — throws CountryNotFoundException if not found
@@ -348,9 +349,26 @@ Country usa = Country.GetCountry("US");
 Country uk  = Country.GetCountry("GBR");
 Country pk  = Country.GetCountry("586");
 Country fr  = Country.GetCountry("France");
+Country ru  = Country.GetCountry("Russia");  // alternate name, resolves to Russian Federation
 
 // Safe lookup — returns null if not found
 Country? country = Country.GetCountryOrDefault("XX"); // null
+```
+
+#### Country Name Aliases
+
+Some countries are far more commonly referred to by a colloquial name than by their canonical ISO name (e.g. "Russian Federation" vs. "Russia"). `CountryHelper.NameAliases` maps ~30 such common alternate names to their alpha-2 code, and is consulted automatically by `GetCountry`, `GetCountryOrDefault`, and `IsValid` whenever an exact code/name match fails:
+
+```csharp
+Country.GetCountry("USA");           // United States of America
+Country.GetCountry("South Korea");   // Korea (South)
+Country.GetCountry("Ivory Coast");   // Côte d'Ivoire
+Country.GetCountry("DR Congo");      // Congo, (Kinshasa)
+Country.IsValid("UK");               // true
+
+// See the full list:
+foreach (var (alias, alpha2) in CountryHelper.NameAliases)
+    Console.WriteLine($"{alias} -> {alpha2}");
 ```
 
 ### Validate a Country Identifier
@@ -914,6 +932,12 @@ bool isThanksgiving = usa.MovableHolidays.Any(h => h.IsOnDate(new DateTime(2026,
 // Get ALL holidays (fixed + movable) on a date
 var allOnDate = usa.GetAllHolidaysOnDate(new DateTime(2026, 11, 26));
 Console.WriteLine(string.Join(", ", allOnDate)); // Thanksgiving Day
+
+// Same query, but with full detail (date, HolidayType, fixed vs. movable) instead of bare names
+var occurrences = usa.GetHolidayOccurrencesOnDate(new DateTime(2026, 11, 26));
+foreach (var occ in occurrences)
+    Console.WriteLine($"  {occ.Name}: {occ.Date:yyyy-MM-dd} ({occ.Type}, movable={occ.IsMovable})");
+// Thanksgiving Day: 2026-11-26 (National, movable=True)
 ```
 
 ---
@@ -1060,7 +1084,7 @@ Country.GetCountry("Us");
 
 | Method | Returns | Throws | Description |
 |---|---|---|---|
-| `GetCountry(string)` | `Country` | `CountryNotFoundException`, `ArgumentNullException` | Strict lookup by alpha-2, alpha-3, numeric code, or name |
+| `GetCountry(string)` | `Country` | `CountryNotFoundException`, `ArgumentNullException` | Strict lookup by alpha-2, alpha-3, numeric code, name, or common alias |
 | `GetCountryOrDefault(string)` | `Country?` | — | Safe lookup; returns `null` if not found |
 | `IsValid(string)` | `bool` | — | Check if identifier maps to a known country |
 | `GetAll()` | `List<Country>` | — | All 250 countries |
@@ -1073,7 +1097,8 @@ Country.GetCountry("Us");
 | `GetPrimaryTimeZone()` | `CountryTimeZone?` | Get the primary (capital-city) time zone, or null |
 | `GetTimeZonesWithDst()` | `IReadOnlyList<CountryTimeZone>` | Get all time zones that observe DST |
 | `GetUtcOffsets()` | `IReadOnlyList<TimeSpan>` | Get distinct UTC offsets across all time zones |
-| `GetAllHolidaysOnDate(DateTime)` | `IReadOnlyList<string>` | Get all holidays (fixed + movable) on a date |
+| `GetAllHolidaysOnDate(DateTime)` | `IReadOnlyList<string>` | Get all holiday names (fixed + movable) on a date |
+| `GetHolidayOccurrencesOnDate(DateTime)` | `IReadOnlyList<HolidayOccurrence>` | Get all holidays (fixed + movable) on a date, with date/type/movable detail |
 | `GetNameInLanguage(string)` | `string?` | Get country name in the specified language |
 
 ### Currency
@@ -1189,7 +1214,7 @@ Country.GetCountry("Us");
 
 ## Testing
 
-The project includes a comprehensive test suite with **692 unit tests** covering every public API, edge case, and data integrity check across the entire library.
+The project includes a comprehensive test suite with **745 unit tests** covering every public API, edge case, and data integrity check across the entire library.
 
 ### Running Tests
 

@@ -68,7 +68,13 @@
 ### Test Reorganization (SRP)
 - Split monolithic ExtendedFeaturesTests.cs into 13 focused test files following Single Responsibility Principle
 - GeographicDataTests, PoliticalDataTests, TransportDataTests, ElectricalSystemTests, EmergencyNumberTests, PhoneFormatTests, LocaleTests, TranslationTests, SubdivisionTests, MovableHolidayTests, CurrencyExtendedTests, LanguageExtendedTests, CountryIntegrationTests
-- 692 total unit tests, 0 failures, 0 warnings
+- 745 total unit tests, 0 failures, 0 warnings
+
+### Reflection, Timezone Coverage & Country Name Aliases
+- Country static-init reflection scan is now computed once and reused (was repeated 6x at startup)
+- Added missing IANA time zone entries for Guernsey (GG), Jersey (JE), Isle of Man (IM), Heard & McDonald Islands (HM), and the legacy Netherlands Antilles (AN) code — time zone data now covers all 250 countries/territories, matching the README's existing claim
+- Country.GetHolidayOccurrencesOnDate — combined fixed + movable holiday query that returns rich HolidayOccurrence objects (name, date, HolidayType, IsMovable) instead of bare names
+- CountryHelper.NameAliases — common colloquial country names (e.g. "USA", "Russia", "South Korea", "Ivory Coast", "DR Congo") now resolve via Country.GetCountry/GetCountryOrDefault/IsValid
 
 ---
 
