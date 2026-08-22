@@ -1,4 +1,4 @@
-namespace Multiverse.Globalization.UnitTests;
+namespace Multiverse.Globalization.UnitTests.Holidays;
 
 public class MovableHolidayTests
 {

@@ -1,4 +1,4 @@
-namespace Multiverse.Globalization.UnitTests;
+namespace Multiverse.Globalization.UnitTests.TimeZones;
 
 public class TimeZoneTests
 {
