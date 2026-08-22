@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using static Multiverse.Globalization.Languages.LanguageHelper;
+﻿using static Multiverse.Globalization.Languages.LanguageHelper;
 
 namespace Multiverse.Globalization.Languages;
 

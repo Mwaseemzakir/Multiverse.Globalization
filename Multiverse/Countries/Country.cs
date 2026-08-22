@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Electrical;
-using Multiverse.Globalization.Holidays;
-using Multiverse.Globalization.Languages;
-using Multiverse.Globalization.Subdivisions;
-using Multiverse.Globalization.TimeZones;
-using static Multiverse.Globalization.Countries.CountryHelper;
+﻿using static Multiverse.Globalization.Countries.CountryHelper;
 
 namespace Multiverse.Globalization.Countries;
 

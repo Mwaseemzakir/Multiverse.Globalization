@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-#if NET8_0_OR_GREATER
-using System.Collections.Frozen;
-#endif
-
-namespace Multiverse.Globalization.Currencies;
+﻿namespace Multiverse.Globalization.Currencies;
 
 /// <summary>
 /// Provides access to all ISO 4217 currencies as static readonly fields and lookup maps.

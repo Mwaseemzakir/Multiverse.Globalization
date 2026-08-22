@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Multiverse.Globalization.Languages;
+﻿namespace Multiverse.Globalization.Languages;
 
 /// <summary>Exception thrown when a language cannot be found by its identifier.</summary>
 [Serializable]

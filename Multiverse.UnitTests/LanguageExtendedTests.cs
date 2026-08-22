@@ -1,6 +1,3 @@
-using Multiverse.Globalization.Languages;
-using Xunit;
-
 namespace Multiverse.Globalization.UnitTests;
 
 public class LanguageExtendedTests
