@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-
 namespace Multiverse.Globalization.TimeZones;
 
 /// <summary>
-/// Provides IANA time zone data for all 250 countries and territories.
-/// Each entry maps an ISO 3166-1 alpha-2 code to a list of time zones observed in that country.
+/// Provides IANA time-zone identifiers for the 250 compatibility country/territory records,
+/// plus the widely used supplemental XK code for Kosovo. Bundled offsets are standard snapshots;
+/// date-aware rules come from the operating system through <see cref="CountryTimeZone"/>.
 /// </summary>
 public static class TimeZoneHelper
 {
@@ -378,6 +377,7 @@ public static class TimeZoneHelper
             ["CC"] = new List<CountryTimeZone> { new("Indian/Cocos", 6.5, false) },
             ["CK"] = new List<CountryTimeZone> { new("Pacific/Rarotonga", -10, false) },
             ["CW"] = new List<CountryTimeZone> { new("America/Curacao", -4, false) },
+            ["AN"] = new List<CountryTimeZone> { new("America/Curacao", -4, false) },
             ["FK"] = new List<CountryTimeZone> { new("Atlantic/Stanley", -3, false) },
             ["FO"] = new List<CountryTimeZone> { new("Atlantic/Faroe", 0, true) },
             ["GF"] = new List<CountryTimeZone> { new("America/Cayenne", -3, false) },
@@ -388,7 +388,11 @@ public static class TimeZoneHelper
                 new("Pacific/Gambier", -9, false)
             },
             ["TF"] = new List<CountryTimeZone> { new("Indian/Kerguelen", 5, false) },
+            ["HM"] = new List<CountryTimeZone> { new("Antarctica/Mawson", 5, false) },
             ["GI"] = new List<CountryTimeZone> { new("Europe/Gibraltar", 1, true) },
+            ["GG"] = new List<CountryTimeZone> { new("Europe/Guernsey", 0, true) },
+            ["JE"] = new List<CountryTimeZone> { new("Europe/Jersey", 0, true) },
+            ["IM"] = new List<CountryTimeZone> { new("Europe/Isle_of_Man", 0, true) },
             ["GL"] = new List<CountryTimeZone>
             {
                 new("America/Nuuk", -2, true),

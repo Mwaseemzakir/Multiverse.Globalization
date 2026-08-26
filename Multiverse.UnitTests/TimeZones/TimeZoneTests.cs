@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Multiverse.Globalization.Countries;
-using Multiverse.Globalization.TimeZones;
-using Xunit;
-
-namespace Multiverse.Globalization.UnitTests;
+namespace Multiverse.Globalization.UnitTests.TimeZones;
 
 public class TimeZoneTests
 {
@@ -45,6 +38,40 @@ public class TimeZoneTests
     public void CountryTimeZone_WhitespaceIanaId_Should_ThrowArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => new CountryTimeZone("   ", 0, false));
+    }
+
+    [Fact]
+    public void TryGetSystemTimeZone_Karachi_ShouldResolveInstalledRules()
+    {
+        var tz = new CountryTimeZone("Asia/Karachi", 5, false);
+
+        Assert.True(tz.TryGetSystemTimeZone(out var systemTimeZone));
+        Assert.NotNull(systemTimeZone);
+    }
+
+    [Fact]
+    public void DateAwareOffset_NewYork_ShouldApplyDstForTheInstant()
+    {
+        var tz = new CountryTimeZone("America/New_York", -5, true);
+        var winter = new DateTimeOffset(2026, 1, 15, 12, 0, 0, TimeSpan.Zero);
+        var summer = new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero);
+
+        Assert.Equal(TimeSpan.FromHours(-5), tz.GetUtcOffset(winter));
+        Assert.Equal(TimeSpan.FromHours(-4), tz.GetUtcOffset(summer));
+        Assert.False(tz.IsDaylightSavingTime(winter));
+        Assert.True(tz.IsDaylightSavingTime(summer));
+    }
+
+    [Fact]
+    public void DateAwareMethods_UnknownZone_ShouldReportResolutionFailure()
+    {
+        var tz = new CountryTimeZone("Etc/Definitely_Not_A_Real_Zone", 0, false);
+        var instant = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
+        Assert.False(tz.TryGetSystemTimeZone(out var systemTimeZone));
+        Assert.Null(systemTimeZone);
+        Assert.Throws<TimeZoneNotFoundException>(() => tz.GetUtcOffset(instant));
+        Assert.Throws<TimeZoneNotFoundException>(() => tz.IsDaylightSavingTime(instant));
     }
 
     #endregion
@@ -1010,6 +1037,46 @@ public class TimeZoneTests
 
             Assert.Null(exception);
         }
+    }
+
+    #endregion
+
+    #region Previously-Missing Territories (GG, JE, IM, HM, AN)
+
+    [Theory]
+    [InlineData("GG", "Europe/Guernsey")]
+    [InlineData("JE", "Europe/Jersey")]
+    [InlineData("IM", "Europe/Isle_of_Man")]
+    [InlineData("HM", "Antarctica/Mawson")]
+    [InlineData("AN", "America/Curacao")]
+    public void PreviouslyMissingTerritories_Should_HaveTimeZoneData(string alpha2, string expectedIanaId)
+    {
+        var timeZones = TimeZoneHelper.GetTimeZonesForCountry(alpha2);
+
+        Assert.NotEmpty(timeZones);
+        Assert.Contains(timeZones, tz => tz.IanaId == expectedIanaId);
+    }
+
+    [Fact]
+    public void ChannelIslandsAndIsleOfMan_Should_ObserveDst()
+    {
+        Assert.All(new[] { "GG", "JE", "IM" }, code =>
+        {
+            var tz = TimeZoneHelper.GetTimeZonesForCountry(code).Single();
+            Assert.Equal(0, tz.UtcOffsetHours);
+            Assert.True(tz.ObservesDst);
+        });
+    }
+
+    [Fact]
+    public void AllCountries_Should_HaveAtLeastOneTimeZone()
+    {
+        var missing = Country.GetAll()
+            .Where(c => c != CountryHelper.None && c.TimeZones.Count == 0)
+            .Select(c => c.Alpha2Code)
+            .ToList();
+
+        Assert.Empty(missing);
     }
 
     #endregion

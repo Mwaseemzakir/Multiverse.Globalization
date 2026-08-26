@@ -1,7 +1,4 @@
-using Multiverse.Globalization.Countries;
-using Xunit;
-
-namespace Multiverse.Globalization.UnitTests;
+namespace Multiverse.Globalization.UnitTests.Countries;
 
 public class PoliticalDataTests
 {

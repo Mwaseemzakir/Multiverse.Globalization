@@ -1,3 +1,13 @@
+## Data Integrity, Catalog Status & Date-Aware Time Zones
+
+- Distinguished 249 current ISO 3166-1 records from the formerly assigned Netherlands Antilles (`AN`) compatibility record
+- Added `Country.CodeStatus`, `Country.IsCurrent`, `Country.GetCurrent()`, and `Country.GetLegacy()`
+- Kept `Country.GetAll()` backward-compatible, including the `None` sentinel and legacy records
+- Documented supplemental `XK` data separately from the ISO 3166-1 country catalog
+- Added date-aware `CountryTimeZone.GetUtcOffset()` and `IsDaylightSavingTime()` APIs backed by host operating-system rules
+- Corrected NuGet repository/project metadata and refreshed coverage claims
+- Added packaged `DATA_SOURCES.md` with authoritative references, exact keyed coverage, and known limitations
+
 ## Extended Country Data, Multi-Framework Support & Test Reorganization
 
 ### Multi-Framework Support
@@ -68,7 +78,13 @@
 ### Test Reorganization (SRP)
 - Split monolithic ExtendedFeaturesTests.cs into 13 focused test files following Single Responsibility Principle
 - GeographicDataTests, PoliticalDataTests, TransportDataTests, ElectricalSystemTests, EmergencyNumberTests, PhoneFormatTests, LocaleTests, TranslationTests, SubdivisionTests, MovableHolidayTests, CurrencyExtendedTests, LanguageExtendedTests, CountryIntegrationTests
-- 692 total unit tests, 0 failures, 0 warnings
+- 745 total unit tests, 0 failures, 0 warnings
+
+### Reflection, Timezone Coverage & Country Name Aliases
+- Country static-init reflection scan is now computed once and reused (was repeated 6x at startup)
+- Added missing IANA time zone entries for Guernsey (GG), Jersey (JE), Isle of Man (IM), Heard & McDonald Islands (HM), and the legacy Netherlands Antilles (AN) code — time zone data now covers all 250 countries/territories, matching the README's existing claim
+- Country.GetHolidayOccurrencesOnDate — combined fixed + movable holiday query that returns rich HolidayOccurrence objects (name, date, HolidayType, IsMovable) instead of bare names
+- CountryHelper.NameAliases — common colloquial country names (e.g. "USA", "Russia", "South Korea", "Ivory Coast", "DR Congo") now resolve via Country.GetCountry/GetCountryOrDefault/IsValid
 
 ---
 

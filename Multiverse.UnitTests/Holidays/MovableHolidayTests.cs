@@ -1,8 +1,4 @@
-using Multiverse.Globalization.Countries;
-using Multiverse.Globalization.Holidays;
-using Xunit;
-
-namespace Multiverse.Globalization.UnitTests;
+namespace Multiverse.Globalization.UnitTests.Holidays;
 
 public class MovableHolidayTests
 {

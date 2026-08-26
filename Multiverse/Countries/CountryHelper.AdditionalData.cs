@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
 namespace Multiverse.Globalization.Countries;
 
 /// <summary>
@@ -284,11 +279,8 @@ public static partial class CountryHelper
             ["HK"] = (7_500_000, 1_104, 22.3193, 114.1694, new[] { "CN" }, false),
         };
 
-        foreach (var field in typeof(CountryHelper)
-            .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country)))
+        foreach (var country in _countryFields.Value)
         {
-            var country = (Country)field.GetValue(null)!;
             if (data.TryGetValue(country.Alpha2Code, out var geo))
                 country.SetGeographicData(
                     geo.Pop, geo.Area,
@@ -561,11 +553,8 @@ public static partial class CountryHelper
             ["AN"] = (false, null),
         };
 
-        foreach (var field in typeof(CountryHelper)
-            .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country)))
+        foreach (var country in _countryFields.Value)
         {
-            var country = (Country)field.GetValue(null)!;
             if (data.TryGetValue(country.Alpha2Code, out var pol))
                 country.SetPoliticalData(pol.UnMember, pol.IndDate);
         }
@@ -586,11 +575,8 @@ public static partial class CountryHelper
         // Countries using mph
         var mphCountries = new HashSet<string> { "US", "GB", "LR", "MM", "AG", "BS", "BZ", "DM", "GD", "MH", "WS", "KN", "LC", "VC" };
 
-        foreach (var field in typeof(CountryHelper)
-            .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country)))
+        foreach (var country in _countryFields.Value)
         {
-            var country = (Country)field.GetValue(null)!;
             var drivingSide = leftDrivingCountries.Contains(country.Alpha2Code)
                 ? DrivingSide.Left : DrivingSide.Right;
             var speedUnit = mphCountries.Contains(country.Alpha2Code) ? "mph" : "km/h";
@@ -611,11 +597,8 @@ public static partial class CountryHelper
             ["RU"] = new[] { ".su" },
         };
 
-        foreach (var field in typeof(CountryHelper)
-            .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country)))
+        foreach (var country in _countryFields.Value)
         {
-            var country = (Country)field.GetValue(null)!;
             if (data.TryGetValue(country.Alpha2Code, out var tlds))
                 country.SetAlternativeTlds(tlds);
         }

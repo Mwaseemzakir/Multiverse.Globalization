@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Multiverse.Globalization.Countries;
 
 /// <summary>
@@ -28,6 +26,9 @@ public static class CountryTranslationHelper
             return name;
         return null;
     }
+
+    /// <summary>All country-name translations keyed by country or supplemental area code.</summary>
+    public static IReadOnlyDictionary<string, Dictionary<string, string>> All => _data;
 
     private static Dictionary<string, Dictionary<string, string>> InitializeData()
     {

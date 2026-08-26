@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Electrical;
-using Multiverse.Globalization.Holidays;
-using Multiverse.Globalization.Languages;
-using Multiverse.Globalization.Subdivisions;
-using Multiverse.Globalization.TimeZones;
-using static Multiverse.Globalization.Countries.CountryHelper;
+﻿using static Multiverse.Globalization.Countries.CountryHelper;
 
 namespace Multiverse.Globalization.Countries;
 
@@ -37,6 +28,23 @@ public sealed class Country
         string region,
         Currency? currency,
         params Language[] officialLanguages)
+        : this(
+            name, numericCode, alpha2Code, alpha3Code, callingCode, capital, region,
+            currency, CountryCodeStatus.OfficiallyAssigned, officialLanguages)
+    {
+    }
+
+    internal Country(
+        string name,
+        string numericCode,
+        string alpha2Code,
+        string alpha3Code,
+        string callingCode,
+        string capital,
+        string region,
+        Currency? currency,
+        CountryCodeStatus codeStatus,
+        params Language[] officialLanguages)
     {
         Name = name;
         NumericCode = numericCode;
@@ -46,6 +54,7 @@ public sealed class Country
         Capital = capital;
         Region = region;
         Currency = currency;
+        CodeStatus = codeStatus;
         OfficialLanguages = officialLanguages ?? Array.Empty<Language>();
     }
 
@@ -69,6 +78,12 @@ public sealed class Country
 
     /// <summary>Geographic region/continent, e.g. "Asia", "Europe", "Americas", "Africa", "Oceania", "Antarctic".</summary>
     public string Region { get; private set; } = string.Empty;
+
+    /// <summary>Whether this record uses a current, former, or unspecified ISO 3166-1 code.</summary>
+    public CountryCodeStatus CodeStatus { get; }
+
+    /// <summary>Whether this record has a currently assigned ISO 3166-1 code.</summary>
+    public bool IsCurrent => CodeStatus == CountryCodeStatus.OfficiallyAssigned;
 
     /// <summary>UN M49 sub-region, e.g. "Southern Asia", "Western Europe", "Caribbean".</summary>
     public string SubRegion { get; private set; } = string.Empty;
@@ -162,6 +177,25 @@ public sealed class Country
         var movableMatch = MovableHolidays.Where(h => h.IsOnDate(date)).Select(h => h.Name);
         result.AddRange(fixedMatch);
         result.AddRange(movableMatch);
+        return result.AsReadOnly();
+    }
+
+    /// <summary>
+    /// Returns all holidays (both fixed and movable) that fall on the given date as
+    /// <see cref="HolidayOccurrence"/> objects, preserving each holiday's date, <see cref="HolidayType"/>,
+    /// and whether it came from a fixed-date or movable rule. Unlike <see cref="GetAllHolidaysOnDate"/>,
+    /// which returns bare names, this keeps the full detail available on <see cref="Holidays"/> and
+    /// <see cref="MovableHolidays"/> individually.
+    /// </summary>
+    public IReadOnlyList<HolidayOccurrence> GetHolidayOccurrencesOnDate(DateTime date)
+    {
+        var result = new List<HolidayOccurrence>();
+        result.AddRange(Holidays
+            .Where(h => h.IsOnDate(date))
+            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, isMovable: false)));
+        result.AddRange(MovableHolidays
+            .Where(h => h.IsOnDate(date))
+            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, isMovable: true)));
         return result.AsReadOnly();
     }
 
@@ -321,11 +355,15 @@ public sealed class Country
         if (NameMap.TryGetValue(identifier, out var byName))
             return byName;
 
+        if (NameAliases.TryGetValue(identifier, out var aliasAlpha2) &&
+            Alpha2CodeMap.TryGetValue(aliasAlpha2.ToLowerInvariant(), out var byAlias))
+            return byAlias;
+
         return default;
     }
 
     /// <summary>
-    /// Retrieves a Country object based on the provided identifier, which can be an Alpha-2 code, 
+    /// Retrieves a Country object based on the provided identifier, which can be an Alpha-2 code,
     /// Alpha-3 code, numeric code, or the name of the country. Throws an exception if not found.
     /// </summary>
     public static Country GetCountry(string identifier)
@@ -351,13 +389,23 @@ public sealed class Country
         return Alpha2CodeMap.ContainsKey(identifier) ||
             Alpha3CodeMap.ContainsKey(identifier) ||
             NumericCodeMap.ContainsKey(identifier) ||
-            NameMap.ContainsKey(identifier);
+            NameMap.ContainsKey(identifier) ||
+            NameAliases.ContainsKey(identifier);
     }
 
     /// <summary>
     /// Retrieves a list of all available Country objects.
     /// </summary>
     public static IReadOnlyList<Country> GetAll() => CountryHelper.GetAll();
+
+    /// <summary>
+    /// Retrieves the 249 records with currently assigned ISO 3166-1 codes.
+    /// This excludes <see cref="CountryHelper.None"/> and formerly assigned compatibility records.
+    /// </summary>
+    public static IReadOnlyList<Country> GetCurrent() => CountryHelper.GetCurrent();
+
+    /// <summary>Retrieves formerly assigned country-code records retained for compatibility.</summary>
+    public static IReadOnlyList<Country> GetLegacy() => CountryHelper.GetLegacy();
 
     /// <inheritdoc />
     public override string ToString() => $"{Name} ({Alpha2Code})";

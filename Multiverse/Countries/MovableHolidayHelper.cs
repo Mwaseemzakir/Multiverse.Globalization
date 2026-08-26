@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Multiverse.Globalization.Holidays;
-
 namespace Multiverse.Globalization.Countries;
 
 /// <summary>
@@ -19,6 +15,9 @@ public static class MovableHolidayHelper
             ? list.AsReadOnly()
             : new List<MovableHoliday>();
     }
+
+    /// <summary>All movable-holiday rules keyed by country alpha-2 code.</summary>
+    public static IReadOnlyDictionary<string, List<MovableHoliday>> All => _data;
 
     private static Dictionary<string, List<MovableHoliday>> InitializeData()
     {

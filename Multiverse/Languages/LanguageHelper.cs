@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Multiverse.Globalization.Languages;
+﻿namespace Multiverse.Globalization.Languages;
 
 /// <summary>
 /// Provides access to all ISO 639 languages as static readonly fields and lookup maps.

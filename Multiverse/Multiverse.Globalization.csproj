@@ -4,13 +4,16 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Title>Multiverse</Title>
+    <Title>Multiverse.Globalization</Title>
     <Authors>Muhammad Waseem</Authors>
-    <Description>This NuGet package provides comprehensive language codes, country codes, and currency codes from around the globe, making it an essential tool for internationalization and localization in .NET projects.</Description>
+    <Description>Offline .NET globalization data for countries, currencies, languages, holidays, IANA time-zone identifiers, locales, subdivisions, phone formats, and electrical systems.</Description>
     <Version>2.0.0</Version>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <FileVersion>2.0.0.0</FileVersion>
-    <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse.Globalization</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Mwaseemzakir/Multiverse</PackageProjectUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Copyright>Muhammad Waseem - $([System.DateTime]::Now.Year)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -26,6 +29,7 @@
       <PackagePath>\</PackagePath>
     </None>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\DATA_SOURCES.md" Pack="true" PackagePath="\" />
     <None Include="logo.jpg" Pack="true" PackagePath="\" />
   </ItemGroup>
 	
