@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Bosnia And Herzegovina country.</summary>
     public static readonly Country BosniaAndHerzegovina =
-        new Country(
+        new(
             CountryNames.BosniaAndHerzegovina, "070", "BA", "BIH",
             "+387", "Sarajevo", "Europe",
             CurrencyHelper.BosniaConvertibleMark,

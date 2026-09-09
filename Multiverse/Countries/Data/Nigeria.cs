@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Nigeria country.</summary>
     public static readonly Country Nigeria =
-        new Country(
+        new(
             CountryNames.Nigeria, "566", "NG", "NGA",
             "+234", "Abuja", "Africa",
             CurrencyHelper.Naira,

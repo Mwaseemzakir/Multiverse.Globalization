@@ -47,4 +47,88 @@ public class EmergencyNumberTests
             }
         }
     }
+
+    [Fact]
+    public void CountryWithoutEmergencyNumbers_Should_ReturnEmptyList()
+    {
+        // The sentinel "no country" record has an empty Alpha2Code and no emergency number data
+        var none = CountryHelper.None;
+        Assert.NotNull(none.EmergencyNumbers);
+        Assert.Empty(none.EmergencyNumbers);
+    }
+
+    [Fact]
+    public void AllCountries_Should_HaveEmergencyNumberData()
+    {
+        // Every current/legacy country record has at least one emergency number defined
+        var missing = Country.GetAll()
+            .Where(c => !c.Equals(CountryHelper.None) && c.EmergencyNumbers.Count == 0)
+            .Select(c => c.Alpha2Code)
+            .ToList();
+
+        Assert.Empty(missing);
+    }
+
+    #region EmergencyNumberHelper.GetEmergencyNumbersForCountry Edge Cases
+
+    [Fact]
+    public void GetEmergencyNumbersForCountry_NullCode_ReturnsEmpty()
+    {
+        var result = EmergencyNumberHelper.GetEmergencyNumbersForCountry(null!);
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetEmergencyNumbersForCountry_EmptyCode_ReturnsEmpty()
+    {
+        var result = EmergencyNumberHelper.GetEmergencyNumbersForCountry("");
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetEmergencyNumbersForCountry_InvalidCode_ReturnsEmpty()
+    {
+        var result = EmergencyNumberHelper.GetEmergencyNumbersForCountry("XX");
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetEmergencyNumbersForCountry_LowercaseCode_ShouldStillWork()
+    {
+        var result = EmergencyNumberHelper.GetEmergencyNumbersForCountry("us");
+        Assert.Contains("911", result);
+    }
+
+    #endregion
+
+    #region EmergencyNumberHelper.All
+
+    [Fact]
+    public void EmergencyNumberHelper_All_Should_NotBeEmpty()
+    {
+        Assert.NotEmpty(EmergencyNumberHelper.All);
+    }
+
+    [Fact]
+    public void EmergencyNumberHelper_All_Should_ContainKnownCountries()
+    {
+        Assert.True(EmergencyNumberHelper.All.ContainsKey("US"));
+        Assert.True(EmergencyNumberHelper.All.ContainsKey("GB"));
+        Assert.True(EmergencyNumberHelper.All.ContainsKey("PK"));
+    }
+
+    [Fact]
+    public void EmergencyNumberHelper_All_KeysShouldBeUppercaseAlpha2()
+    {
+        foreach (var key in EmergencyNumberHelper.All.Keys)
+        {
+            Assert.Equal(2, key.Length);
+            Assert.Equal(key.ToUpperInvariant(), key);
+        }
+    }
+
+    #endregion
 }

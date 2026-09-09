@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Aland Islands country.</summary>
     public static readonly Country AlandIslands =
-        new Country(
+        new(
             CountryNames.AlandIslands, "248", "AX", "ALA",
             "+358", "Mariehamn", "Europe",
             CurrencyHelper.Euro,

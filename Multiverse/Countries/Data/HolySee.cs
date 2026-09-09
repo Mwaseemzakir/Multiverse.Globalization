@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Holy See country.</summary>
     public static readonly Country HolySee =
-        new Country(
+        new(
             CountryNames.HolySee, "336", "VA", "VAT",
             "+379", "Vatican City", "Europe",
             CurrencyHelper.Euro,

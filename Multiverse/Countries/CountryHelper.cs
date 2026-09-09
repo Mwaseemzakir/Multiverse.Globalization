@@ -7,7 +7,7 @@ namespace Multiverse.Globalization.Countries;
 public static partial class CountryHelper
 {
     /// <summary>Empty sentinel value representing no country.</summary>
-    public static readonly Country None = new Country(
+    public static readonly Country None = new(
         "", "", "", "", "", "", "", null, CountryCodeStatus.Unspecified);
 
     /// <summary>
@@ -16,11 +16,12 @@ public static partial class CountryHelper
     /// initialization pass and by <see cref="_all"/>, instead of each caller re-scanning the type.
     /// </summary>
     private static readonly Lazy<Country[]> _countryFields = new(() =>
-        typeof(CountryHelper)
+    [
+        .. typeof(CountryHelper)
             .GetFields(BindingFlags.Public | BindingFlags.Static)
             .Where(f => f.FieldType == typeof(Country))
             .Select(f => (Country)f.GetValue(null)!)
-            .ToArray());
+    ]);
 
     /// <summary>
     /// Static constructor — runs after all static field initializers (the 250 country objects)
@@ -299,20 +300,16 @@ public static partial class CountryHelper
             ["VI"] = ("Caribbean", "U.S. Virgin Islander", ".vi"),
             ["UM"] = ("Polynesia", "American", ".um"),
             ["WF"] = ("Polynesia", "Wallisian", ".wf"),
-            ["EH"] = ("Northern Africa", "Sahrawi", ".eh"),
+            ["EH"] = ("Northern Africa", "Sahrawi", ".eh")
         };
 
         foreach (var country in _countryFields.Value)
-        {
             if (data.TryGetValue(country.Alpha2Code, out var ext))
                 country.SetExtendedData(ext.SubRegion, ext.Demonym, ext.TLD);
-        }
     }
 
     private static readonly Lazy<List<Country>> _all = new(() =>
-        _countryFields.Value
-            .OrderBy(c => c.Name)
-            .ToList());
+        [.. _countryFields.Value.OrderBy(c => c.Name)]);
 
     private static readonly Lazy<IReadOnlyList<Country>> _current = new(() =>
         _all.Value
@@ -358,13 +355,22 @@ public static partial class CountryHelper
     /// Returns the complete compatibility catalog, including <see cref="None"/> and formerly
     /// assigned country-code records. Use <see cref="GetCurrent"/> for current ISO entries only.
     /// </summary>
-    public static IReadOnlyList<Country> GetAll() => _all.Value;
+    public static IReadOnlyList<Country> GetAll()
+    {
+        return _all.Value;
+    }
 
     /// <summary>Returns the 249 records with currently assigned ISO 3166-1 codes.</summary>
-    public static IReadOnlyList<Country> GetCurrent() => _current.Value;
+    public static IReadOnlyList<Country> GetCurrent()
+    {
+        return _current.Value;
+    }
 
     /// <summary>Returns formerly assigned country-code records retained for compatibility.</summary>
-    public static IReadOnlyList<Country> GetLegacy() => _legacy.Value;
+    public static IReadOnlyList<Country> GetLegacy()
+    {
+        return _legacy.Value;
+    }
 
     /// <summary>Lookup by ISO 3166-1 alpha-2 code (case-insensitive).</summary>
     public static IReadOnlyDictionary<string, Country> Alpha2CodeMap => _alpha2CodeMap.Value;
@@ -421,6 +427,6 @@ public static partial class CountryHelper
         ["vietnam"] = "VN",
         ["east timor"] = "TL",
         ["uae"] = "AE",
-        ["cabo verde"] = "CV",
+        ["cabo verde"] = "CV"
     };
 }

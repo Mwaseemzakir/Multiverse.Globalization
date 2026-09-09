@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Tonga country.</summary>
     public static readonly Country Tonga =
-        new Country(
+        new(
             CountryNames.Tonga, "776", "TO", "TON",
             "+676", "Nuku'alofa", "Oceania",
             CurrencyHelper.TonganPaanga,

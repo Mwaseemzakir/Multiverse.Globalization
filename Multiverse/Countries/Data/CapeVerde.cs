@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Cape Verde country.</summary>
     public static readonly Country CapeVerde =
-        new Country(
+        new(
             CountryNames.CapeVerde, "132", "CV", "CPV",
             "+238", "Praia", "Africa",
             CurrencyHelper.CapeVerdeanEscudo,

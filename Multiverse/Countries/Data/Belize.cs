@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Belize country.</summary>
     public static readonly Country Belize =
-        new Country(
+        new(
             CountryNames.Belize, "084", "BZ", "BLZ",
             "+501", "Belmopan", "Americas",
             CurrencyHelper.BelizeDollar,

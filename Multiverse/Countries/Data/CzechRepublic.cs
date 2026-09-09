@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Czech Republic country.</summary>
     public static readonly Country CzechRepublic =
-        new Country(
+        new(
             CountryNames.CzechRepublic, "203", "CZ", "CZE",
             "+420", "Prague", "Europe",
             CurrencyHelper.CzechKoruna,

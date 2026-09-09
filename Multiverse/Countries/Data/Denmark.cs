@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Denmark country.</summary>
     public static readonly Country Denmark =
-        new Country(
+        new(
             CountryNames.Denmark, "208", "DK", "DNK",
             "+45", "Copenhagen", "Europe",
             CurrencyHelper.DanishKrone,

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Svalbard And Jan Mayen Islands country.</summary>
     public static readonly Country SvalbardAndJanMayenIslands =
-        new Country(
+        new(
             CountryNames.SvalbardAndJanMayenIslands, "744", "SJ", "SJM",
             "+47", "Longyearbyen", "Europe",
             CurrencyHelper.NorwegianKrone,

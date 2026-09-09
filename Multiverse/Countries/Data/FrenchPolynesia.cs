@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The French Polynesia country.</summary>
     public static readonly Country FrenchPolynesia =
-        new Country(
+        new(
             CountryNames.FrenchPolynesia, "258", "PF", "PYF",
             "+689", "Papeete", "Oceania",
             CurrencyHelper.CfpFranc,

@@ -10,7 +10,7 @@ public static class MovableHolidayHelper
     internal static IReadOnlyList<MovableHoliday> GetMovableHolidaysForCountry(string alpha2Code)
     {
         if (string.IsNullOrWhiteSpace(alpha2Code))
-            return new List<MovableHoliday>();
+            return [];
         return _data.TryGetValue(alpha2Code.ToUpperInvariant(), out var list)
             ? list.AsReadOnly()
             : new List<MovableHoliday>();
@@ -21,11 +21,11 @@ public static class MovableHolidayHelper
 
     private static Dictionary<string, List<MovableHoliday>> InitializeData()
     {
-        var d = new Dictionary<string, List<MovableHoliday>>();
-
-        // ---------- United States ----------
-        d["US"] = new List<MovableHoliday>
+        var d = new Dictionary<string, List<MovableHoliday>>
         {
+            // ---------- United States ----------
+            ["US"] =
+        [
             new("Martin Luther King Jr. Day", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 1, DayOfWeek.Monday, 3)),
             new("Presidents' Day", HolidayType.National,
@@ -40,11 +40,11 @@ public static class MovableHolidayHelper
                 year => MovableHoliday.NthWeekdayOfMonth(year, 11, DayOfWeek.Thursday, 4)),
             new("Easter Sunday", HolidayType.Observance,
                 year => MovableHoliday.ComputeEasterSunday(year)),
-        };
+        ],
 
-        // ---------- Canada ----------
-        d["CA"] = new List<MovableHoliday>
-        {
+            // ---------- Canada ----------
+            ["CA"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
@@ -55,11 +55,11 @@ public static class MovableHolidayHelper
                 year => MovableHoliday.NthWeekdayOfMonth(year, 9, DayOfWeek.Monday, 1)),
             new("Thanksgiving Day", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 10, DayOfWeek.Monday, 2)),
-        };
+        ],
 
-        // ---------- United Kingdom ----------
-        d["GB"] = new List<MovableHoliday>
-        {
+            // ---------- United Kingdom ----------
+            ["GB"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
@@ -70,11 +70,11 @@ public static class MovableHolidayHelper
                 year => MovableHoliday.LastWeekdayOfMonth(year, 5, DayOfWeek.Monday)),
             new("Summer Bank Holiday", HolidayType.National,
                 year => MovableHoliday.LastWeekdayOfMonth(year, 8, DayOfWeek.Monday)),
-        };
+        ],
 
-        // ---------- Germany ----------
-        d["DE"] = new List<MovableHoliday>
-        {
+            // ---------- Germany ----------
+            ["DE"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
@@ -83,40 +83,40 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- France ----------
-        d["FR"] = new List<MovableHoliday>
-        {
+            // ---------- France ----------
+            ["FR"] =
+        [
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Ascension Day", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Italy ----------
-        d["IT"] = new List<MovableHoliday>
-        {
+            // ---------- Italy ----------
+            ["IT"] =
+        [
             new("Easter Sunday", HolidayType.National,
                 year => MovableHoliday.ComputeEasterSunday(year)),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Spain ----------
-        d["ES"] = new List<MovableHoliday>
-        {
+            // ---------- Spain ----------
+            ["ES"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.Observance,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Australia ----------
-        d["AU"] = new List<MovableHoliday>
-        {
+            // ---------- Australia ----------
+            ["AU"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Saturday", HolidayType.National,
@@ -125,11 +125,11 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Queen's Birthday", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 6, DayOfWeek.Monday, 2)),
-        };
+        ],
 
-        // ---------- New Zealand ----------
-        d["NZ"] = new List<MovableHoliday>
-        {
+            // ---------- New Zealand ----------
+            ["NZ"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
@@ -138,67 +138,67 @@ public static class MovableHolidayHelper
                 year => MovableHoliday.NthWeekdayOfMonth(year, 6, DayOfWeek.Monday, 1)),
             new("Labour Day", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 10, DayOfWeek.Monday, 4)),
-        };
+        ],
 
-        // ---------- Brazil ----------
-        d["BR"] = new List<MovableHoliday>
-        {
+            // ---------- Brazil ----------
+            ["BR"] =
+        [
             new("Carnival", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-47); }),
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Corpus Christi", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(60); }),
-        };
+        ],
 
-        // ---------- India ----------
-        d["IN"] = new List<MovableHoliday>
-        {
+            // ---------- India ----------
+            ["IN"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
-        };
+        ],
 
-        // ---------- Mexico ----------
-        d["MX"] = new List<MovableHoliday>
-        {
+            // ---------- Mexico ----------
+            ["MX"] =
+        [
             new("Benito Juárez's Birthday", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 3, DayOfWeek.Monday, 3)),
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Revolution Day", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 11, DayOfWeek.Monday, 3)),
-        };
+        ],
 
-        // ---------- South Korea ----------
-        d["KR"] = new List<MovableHoliday>
-        {
+            // ---------- South Korea ----------
+            ["KR"] =
+        [
             new("Buddha's Birthday", HolidayType.National,
-                year => null), // Requires lunar calendar, date varies
-        };
+                _ => null), // Requires lunar calendar, date varies
+        ],
 
-        // ---------- South Africa ----------
-        d["ZA"] = new List<MovableHoliday>
-        {
+            // ---------- South Africa ----------
+            ["ZA"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Family Day", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Poland ----------
-        d["PL"] = new List<MovableHoliday>
-        {
+            // ---------- Poland ----------
+            ["PL"] =
+        [
             new("Easter Sunday", HolidayType.National,
                 year => MovableHoliday.ComputeEasterSunday(year)),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Corpus Christi", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(60); }),
-        };
+        ],
 
-        // ---------- Netherlands ----------
-        d["NL"] = new List<MovableHoliday>
-        {
+            // ---------- Netherlands ----------
+            ["NL"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Sunday", HolidayType.National,
@@ -211,11 +211,11 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(49); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Switzerland ----------
-        d["CH"] = new List<MovableHoliday>
-        {
+            // ---------- Switzerland ----------
+            ["CH"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
@@ -224,18 +224,14 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Pakistan ----------
-        d["PK"] = new List<MovableHoliday>
-        {
-            // Islamic holidays: approximate dates, not computable with simple algorithm
-            // Users should check actual published dates for each year
-        };
+            // ---------- Pakistan ----------
+            ["PK"] = [],
 
-        // ---------- Ireland ----------
-        d["IE"] = new List<MovableHoliday>
-        {
+            // ---------- Ireland ----------
+            ["IE"] =
+        [
             new("St. Patrick's Day (observed)", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 3, DayOfWeek.Monday, 3)), // Closest Monday
             new("Easter Monday", HolidayType.National,
@@ -248,11 +244,11 @@ public static class MovableHolidayHelper
                 year => MovableHoliday.NthWeekdayOfMonth(year, 8, DayOfWeek.Monday, 1)),
             new("October Bank Holiday", HolidayType.National,
                 year => MovableHoliday.LastWeekdayOfMonth(year, 10, DayOfWeek.Monday)),
-        };
+        ],
 
-        // ---------- Austria ----------
-        d["AT"] = new List<MovableHoliday>
-        {
+            // ---------- Austria ----------
+            ["AT"] =
+        [
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Ascension Day", HolidayType.National,
@@ -261,44 +257,44 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
             new("Corpus Christi", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(60); }),
-        };
+        ],
 
-        // ---------- Belgium ----------
-        d["BE"] = new List<MovableHoliday>
-        {
+            // ---------- Belgium ----------
+            ["BE"] =
+        [
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Ascension Day", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Portugal ----------
-        d["PT"] = new List<MovableHoliday>
-        {
+            // ---------- Portugal ----------
+            ["PT"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Sunday", HolidayType.National,
                 year => MovableHoliday.ComputeEasterSunday(year)),
             new("Corpus Christi", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(60); }),
-        };
+        ],
 
-        // ---------- Sweden ----------
-        d["SE"] = new List<MovableHoliday>
-        {
+            // ---------- Sweden ----------
+            ["SE"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Ascension Day", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
-        };
+        ],
 
-        // ---------- Norway ----------
-        d["NO"] = new List<MovableHoliday>
-        {
+            // ---------- Norway ----------
+            ["NO"] =
+        [
             new("Maundy Thursday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-3); }),
             new("Good Friday", HolidayType.National,
@@ -309,11 +305,11 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Denmark ----------
-        d["DK"] = new List<MovableHoliday>
-        {
+            // ---------- Denmark ----------
+            ["DK"] =
+        [
             new("Maundy Thursday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-3); }),
             new("Good Friday", HolidayType.National,
@@ -326,11 +322,11 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Finland ----------
-        d["FI"] = new List<MovableHoliday>
-        {
+            // ---------- Finland ----------
+            ["FI"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
@@ -339,31 +335,31 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Midsummer Eve", HolidayType.National,
                 year => MovableHoliday.LastWeekdayBefore(year, 6, 26, DayOfWeek.Friday)),
-        };
+        ],
 
-        // ---------- Czech Republic ----------
-        d["CZ"] = new List<MovableHoliday>
-        {
+            // ---------- Czech Republic ----------
+            ["CZ"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Hungary ----------
-        d["HU"] = new List<MovableHoliday>
-        {
+            // ---------- Hungary ----------
+            ["HU"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Romania ----------
-        d["RO"] = new List<MovableHoliday>
-        {
+            // ---------- Romania ----------
+            ["RO"] =
+        [
             // Romanian Orthodox Easter uses Julian calendar calculation, dates differ from Western Easter
             new("Good Friday (Orthodox)", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
@@ -371,11 +367,11 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Greece ----------
-        d["GR"] = new List<MovableHoliday>
-        {
+            // ---------- Greece ----------
+            ["GR"] =
+        [
             new("Clean Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-48); }),
             new("Good Friday (Orthodox)", HolidayType.National,
@@ -384,11 +380,11 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Colombia ----------
-        d["CO"] = new List<MovableHoliday>
-        {
+            // ---------- Colombia ----------
+            ["CO"] =
+        [
             new("Maundy Thursday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-3); }),
             new("Good Friday", HolidayType.National,
@@ -399,60 +395,60 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(64); }),
             new("Sacred Heart", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(71); }),
-        };
+        ],
 
-        // ---------- Argentina ----------
-        d["AR"] = new List<MovableHoliday>
-        {
+            // ---------- Argentina ----------
+            ["AR"] =
+        [
             new("Carnival Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-48); }),
             new("Carnival Tuesday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-47); }),
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
-        };
+        ],
 
-        // ---------- Chile ----------
-        d["CL"] = new List<MovableHoliday>
-        {
+            // ---------- Chile ----------
+            ["CL"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Holy Saturday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-1); }),
-        };
+        ],
 
-        // ---------- Peru ----------
-        d["PE"] = new List<MovableHoliday>
-        {
+            // ---------- Peru ----------
+            ["PE"] =
+        [
             new("Maundy Thursday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-3); }),
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
-        };
+        ],
 
-        // ---------- Philippines ----------
-        d["PH"] = new List<MovableHoliday>
-        {
+            // ---------- Philippines ----------
+            ["PH"] =
+        [
             new("Maundy Thursday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-3); }),
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Black Saturday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-1); }),
-        };
+        ],
 
-        // ---------- Indonesia ----------
-        d["ID"] = new List<MovableHoliday>
-        {
+            // ---------- Indonesia ----------
+            ["ID"] =
+        [
             new("Good Friday", HolidayType.Religious,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Ascension Day", HolidayType.Religious,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
-        };
+        ],
 
-        // ---------- Japan ----------
-        d["JP"] = new List<MovableHoliday>
-        {
+            // ---------- Japan ----------
+            ["JP"] =
+        [
             new("Coming of Age Day", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 1, DayOfWeek.Monday, 2)),
             new("Marine Day", HolidayType.National,
@@ -461,98 +457,91 @@ public static class MovableHolidayHelper
                 year => MovableHoliday.NthWeekdayOfMonth(year, 9, DayOfWeek.Monday, 3)),
             new("Sports Day", HolidayType.National,
                 year => MovableHoliday.NthWeekdayOfMonth(year, 10, DayOfWeek.Monday, 2)),
-        };
+        ],
 
-        // ---------- Thailand ----------
-        d["TH"] = new List<MovableHoliday>
-        {
-            // Buddhist holidays follow lunar calendar; not easily computable
-        };
+            // ---------- Thailand ----------
+            ["TH"] = [],
 
-        // ---------- Turkey ----------
-        d["TR"] = new List<MovableHoliday>
-        {
-            // Islamic holidays (Eid al-Fitr, Eid al-Adha) follow the Hijri calendar
-            // and cannot be computed with a simple Gregorian algorithm
-        };
+            // ---------- Turkey ----------
+            ["TR"] = [],
 
-        // ---------- Kenya ----------
-        d["KE"] = new List<MovableHoliday>
-        {
+            // ---------- Kenya ----------
+            ["KE"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Nigeria ----------
-        d["NG"] = new List<MovableHoliday>
-        {
+            // ---------- Nigeria ----------
+            ["NG"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Ghana ----------
-        d["GH"] = new List<MovableHoliday>
-        {
+            // ---------- Ghana ----------
+            ["GH"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Singapore ----------
-        d["SG"] = new List<MovableHoliday>
-        {
+            // ---------- Singapore ----------
+            ["SG"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
-        };
+        ],
 
-        // ---------- Croatia ----------
-        d["HR"] = new List<MovableHoliday>
-        {
+            // ---------- Croatia ----------
+            ["HR"] =
+        [
             new("Easter Sunday", HolidayType.National,
                 year => MovableHoliday.ComputeEasterSunday(year)),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Corpus Christi", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(60); }),
-        };
+        ],
 
-        // ---------- Slovakia ----------
-        d["SK"] = new List<MovableHoliday>
-        {
+            // ---------- Slovakia ----------
+            ["SK"] =
+        [
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
-        };
+        ],
 
-        // ---------- Luxembourg ----------
-        d["LU"] = new List<MovableHoliday>
-        {
+            // ---------- Luxembourg ----------
+            ["LU"] =
+        [
             new("Easter Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(1); }),
             new("Ascension Day", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(39); }),
             new("Whit Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(50); }),
-        };
+        ],
 
-        // ---------- Ecuador ----------
-        d["EC"] = new List<MovableHoliday>
-        {
+            // ---------- Ecuador ----------
+            ["EC"] =
+        [
             new("Carnival", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-47); }),
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
-        };
+        ],
 
-        // ---------- Venezuela ----------
-        d["VE"] = new List<MovableHoliday>
-        {
+            // ---------- Venezuela ----------
+            ["VE"] =
+        [
             new("Carnival Monday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-48); }),
             new("Carnival Tuesday", HolidayType.National,
@@ -561,6 +550,7 @@ public static class MovableHolidayHelper
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-3); }),
             new("Good Friday", HolidayType.National,
                 year => { var e = MovableHoliday.ComputeEasterSunday(year); return e.AddDays(-2); }),
+        ]
         };
 
         return d;

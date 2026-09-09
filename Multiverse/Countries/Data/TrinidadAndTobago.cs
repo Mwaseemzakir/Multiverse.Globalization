@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Trinidad And Tobago country.</summary>
     public static readonly Country TrinidadAndTobago =
-        new Country(
+        new(
             CountryNames.TrinidadAndTobago, "780", "TT", "TTO",
             "+1", "Port of Spain", "Americas",
             CurrencyHelper.TrinidadDollar,

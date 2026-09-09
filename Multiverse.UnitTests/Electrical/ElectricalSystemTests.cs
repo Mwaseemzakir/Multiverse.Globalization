@@ -49,13 +49,9 @@ public class ElectricalSystemTests
     public void ElectricalSystem_Should_HaveValidVoltage()
     {
         foreach (var country in Country.GetAll())
-        {
             if (country.ElectricalSystem != null)
-            {
                 Assert.True(country.ElectricalSystem.Voltage > 0 && country.ElectricalSystem.Voltage <= 250,
                     $"{country.Name} has invalid voltage: {country.ElectricalSystem.Voltage}");
-            }
-        }
     }
 
     [Fact]
@@ -63,24 +59,16 @@ public class ElectricalSystemTests
     {
         var validFreqs = new[] { 50, 60 };
         foreach (var country in Country.GetAll())
-        {
             if (country.ElectricalSystem != null)
-            {
                 Assert.Contains(country.ElectricalSystem.Frequency, validFreqs);
-            }
-        }
     }
 
     [Fact]
     public void ElectricalSystem_Should_HaveAtLeastOnePlugType()
     {
         foreach (var country in Country.GetAll())
-        {
             if (country.ElectricalSystem != null)
-            {
                 Assert.NotEmpty(country.ElectricalSystem.PlugTypes);
-            }
-        }
     }
 
     [Fact]
@@ -110,4 +98,78 @@ public class ElectricalSystemTests
         var values = Enum.GetValues(typeof(PlugType));
         Assert.True(values.Length >= 13, "There should be at least 13 plug types (A through O)");
     }
+
+    [Fact]
+    public void PlugType_Should_HaveExactly15Values_AThroughO()
+    {
+        var values = Enum.GetValues(typeof(PlugType)).Cast<PlugType>().ToList();
+        Assert.Equal(15, values.Count);
+        Assert.Equal(PlugType.A, values.Min());
+        Assert.Equal(PlugType.O, values.Max());
+    }
+
+    [Fact]
+    public void ToString_Should_ReturnVoltageAndFrequency()
+    {
+        var es = new ElectricalSystem(230, 50, PlugType.C, PlugType.F);
+        Assert.Equal("230V / 50Hz", es.ToString());
+    }
+
+    #region ElectricalSystemHelper.GetElectricalSystemForCountry Edge Cases
+
+    [Fact]
+    public void GetElectricalSystemForCountry_NullCode_ReturnsNull()
+    {
+        Assert.Null(ElectricalSystemHelper.GetElectricalSystemForCountry(null!));
+    }
+
+    [Fact]
+    public void GetElectricalSystemForCountry_EmptyCode_ReturnsNull()
+    {
+        Assert.Null(ElectricalSystemHelper.GetElectricalSystemForCountry(""));
+    }
+
+    [Fact]
+    public void GetElectricalSystemForCountry_InvalidCode_ReturnsNull()
+    {
+        Assert.Null(ElectricalSystemHelper.GetElectricalSystemForCountry("XX"));
+    }
+
+    [Fact]
+    public void GetElectricalSystemForCountry_LowercaseCode_ShouldStillWork()
+    {
+        var system = ElectricalSystemHelper.GetElectricalSystemForCountry("us");
+        Assert.NotNull(system);
+        Assert.Equal(120, system!.Voltage);
+    }
+
+    #endregion
+
+    #region ElectricalSystemHelper.All
+
+    [Fact]
+    public void ElectricalSystemHelper_All_Should_NotBeEmpty()
+    {
+        Assert.NotEmpty(ElectricalSystemHelper.All);
+    }
+
+    [Fact]
+    public void ElectricalSystemHelper_All_Should_ContainKnownCountries()
+    {
+        Assert.True(ElectricalSystemHelper.All.ContainsKey("US"));
+        Assert.True(ElectricalSystemHelper.All.ContainsKey("GB"));
+        Assert.True(ElectricalSystemHelper.All.ContainsKey("PK"));
+    }
+
+    [Fact]
+    public void ElectricalSystemHelper_All_KeysShouldBeUppercaseAlpha2()
+    {
+        foreach (var key in ElectricalSystemHelper.All.Keys)
+        {
+            Assert.Equal(2, key.Length);
+            Assert.Equal(key.ToUpperInvariant(), key);
+        }
+    }
+
+    #endregion
 }

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Russian Federation country.</summary>
     public static readonly Country RussianFederation =
-        new Country(
+        new(
             CountryNames.RussianFederation, "643", "RU", "RUS",
             "+7", "Moscow", "Europe",
             CurrencyHelper.RussianRuble,

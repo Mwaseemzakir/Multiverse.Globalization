@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Japan country.</summary>
     public static readonly Country Japan =
-        new Country(
+        new(
             CountryNames.Japan, "392", "JP", "JPN",
             "+81", "Tokyo", "Asia",
             CurrencyHelper.Yen,

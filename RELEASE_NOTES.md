@@ -1,3 +1,48 @@
+## Validation, Formatting, Business Days & Queries
+
+This release turns data the package already shipped into operations. Postal code patterns, phone
+formats, and locale separators now validate and format; holidays resolve for a concrete year and
+drive working-day arithmetic; and the catalog is queryable without hand-rolled LINQ.
+
+### Validation & Formatting
+- `CountryLocale.IsValidPostalCode(string?)` — validates against the country's own pattern, with
+  `HasPostalCodes` to distinguish countries that have no postal system
+- `CountryLocale.FormatNumber(decimal, int)` — the country's decimal and group separators, independent of ambient culture
+- `CountryLocale.FormatAddress(...)` — renders the country's address template, dropping omitted components and the separators they leave behind
+- `Country.TryParsePhoneNumber`, `ParsePhoneNumber`, `IsValidPhoneNumber` — parse E.164, international, national, and bare subscriber forms
+- New `PhoneNumber` type with `ToE164()`, `ToNational()`, and `ToInternational()`
+- `Currency.Format(decimal, CountryLocale?, CurrencySymbolPosition)` — symbol placement plus locale separators
+- `Currency.Round`, `ToMinorUnits`, `FromMinorUnits` — money-safe rounding to each currency's minor unit
+- New `CurrencySymbolPosition` enum (Prefix, Suffix, None)
+
+### Business Days
+- `Country.GetHolidays(int year)` — fixed and movable holidays resolved to concrete dates for a year
+- `Country.GetHolidays(DateTime, DateTime)` — holidays across a date range, spanning year boundaries
+- `Country.GetHolidaysOn(DateTime)` and `Country.IsHoliday(DateTime)` — year-aware, movable-holiday-aware
+- `Country.WeekendDays` and `IsWeekend(DateTime)` — new weekend dataset covering 22 deviations from Saturday–Sunday
+- `Country.ObservanceRule` and substitute days — `HolidayOccurrence` now carries `ObservedDate` and `IsSubstituted`
+- `Country.IsWorkingDay`, `NextWorkingDay`, `PreviousWorkingDay`, `AddBusinessDays`, `CountBusinessDays`
+- New `HolidayObservanceRule` enum, `WeekendHelper`, and `HolidayObservanceHelper`
+
+### Queries
+- `Country.InRegion`, `InSubRegion`, `UsingCurrency`, `SpeakingLanguage`, `WithCallingCode`, `WithWeekendDay`
+- `Country.Search(string, int)` — ranked across name, ISO codes, aliases, and capitals, tolerating a two-edit typo
+- `Country.NearestTo(double, double, int)` — countries whose capitals are closest to a point
+- `Country.GetBorderingCountries()` — neighbours as `Country` objects rather than alpha-2 codes
+- `Country.DistanceTo(Country)` — great-circle kilometres between capitals
+
+### Data Corrections
+- `GetHolidays(int)` drops a fixed-date holiday when a movable rule of the same name exists. Six US
+  holidays (Thanksgiving, Memorial Day, Labor Day, Columbus Day, MLK Jr. Day, Presidents' Day)
+  were listed both ways and previously resolved to two different dates each.
+- `HolidayType.Observance` entries are treated as commemorations, not days off, so Easter Sunday no
+  longer generates a substitute Monday in the US.
+
+### Deprecations
+- `Country.IsPublicHoliday(DateTime)` is obsolete. It matched only fixed-date holidays and ignored
+  the year, so movable holidays were never reported and substitute days were invisible. Use
+  `IsHoliday(DateTime)`. The method still works and its behaviour is unchanged.
+
 ## Data Integrity, Catalog Status & Date-Aware Time Zones
 
 - Distinguished 249 current ISO 3166-1 records from the formerly assigned Netherlands Antilles (`AN`) compatibility record

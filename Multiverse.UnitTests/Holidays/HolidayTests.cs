@@ -282,13 +282,9 @@ public class HolidayTests
         var countries = Country.GetAll();
 
         foreach (var country in countries)
-        {
             foreach (var holiday in country.Holidays)
-            {
                 Assert.False(string.IsNullOrEmpty(holiday.Name),
                     $"Country '{country.Name}' has a holiday with an empty name");
-            }
-        }
     }
 
     [Fact]
@@ -297,13 +293,11 @@ public class HolidayTests
         var countries = Country.GetAll();
 
         foreach (var country in countries)
-        {
             foreach (var holiday in country.Holidays)
             {
                 Assert.InRange(holiday.Month, 1, 12);
                 Assert.InRange(holiday.Day, 1, 31);
             }
-        }
     }
 
     [Fact]
@@ -312,14 +306,12 @@ public class HolidayTests
         var countries = Country.GetAll();
 
         foreach (var country in countries)
-        {
             foreach (var holiday in country.Holidays)
             {
                 // Ensure the month/day combination is a valid date
                 var ex = Record.Exception(() => holiday.GetDate(2024)); // 2024 is a leap year
                 Assert.Null(ex);
             }
-        }
     }
 
     #endregion
@@ -407,6 +399,10 @@ public class HolidayTests
 
     #endregion
 
+    // These tests pin the legacy fixed-date behaviour of the now-obsolete IsPublicHoliday.
+    // Year-aware behaviour is covered by BusinessDayTests and HolidayObservanceTests.
+#pragma warning disable CS0618 // Type or member is obsolete
+
     #region Country.IsPublicHoliday
 
     [Fact]
@@ -454,6 +450,8 @@ public class HolidayTests
     }
 
     #endregion
+
+#pragma warning restore CS0618
 
     #region Country.GetHolidayOnDate
 
@@ -539,10 +537,7 @@ public class HolidayTests
     [Fact]
     public void HolidayHelper_All_Should_HaveAtLeastOneHolidayPerEntry()
     {
-        foreach (var kvp in HolidayHelper.All)
-        {
-            Assert.NotEmpty(kvp.Value);
-        }
+        foreach (var kvp in HolidayHelper.All) Assert.NotEmpty(kvp.Value);
     }
 
     [Fact]
@@ -572,12 +567,8 @@ public class HolidayTests
         };
 
         foreach (var kvp in HolidayHelper.All)
-        {
             foreach (var holiday in kvp.Value)
-            {
                 Assert.Contains(holiday.Type, validTypes);
-            }
-        }
     }
 
     [Theory]
@@ -618,7 +609,7 @@ public class HolidayTests
         var holidays2 = us.Holidays;
 
         Assert.Equal(holidays1.Count, holidays2.Count);
-        for (int i = 0; i < holidays1.Count; i++)
+        for (var i = 0; i < holidays1.Count; i++)
         {
             Assert.Equal(holidays1[i].Name, holidays2[i].Name);
             Assert.Equal(holidays1[i].Month, holidays2[i].Month);

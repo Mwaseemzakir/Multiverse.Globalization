@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Barbados country.</summary>
     public static readonly Country Barbados =
-        new Country(
+        new(
             CountryNames.Barbados, "052", "BB", "BRB",
             "+1", "Bridgetown", "Americas",
             CurrencyHelper.BarbadosDollar,

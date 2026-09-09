@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Cocos Islands country.</summary>
     public static readonly Country CocosIslands =
-        new Country(
+        new(
             CountryNames.CocosIslands, "166", "CC", "CCK",
             "+61", "West Island", "Oceania",
             CurrencyHelper.AustralianDollar,

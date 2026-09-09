@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Kazakhstan country.</summary>
     public static readonly Country Kazakhstan =
-        new Country(
+        new(
             CountryNames.Kazakhstan, "398", "KZ", "KAZ",
             "+7", "Astana", "Asia",
             CurrencyHelper.Tenge,

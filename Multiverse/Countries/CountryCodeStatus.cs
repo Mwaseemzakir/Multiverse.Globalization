@@ -12,5 +12,5 @@ public enum CountryCodeStatus
     OfficiallyAssigned = 1,
 
     /// <summary>The code was formerly assigned and is retained for backward compatibility.</summary>
-    FormerlyAssigned = 2,
+    FormerlyAssigned = 2
 }

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Turkmenistan country.</summary>
     public static readonly Country Turkmenistan =
-        new Country(
+        new(
             CountryNames.Turkmenistan, "795", "TM", "TKM",
             "+993", "Ashgabat", "Asia",
             CurrencyHelper.TurkmenistanNewManat,

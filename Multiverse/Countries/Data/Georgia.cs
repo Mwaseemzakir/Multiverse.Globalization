@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Georgia country.</summary>
     public static readonly Country Georgia =
-        new Country(
+        new(
             CountryNames.Georgia, "268", "GE", "GEO",
             "+995", "Tbilisi", "Asia",
             CurrencyHelper.Lari,

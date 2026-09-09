@@ -64,6 +64,20 @@
   - [Translations](#translations)
   - [Subdivisions](#subdivisions)
   - [Movable Holidays](#movable-holidays)
+- [Validation & Formatting](#validation--formatting)
+  - [Postal Codes](#postal-codes)
+  - [Phone Numbers](#phone-numbers)
+  - [Numbers & Addresses](#numbers--addresses)
+  - [Money](#money)
+- [Business Days](#business-days)
+  - [Weekends](#weekends)
+  - [Holidays for a Year](#holidays-for-a-year)
+  - [Substitute Days](#substitute-days)
+  - [Working-Day Arithmetic](#working-day-arithmetic)
+- [Querying & Search](#querying--search)
+  - [Filters](#filters)
+  - [Search](#search)
+  - [Geographic Queries](#geographic-queries)
 - [Exception Handling](#exception-handling)
 - [Best Practices](#best-practices)
 - [API Reference Summary](#api-reference-summary)
@@ -92,8 +106,11 @@
 | **Locale & Formatting** | Date, number & measurement formats | All 250 compatibility records plus supplemental `XK` |
 | **Translations** | Country name translations | All 250 compatibility records plus supplemental `XK` |
 | **Subdivisions** | ISO 3166-2 | Explicit records for 59 country/area codes |
+| **Weekends** | Working-week conventions | Saturday–Sunday by default, with 22 explicit deviations (Friday–Saturday, Friday-only, Saturday-only, split) |
+| **Substitute Days** | Holiday-in-lieu rules | Explicit rules for 13 country codes; no substitution elsewhere |
 
 - **Country-centric design** — each `Country` carries its `Currency` and `OfficialLanguages`; one lookup gives you everything
+- **Not just data** — validate postal codes and phone numbers, format money and addresses, and do working-day arithmetic straight off the country
 - **Fast lookups** — pre-built dictionary maps for O(1) retrieval by code, name, or number
 - **Case-insensitive** — all lookups normalize input automatically
 - **Null-safe** — `OrDefault` variants return `null` instead of throwing
@@ -294,9 +311,9 @@ foreach (var holiday in usa.Holidays)
 var nationalHolidays = usa.GetHolidaysByType(HolidayType.National);
 Console.WriteLine($"National holidays: {nationalHolidays.Count}"); // 1 (Independence Day)
 
-// Check if a date is a holiday
-bool isHoliday = usa.IsPublicHoliday(new DateTime(2026, 7, 4)); // true
-bool isNotHoliday = usa.IsPublicHoliday(new DateTime(2026, 3, 15)); // false
+// Check if a date is a day off (year-aware; includes movable holidays and substitute days)
+bool isHoliday = usa.IsHoliday(new DateTime(2026, 7, 3));    // true — 4 July 2026 is a Saturday
+bool isNotHoliday = usa.IsHoliday(new DateTime(2026, 3, 15)); // false
 
 // Get the holiday on a given date
 var holiday = usa.GetHolidayOnDate(new DateTime(2026, 7, 4));
@@ -641,9 +658,13 @@ Console.WriteLine(religious.Count); // 3 (Assumption, All Saints', Christmas)
 ```csharp
 var india = Country.GetCountry("IN");
 
-// Check if a date falls on a holiday
-bool isHoliday = india.IsPublicHoliday(new DateTime(2026, 1, 26)); // true (Republic Day)
-bool isNot = india.IsPublicHoliday(new DateTime(2026, 3, 15));     // false
+// Year-aware check covering fixed holidays, movable holidays, and substitute days
+bool isHoliday = india.IsHoliday(new DateTime(2026, 1, 26)); // true (Republic Day)
+bool isNot = india.IsHoliday(new DateTime(2026, 3, 15));     // false
+
+// Everything observed on a date, with type and movable/fixed detail
+foreach (var occurrence in india.GetHolidaysOn(new DateTime(2026, 8, 15)))
+    Console.WriteLine($"{occurrence.Name} ({occurrence.Type})"); // Independence Day (National)
 
 // Get the specific holiday on a date
 var holiday = india.GetHolidayOnDate(new DateTime(2026, 8, 15));
@@ -656,6 +677,10 @@ Console.WriteLine(republicDay.GetDate(2026)); // 2026-01-26
 // Check using Holiday.IsOnDate()
 Console.WriteLine(republicDay.IsOnDate(new DateTime(2026, 1, 26))); // true
 ```
+
+> **Note:** `IsPublicHoliday(DateTime)` is obsolete. It matched only fixed-date holidays and
+> ignored the year entirely, so movable holidays such as Easter Monday and Thanksgiving were
+> never reported. Use `IsHoliday(DateTime)` instead — see [Business Days](#business-days).
 
 ### Holiday Types
 
@@ -860,11 +885,13 @@ Console.WriteLine($"Emergency: {string.Join(", ", usa.EmergencyNumbers)}");
 var pakistan = Country.GetCountry("PK");
 var phone = pakistan.PhoneFormat;
 
-Console.WriteLine($"Calling code: {phone?.CallingCode}"); // Calling code: +92
-Console.WriteLine($"Trunk prefix: {phone?.TrunkPrefix}"); // Trunk prefix: 0
-Console.WriteLine($"Lengths: {string.Join(", ", phone?.PhoneNumberLengths ?? Array.Empty<int>())}");
-// Lengths: 10
+Console.WriteLine($"Calling code: {pakistan.CallingCode}");         // Calling code: +92
+Console.WriteLine($"Trunk prefix: {phone?.TrunkPrefix}");           // Trunk prefix: 0
+Console.WriteLine($"International prefix: {phone?.InternationalPrefix}"); // International prefix: 00
+Console.WriteLine($"Digits: {phone?.MinLength}–{phone?.MaxLength}");     // Digits: 10–10
 ```
+
+To parse and re-render actual numbers, see [Phone Numbers](#phone-numbers).
 
 ### Locale & Formatting
 
@@ -952,6 +979,254 @@ foreach (var occ in occurrences)
     Console.WriteLine($"  {occ.Name}: {occ.Date:yyyy-MM-dd} ({occ.Type}, movable={occ.IsMovable})");
 // Thanksgiving Day: 2026-11-26 (National, movable=True)
 ```
+
+---
+
+## Validation & Formatting
+
+The locale, phone, and currency datasets are wired up to do the work, not just describe it.
+
+### Postal Codes
+
+```csharp
+var us = Country.GetCountry("US");
+
+us.Locale!.IsValidPostalCode("94103");      // true
+us.Locale.IsValidPostalCode("94103-1234");  // true
+us.Locale.IsValidPostalCode("9410");        // false
+
+var canada = Country.GetCountry("CA");
+canada.Locale!.IsValidPostalCode("K1A 0B1"); // true
+canada.Locale.IsValidPostalCode("K1A0B1");   // true — the space is optional
+
+// Countries with no postal system accept only a blank value
+var bolivia = Country.GetCountry("BO");
+bolivia.Locale!.HasPostalCodes;              // false
+bolivia.Locale.IsValidPostalCode("");        // true
+bolivia.Locale.IsValidPostalCode("12345");   // false
+```
+
+Branch on `HasPostalCodes` when a form needs to hide the field entirely.
+
+### Phone Numbers
+
+`TryParsePhoneNumber` accepts every form a user is likely to type — E.164, international with a
+dialling prefix, national with a trunk prefix, or bare subscriber digits — and normalizes them.
+
+```csharp
+var pk = Country.GetCountry("PK");
+
+pk.TryParsePhoneNumber("0300-1234567", out var number); // true
+number!.ToE164();          // +923001234567  ← store this
+number.ToNational();       // 03001234567
+number.ToInternational();  // +92 3001234567
+number.NationalNumber;     // 3001234567
+
+// All of these parse to the same number
+pk.ParsePhoneNumber("+923001234567");
+pk.ParsePhoneNumber("00923001234567");
+pk.ParsePhoneNumber("3001234567");
+
+// Validation without the out-parameter
+pk.IsValidPhoneNumber("0300-1234567"); // true
+pk.IsValidPhoneNumber("12345");        // false
+```
+
+`ParsePhoneNumber` throws `FormatException` on invalid input; `TryParsePhoneNumber` returns
+`false`. Parsing checks the digit count against the country's known number lengths — it does not
+verify that a number is assigned or reachable.
+
+### Numbers & Addresses
+
+```csharp
+var us = Country.GetCountry("US");
+var de = Country.GetCountry("DE");
+
+us.Locale!.FormatNumber(1234.5m); // 1,234.50
+de.Locale!.FormatNumber(1234.5m); // 1.234,50
+
+// Addresses follow the country's own template; omitted parts take their separators with them
+us.Locale.FormatAddress(
+    street: "1600 Pennsylvania Avenue NW",
+    city: "Washington",
+    state: "DC",
+    postalCode: "20500",
+    country: "United States");
+// 1600 Pennsylvania Avenue NW
+// Washington, DC 20500
+// United States
+
+de.Locale.FormatAddress(street: "Unter den Linden 77", city: "Berlin", postalCode: "10117");
+// Unter den Linden 77
+// 10117 Berlin
+```
+
+### Money
+
+```csharp
+var usd = Currency.GetCurrency("USD");
+var eur = Currency.GetCurrency("EUR");
+var jpy = Currency.GetCurrency("JPY");
+
+usd.Format(1234.5m, Country.GetCountry("US").Locale); // $1,234.50
+eur.Format(1234.5m, Country.GetCountry("DE").Locale, CurrencySymbolPosition.Suffix); // 1.234,50 €
+jpy.Format(1234.5m); // ¥1,235 — the yen has no minor unit
+
+// Minor units and money-safe rounding
+usd.Round(2.345m);            // 2.35 (away from zero)
+usd.ToMinorUnits(1234.50m);   // 123450
+usd.FromMinorUnits(123450L);  // 1234.50
+Currency.GetCurrency("KWD").ToMinorUnits(1.5m); // 1500 — the dinar has three
+```
+
+---
+
+## Business Days
+
+Working-day arithmetic that respects each country's weekend, its fixed **and** movable holidays,
+and its substitute-day rule.
+
+### Weekends
+
+```csharp
+Country.GetCountry("US").WeekendDays; // [Saturday, Sunday]
+Country.GetCountry("SA").WeekendDays; // [Friday, Saturday]
+Country.GetCountry("NP").WeekendDays; // [Saturday]
+Country.GetCountry("BN").WeekendDays; // [Friday, Sunday]
+
+var friday = new DateTime(2026, 1, 2);
+Country.GetCountry("US").IsWeekend(friday); // false
+Country.GetCountry("SA").IsWeekend(friday); // true
+
+// Every country resting on a given day
+Country.WithWeekendDay(DayOfWeek.Friday);
+```
+
+### Holidays for a Year
+
+`GetHolidays(year)` resolves fixed and movable holidays into concrete dates. Where a country lists
+a holiday both as a fixed date and as a movable rule, the rule wins — so you get one Thanksgiving,
+on the right day.
+
+```csharp
+var us = Country.GetCountry("US");
+
+foreach (var holiday in us.GetHolidays(2026))
+    Console.WriteLine($"{holiday.ObservedDate:yyyy-MM-dd}  {holiday.Name}");
+// 2026-01-01  New Year's Day
+// 2026-01-19  Martin Luther King Jr. Day   ← third Monday, not a stale fixed date
+// ...
+// 2026-11-26  Thanksgiving Day             ← fourth Thursday
+
+// Ranges span year boundaries
+us.GetHolidays(new DateTime(2026, 12, 20), new DateTime(2027, 1, 5));
+
+// Everything observed on one date
+us.GetHolidaysOn(new DateTime(2026, 12, 25));
+```
+
+### Substitute Days
+
+When a holiday lands on a weekend, most common-law countries move it. `HolidayOccurrence` carries
+both the calendar `Date` and the `ObservedDate` actually taken off.
+
+```csharp
+var us = Country.GetCountry("US");
+var independenceDay = us.GetHolidays(2026).Single(h => h.Name == "Independence Day");
+
+independenceDay.Date;          // 2026-07-04 (a Saturday)
+independenceDay.ObservedDate;  // 2026-07-03 — the US moves Saturday holidays back to Friday
+independenceDay.IsSubstituted; // true
+
+// The UK pushes forward instead, and never doubles up
+var gb = Country.GetCountry("GB");
+gb.GetHolidays(2027).Single(h => h.Name == "Christmas Day").ObservedDate; // 2027-12-27 (Mon)
+gb.GetHolidays(2027).Single(h => h.Name == "Boxing Day").ObservedDate;    // 2027-12-28 (Tue)
+
+// Most of continental Europe simply loses the day
+Country.GetCountry("DE").ObservanceRule; // None
+```
+
+`HolidayType.Observance` entries are commemorations rather than days off — they never generate a
+substitute day and never count against working-day arithmetic.
+
+### Working-Day Arithmetic
+
+```csharp
+var us = Country.GetCountry("US");
+
+us.IsWorkingDay(new DateTime(2026, 7, 3)); // false — substituted Independence Day
+
+// Thursday 2 July + 1 working day: the 3rd is the substitute holiday and the 4th-5th
+// are the weekend, so the answer is Monday the 6th
+us.AddBusinessDays(new DateTime(2026, 7, 2), 1);  // 2026-07-06
+us.AddBusinessDays(new DateTime(2026, 7, 6), -1); // 2026-07-02 — negatives walk backwards
+
+us.NextWorkingDay(new DateTime(2026, 7, 2));      // 2026-07-06
+us.PreviousWorkingDay(new DateTime(2026, 7, 6));  // 2026-07-02
+
+// Inclusive of both endpoints
+us.CountBusinessDays(new DateTime(2026, 6, 29), new DateTime(2026, 7, 10)); // 9
+
+// The same arithmetic, on a Friday-Saturday weekend
+Country.GetCountry("SA").AddBusinessDays(new DateTime(2026, 3, 5), 1); // 2026-03-08 (Sunday)
+```
+
+---
+
+## Querying & Search
+
+Filters and search over the catalog. Every static query runs over `GetCurrent()`, so the `None`
+sentinel and formerly assigned codes never appear in results.
+
+### Filters
+
+```csharp
+Country.InRegion("Europe");            // all European countries
+Country.InSubRegion("Southern Asia");  // PK, IN, BD, LK, ...
+Country.UsingCurrency("EUR");          // the eurozone
+Country.SpeakingLanguage("French");    // FR, BE, CH, CA, SN, ...
+Country.WithCallingCode("+1");         // the whole North American Numbering Plan
+Country.WithWeekendDay(DayOfWeek.Friday);
+```
+
+Currency and language filters accept any identifier the corresponding lookup accepts — `"EUR"` or
+`"Euro"`, `"fr"` or `"fra"` or `"French"`.
+
+### Search
+
+```csharp
+Country.Search("USA")[0].Name;            // United States of America — exact code
+Country.Search("united states")[0].Name;  // United States of America — alias
+Country.Search("Paki")[0].Name;           // Pakistan — prefix
+Country.Search("Tokyo")[0].Name;          // Japan — capital city
+Country.Search("germny")[0].Name;         // Germany — tolerates a typo
+
+Country.Search("a", maxResults: 5);       // capped
+Country.Search("zzzzqqqq");               // empty
+```
+
+Results are ranked: exact code or name, then alias, prefix, substring, capital, and finally a
+Levenshtein match within two edits.
+
+### Geographic Queries
+
+```csharp
+var us = Country.GetCountry("US");
+
+// Neighbours as countries, not just codes
+foreach (var neighbour in us.GetBorderingCountries())
+    Console.WriteLine(neighbour.Name); // Canada, Mexico
+
+// Great-circle distance between capitals, in kilometres
+Country.GetCountry("FR").DistanceTo(Country.GetCountry("DE")); // ~878
+
+// Nearest countries to a point
+Country.NearestTo(48.8566, 2.3522);             // [France]
+Country.NearestTo(35.6762, 139.6503, count: 3); // [Japan, South Korea, ...]
+```
+
+`DistanceTo` returns `null` when either capital has no coordinates on record.
 
 ---
 
@@ -1096,6 +1371,8 @@ Country.GetCountry("Us");
 | `Translations` | `IReadOnlyDictionary<string, string>` | Country name translations |
 | `Subdivisions` | `IReadOnlyList<Subdivision>` | ISO 3166-2 subdivisions |
 | `MovableHolidays` | `IReadOnlyList<MovableHoliday>` | Movable holidays |
+| `WeekendDays` | `IReadOnlyList<DayOfWeek>` | Days forming the weekend in this country |
+| `ObservanceRule` | `HolidayObservanceRule` | How weekend holidays are moved |
 
 | Method | Returns | Throws | Description |
 |---|---|---|---|
@@ -1109,7 +1386,7 @@ Country.GetCountry("Us");
 | Method | Returns | Description |
 |---|---|---|
 | `GetHolidaysByType(HolidayType)` | `IReadOnlyList<Holiday>` | Filter holidays by type |
-| `IsPublicHoliday(DateTime)` | `bool` | Check if date falls on any holiday |
+| `IsPublicHoliday(DateTime)` | `bool` | **Obsolete.** Fixed-date only, ignores the year — use `IsHoliday` |
 | `GetHolidayOnDate(DateTime)` | `Holiday?` | Get the holiday on a given date, or null |
 | `GetPrimaryTimeZone()` | `CountryTimeZone?` | Get the primary (capital-city) time zone, or null |
 | `GetTimeZonesWithDst()` | `IReadOnlyList<CountryTimeZone>` | Get all time zones that observe DST |
@@ -1117,6 +1394,32 @@ Country.GetCountry("Us");
 | `GetAllHolidaysOnDate(DateTime)` | `IReadOnlyList<string>` | Get all holiday names (fixed + movable) on a date |
 | `GetHolidayOccurrencesOnDate(DateTime)` | `IReadOnlyList<HolidayOccurrence>` | Get all holidays (fixed + movable) on a date, with date/type/movable detail |
 | `GetNameInLanguage(string)` | `string?` | Get country name in the specified language |
+| `GetHolidays(int)` | `IReadOnlyList<HolidayOccurrence>` | All holidays for a year, fixed and movable, with substitute days |
+| `GetHolidays(DateTime, DateTime)` | `IReadOnlyList<HolidayOccurrence>` | All holidays in a date range, spanning years |
+| `GetHolidaysOn(DateTime)` | `IReadOnlyList<HolidayOccurrence>` | Holidays observed on a date |
+| `IsHoliday(DateTime)` | `bool` | Year-aware day-off check, including movable and substitute days |
+| `IsWeekend(DateTime)` | `bool` | Check against this country's weekend |
+| `IsWorkingDay(DateTime)` | `bool` | Neither weekend nor holiday |
+| `NextWorkingDay(DateTime)` | `DateTime` | First working day after the given date |
+| `PreviousWorkingDay(DateTime)` | `DateTime` | Last working day before the given date |
+| `AddBusinessDays(DateTime, int)` | `DateTime` | Advance by working days; negative walks backwards |
+| `CountBusinessDays(DateTime, DateTime)` | `int` | Working days in an inclusive range |
+| `TryParsePhoneNumber(string?, out PhoneNumber?)` | `bool` | Parse a phone number against this country's format |
+| `ParsePhoneNumber(string)` | `PhoneNumber` | Strict parse; throws `FormatException` |
+| `IsValidPhoneNumber(string?)` | `bool` | Phone number plausibility check |
+| `GetBorderingCountries()` | `IReadOnlyList<Country>` | Neighbours resolved from alpha-2 codes |
+| `DistanceTo(Country)` | `double?` | Great-circle km between capitals, or null |
+
+| Static query | Returns | Description |
+|---|---|---|
+| `InRegion(string)` | `IReadOnlyList<Country>` | Countries in a region |
+| `InSubRegion(string)` | `IReadOnlyList<Country>` | Countries in a sub-region |
+| `UsingCurrency(string)` | `IReadOnlyList<Country>` | Countries using a currency |
+| `SpeakingLanguage(string)` | `IReadOnlyList<Country>` | Countries with an official language |
+| `WithCallingCode(string)` | `IReadOnlyList<Country>` | Countries sharing a calling code |
+| `WithWeekendDay(DayOfWeek)` | `IReadOnlyList<Country>` | Countries resting on a given day |
+| `Search(string, int)` | `IReadOnlyList<Country>` | Ranked search by name, code, alias, capital, or near-miss |
+| `NearestTo(double, double, int)` | `IReadOnlyList<Country>` | Countries whose capitals are closest to a point |
 
 ### Currency
 
@@ -1127,6 +1430,10 @@ Country.GetCountry("Us");
 | `Number` | `int` | ISO 4217 numeric code |
 | `Symbol` | `string` | Currency symbol |
 | `DecimalPlaces` | `int` | Minor units (decimal places) |
+| `Format(decimal, CountryLocale?, CurrencySymbolPosition)` | `string` | Format an amount with a country's separators |
+| `Round(decimal)` | `decimal` | Round to the currency's minor unit, away from zero |
+| `ToMinorUnits(decimal)` | `long` | Convert to whole minor units (cents, fils) |
+| `FromMinorUnits(long)` | `decimal` | Convert minor units back to a major-unit amount |
 
 | Method | Returns | Throws | Description |
 |---|---|---|---|
@@ -1212,6 +1519,33 @@ Country.GetCountry("Us");
 |---|---|---|
 | `All` | `IReadOnlyDictionary<string, List<Holiday>>` | Complete mapping of alpha-2 codes to holiday lists |
 
+### CountryLocale
+
+| Property / Method | Returns | Description |
+|---|---|---|
+| `DateFormat` | `string` | Primary date format string |
+| `NumberDecimalSeparator` | `string` | Decimal separator |
+| `NumberGroupSeparator` | `string` | Thousands separator |
+| `MeasurementSystem` | `MeasurementSystem` | Metric, Imperial, or USCustomary |
+| `WeekStartDay` | `DayOfWeek` | Day the week starts on |
+| `PostalCodeFormat` | `string` | Regex pattern for postal codes |
+| `AddressFormat` | `string` | Address template |
+| `HasPostalCodes` | `bool` | Whether the country operates a postal code system |
+| `IsValidPostalCode(string?)` | `bool` | Validate a postal code against the country's pattern |
+| `FormatNumber(decimal, int)` | `string` | Format a number with the country's separators |
+| `FormatAddress(...)` | `string` | Render an address, dropping omitted components |
+
+### PhoneNumber
+
+| Property / Method | Returns | Description |
+|---|---|---|
+| `Country` | `Country` | The country the number was parsed against |
+| `NationalNumber` | `string` | Subscriber digits, no calling code or trunk prefix |
+| `CallingCode` | `string` | Country calling code with the leading plus |
+| `ToE164()` | `string` | E.164 form, e.g. `+923001234567` |
+| `ToNational()` | `string` | National form with the trunk prefix |
+| `ToInternational()` | `string` | Calling code separated from the number |
+
 ### CountryTimeZone
 
 | Property / Method | Returns | Description |
@@ -1267,6 +1601,14 @@ dotnet test
 | `CurrencyExtendedTests` | 24 | Decimal places, reverse country lookup |
 | `LanguageExtendedTests` | 24 | Native names, scripts, text direction |
 | `CountryIntegrationTests` | 22 | Alternative TLDs, full property integration |
+| `PostalCodeValidationTests` | 15 | Postal code validation per country, `HasPostalCodes`, whole-catalog pattern safety |
+| `LocaleFormattingTests` | 15 | Number formatting, address templating, culture independence |
+| `PhoneNumberTests` | 29 | Phone parsing in every common form, E.164 round trip across the catalog |
+| `CurrencyFormattingTests` | 14 | Symbol placement, minor units, money-safe rounding |
+| `WeekendTests` | 13 | Weekend days per country, `IsWeekend`, exception-map integrity |
+| `HolidayObservanceTests` | 17 | Substitute-day rules, double bank holidays, observance exclusion |
+| `BusinessDayTests` | 34 | Year-aware holidays, working-day arithmetic, whole-catalog sanity |
+| `CountryQueryTests` | 39 | Region/currency/language/calling-code filters, ranked search, geographic queries |
 
 ### What's Tested
 
@@ -1283,6 +1625,9 @@ dotnet test
 - **Extended country data** — geographic data (population, area, coordinates, borders, landlocked), political data (UN membership, independence dates), transport data (driving side, speed units), electrical systems (voltage, frequency, plug types), emergency numbers, phone formats, locale/formatting (date/number formats, measurement systems, postal codes), translations (country names in 10+ languages), subdivisions (ISO 3166-2), and movable holidays (Easter, Thanksgiving, etc.)
 - **Currency extensions** — decimal places (minor units) for all currencies, reverse lookup via `GetCountriesUsingCurrency()`
 - **Language extensions** — native names, scripts, text direction (LTR/RTL) for all languages
+- **Validation & formatting** — postal codes against every shipped pattern, phone numbers in E.164/international/national/bare forms with a full-catalog round trip, number and address formatting under a non-invariant ambient culture, currency symbol placement and minor-unit round trips
+- **Business days** — weekend data per country, year-aware holiday resolution, substitute-day rules including the UK double bank holiday and the US Saturday-to-Friday shift, forward and backward working-day arithmetic, and a whole-catalog check that every country resolves a full year without throwing
+- **Queries** — filters return only current ISO 3166-1 records, search ranking from exact code through typo tolerance, border resolution for every country, and great-circle distances between capitals
 
 ### Test Dependencies
 

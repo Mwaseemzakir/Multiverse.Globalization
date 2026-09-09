@@ -7,12 +7,13 @@ public class LanguageTests
     [Fact]
     public void GetAll_Should_ReturnAllLanguages()
     {
-        IReadOnlyList<Language> languages = Language.GetAll();
+        var languages = Language.GetAll();
 
         Assert.NotNull(languages);
         Assert.NotEmpty(languages);
         Assert.Contains(languages, l => l.Alpha2Code == "en" && l.Alpha3Code == "eng" && l.Name == "English");
-        Assert.Contains(languages, l => l.Alpha2Code == "es" && l.Alpha3Code == "spa" && l.Name == "Spanish; Castilian");
+        Assert.Contains(languages,
+            l => l.Alpha2Code == "es" && l.Alpha3Code == "spa" && l.Name == "Spanish; Castilian");
         Assert.Contains(languages, l => l.Alpha2Code == "fr" && l.Alpha3Code == "fre" && l.Name == "French");
         Assert.Contains(languages, l => l.Alpha2Code == "ur" && l.Alpha3Code == "urd" && l.Name == "Urdu");
     }
@@ -343,9 +344,8 @@ public class LanguageTests
     {
         var languages = Language.GetAll();
         foreach (var language in languages)
-        {
-            Assert.False(string.IsNullOrEmpty(language.Name), $"Language with Alpha2={language.Alpha2Code}, Alpha3={language.Alpha3Code} has empty Name");
-        }
+            Assert.False(string.IsNullOrEmpty(language.Name),
+                $"Language with Alpha2={language.Alpha2Code}, Alpha3={language.Alpha3Code} has empty Name");
     }
 
     [Fact]
@@ -356,7 +356,8 @@ public class LanguageTests
         {
             Assert.False(string.IsNullOrEmpty(language.Alpha3Code), $"Language '{language.Name}' has empty Alpha3Code");
             // Most alpha3 codes are 3 chars, but reserved ranges like "qaa-qtz" are longer
-            Assert.True(language.Alpha3Code.Length >= 3, $"Language '{language.Name}' has Alpha3Code shorter than 3: '{language.Alpha3Code}'");
+            Assert.True(language.Alpha3Code.Length >= 3,
+                $"Language '{language.Name}' has Alpha3Code shorter than 3: '{language.Alpha3Code}'");
         }
     }
 
@@ -364,30 +365,21 @@ public class LanguageTests
     public void AllLanguages_WithAlpha2_Should_HaveTwoLetterCode()
     {
         var languages = Language.GetAll().Where(l => !string.IsNullOrEmpty(l.Alpha2Code));
-        foreach (var language in languages)
-        {
-            Assert.Equal(2, language.Alpha2Code.Length);
-        }
+        foreach (var language in languages) Assert.Equal(2, language.Alpha2Code.Length);
     }
 
     [Fact]
     public void AllLanguages_Alpha3Codes_Should_BeLowercase()
     {
         var languages = Language.GetAll();
-        foreach (var language in languages)
-        {
-            Assert.Equal(language.Alpha3Code, language.Alpha3Code.ToLowerInvariant());
-        }
+        foreach (var language in languages) Assert.Equal(language.Alpha3Code, language.Alpha3Code.ToLowerInvariant());
     }
 
     [Fact]
     public void AllLanguages_Alpha2Codes_Should_BeLowercase()
     {
         var languages = Language.GetAll().Where(l => !string.IsNullOrEmpty(l.Alpha2Code));
-        foreach (var language in languages)
-        {
-            Assert.Equal(language.Alpha2Code, language.Alpha2Code.ToLowerInvariant());
-        }
+        foreach (var language in languages) Assert.Equal(language.Alpha2Code, language.Alpha2Code.ToLowerInvariant());
     }
 
     #endregion
@@ -461,7 +453,7 @@ public class LanguageTests
     public void Equals_NonLanguageObject_Should_ReturnFalse()
     {
         var eng = Language.GetLanguage("en");
-        Assert.False(eng.Equals("en"));
+        Assert.False(eng.Equals((object)"en"));
     }
 
     [Fact]
@@ -576,7 +568,8 @@ public class LanguageTests
     [InlineData("ko", "한국어", "Hangul")]
     [InlineData("hi", "हिन्दी", "Devanagari")]
     [InlineData("ru", "русский", "Cyrillic")]
-    public void Language_Should_HaveCorrectNativeNameAndScript(string alpha2, string expectedNativeName, string expectedScript)
+    public void Language_Should_HaveCorrectNativeNameAndScript(string alpha2, string expectedNativeName,
+        string expectedScript)
     {
         var lang = Language.GetLanguage(alpha2);
         Assert.Equal(expectedNativeName, lang.NativeName);
@@ -608,7 +601,8 @@ public class LanguageTests
             // Should never throw; defaults are empty string and LTR
             Assert.NotNull(lang.NativeName);
             Assert.NotNull(lang.Script);
-            Assert.True(lang.TextDirection == TextDirection.LeftToRight || lang.TextDirection == TextDirection.RightToLeft);
+            Assert.True(lang.TextDirection == TextDirection.LeftToRight ||
+                        lang.TextDirection == TextDirection.RightToLeft);
         }
     }
 

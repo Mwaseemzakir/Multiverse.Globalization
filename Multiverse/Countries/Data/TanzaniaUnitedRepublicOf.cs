@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Tanzania United Republic Of country.</summary>
     public static readonly Country TanzaniaUnitedRepublicOf =
-        new Country(
+        new(
             CountryNames.TanzaniaUnitedRepublicOf, "834", "TZ", "TZA",
             "+255", "Dodoma", "Africa",
             CurrencyHelper.TanzanianShilling,

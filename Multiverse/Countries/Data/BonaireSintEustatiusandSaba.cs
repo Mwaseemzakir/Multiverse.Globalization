@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Bonaire Sint Eustatiusand Saba country.</summary>
     public static readonly Country BonaireSintEustatiusandSaba =
-        new Country(
+        new(
             CountryNames.BonaireSintEustatiusandSaba, "535", "BQ", "BES",
             "+599", "Kralendijk", "Americas",
             CurrencyHelper.UsDollar,

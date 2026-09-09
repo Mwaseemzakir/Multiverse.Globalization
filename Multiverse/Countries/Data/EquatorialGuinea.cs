@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Equatorial Guinea country.</summary>
     public static readonly Country EquatorialGuinea =
-        new Country(
+        new(
             CountryNames.EquatorialGuinea, "226", "GQ", "GNQ",
             "+240", "Malabo", "Africa",
             CurrencyHelper.CfaFrancBeac,

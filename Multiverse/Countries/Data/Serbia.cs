@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Serbia country.</summary>
     public static readonly Country Serbia =
-        new Country(
+        new(
             CountryNames.Serbia, "688", "RS", "SRB",
             "+381", "Belgrade", "Europe",
             CurrencyHelper.SerbianDinar,

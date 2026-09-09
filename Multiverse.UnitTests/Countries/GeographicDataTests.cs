@@ -38,10 +38,10 @@ public class GeographicDataTests
     }
 
     [Theory]
-    [InlineData("JP")]  // Island nation
-    [InlineData("AU")]  // Island continent
-    [InlineData("NZ")]  // Island nation
-    [InlineData("SG")]  // City-state island
+    [InlineData("JP")] // Island nation
+    [InlineData("AU")] // Island continent
+    [InlineData("NZ")] // Island nation
+    [InlineData("SG")] // City-state island
     public void IslandNation_Should_HaveNoBorderingCountries(string alpha2)
     {
         var country = Country.GetCountry(alpha2);
@@ -56,15 +56,15 @@ public class GeographicDataTests
     }
 
     [Theory]
-    [InlineData("AT")]  // Austria
-    [InlineData("CH")]  // Switzerland
-    [InlineData("CZ")]  // Czech Republic
-    [InlineData("HU")]  // Hungary
-    [InlineData("BO")]  // Bolivia
-    [InlineData("AF")]  // Afghanistan
-    [InlineData("ET")]  // Ethiopia
-    [InlineData("NP")]  // Nepal
-    [InlineData("LA")]  // Laos
+    [InlineData("AT")] // Austria
+    [InlineData("CH")] // Switzerland
+    [InlineData("CZ")] // Czech Republic
+    [InlineData("HU")] // Hungary
+    [InlineData("BO")] // Bolivia
+    [InlineData("AF")] // Afghanistan
+    [InlineData("ET")] // Ethiopia
+    [InlineData("NP")] // Nepal
+    [InlineData("LA")] // Laos
     public void LandlockedCountry_Should_BeMarkedAsLandlocked(string alpha2)
     {
         var country = Country.GetCountry(alpha2);
@@ -189,7 +189,7 @@ public class GeographicDataTests
     public void GeoCoordinate_NotEqualToDifferentType()
     {
         var coord = new GeoCoordinate(0, 0);
-        Assert.False(coord.Equals("not a coordinate"));
+        Assert.False(coord.Equals((object)"not a coordinate"));
     }
 
     #endregion

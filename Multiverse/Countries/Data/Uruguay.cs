@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Uruguay country.</summary>
     public static readonly Country Uruguay =
-        new Country(
+        new(
             CountryNames.Uruguay, "858", "UY", "URY",
             "+598", "Montevideo", "Americas",
             CurrencyHelper.PesoUruguayo,

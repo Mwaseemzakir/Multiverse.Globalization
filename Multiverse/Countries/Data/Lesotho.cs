@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Lesotho country.</summary>
     public static readonly Country Lesotho =
-        new Country(
+        new(
             CountryNames.Lesotho, "426", "LS", "LSO",
             "+266", "Maseru", "Africa",
             CurrencyHelper.LesothoLoti,

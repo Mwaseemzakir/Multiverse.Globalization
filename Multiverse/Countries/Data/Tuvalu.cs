@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Tuvalu country.</summary>
     public static readonly Country Tuvalu =
-        new Country(
+        new(
             CountryNames.Tuvalu, "798", "TV", "TUV",
             "+688", "Funafuti", "Oceania",
             CurrencyHelper.AustralianDollar,

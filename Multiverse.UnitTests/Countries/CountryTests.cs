@@ -7,12 +7,13 @@ public class CountryTests
     [Fact]
     public void GetAll_Should_ReturnAllCountries()
     {
-        IReadOnlyList<Country> countries = Country.GetAll();
+        var countries = Country.GetAll();
 
         Assert.NotNull(countries);
         Assert.NotEmpty(countries);
         Assert.Contains(CountryHelper.None, countries);
-        Assert.Contains(countries, c => c.Alpha2Code == "US" && c.Alpha3Code == "USA" && c.Name == "United States of America");
+        Assert.Contains(countries,
+            c => c.Alpha2Code == "US" && c.Alpha3Code == "USA" && c.Name == "United States of America");
         Assert.Contains(countries, c => c.Alpha2Code == "GB" && c.Alpha3Code == "GBR" && c.Name == "United Kingdom");
         Assert.Contains(countries, c => c.Alpha2Code == "FR" && c.Alpha3Code == "FRA" && c.Name == "France");
     }
@@ -418,7 +419,8 @@ public class CountryTests
     [InlineData("Germany", "+49", "Berlin", "Europe", "EUR")]
     [InlineData("India", "+91", "New Delhi", "Asia", "INR")]
     public void Country_ExtendedProperties_Should_BeCorrect(
-        string countryName, string expectedCallingCode, string expectedCapital, string expectedRegion, string expectedCurrencyCode)
+        string countryName, string expectedCallingCode, string expectedCapital, string expectedRegion,
+        string expectedCurrencyCode)
     {
         var country = Country.GetCountry(countryName);
 
@@ -465,10 +467,7 @@ public class CountryTests
     public void Country_Flag_Should_NotBeEmptyForCountriesWithAlpha2Code()
     {
         var countries = Country.GetAll().Where(c => !string.IsNullOrEmpty(c.Alpha2Code));
-        foreach (var country in countries)
-        {
-            Assert.NotEqual(string.Empty, country.Flag);
-        }
+        foreach (var country in countries) Assert.NotEqual(string.Empty, country.Flag);
     }
 
     #endregion
@@ -632,26 +631,22 @@ public class CountryTests
     public void AllCountries_Should_HaveNonNullOfficialLanguages()
     {
         var countries = Country.GetAll();
-        foreach (var country in countries)
-        {
-            Assert.NotNull(country.OfficialLanguages);
-        }
+        foreach (var country in countries) Assert.NotNull(country.OfficialLanguages);
     }
 
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveNonEmptyName()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
-        {
-            Assert.False(string.IsNullOrEmpty(country.Name), $"Country with Alpha2={country.Alpha2Code} has empty name");
-        }
+            Assert.False(string.IsNullOrEmpty(country.Name),
+                $"Country with Alpha2={country.Alpha2Code} has empty name");
     }
 
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveNonEmptyAlpha2Code()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
         {
             Assert.False(string.IsNullOrEmpty(country.Alpha2Code), $"Country '{country.Name}' has empty Alpha2Code");
@@ -662,7 +657,7 @@ public class CountryTests
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveNonEmptyAlpha3Code()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
         {
             Assert.False(string.IsNullOrEmpty(country.Alpha3Code), $"Country '{country.Name}' has empty Alpha3Code");
@@ -673,7 +668,7 @@ public class CountryTests
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveNonEmptyNumericCode()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
         {
             Assert.False(string.IsNullOrEmpty(country.NumericCode), $"Country '{country.Name}' has empty NumericCode");
@@ -684,11 +679,9 @@ public class CountryTests
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveNonEmptyRegion()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
-        {
             Assert.False(string.IsNullOrEmpty(country.Region), $"Country '{country.Name}' has empty Region");
-        }
     }
 
     [Fact]
@@ -696,16 +689,13 @@ public class CountryTests
     {
         var validRegions = new HashSet<string> { "Asia", "Europe", "Americas", "Africa", "Oceania", "Antarctic", "" };
         var countries = Country.GetAll();
-        foreach (var country in countries)
-        {
-            Assert.Contains(country.Region, validRegions);
-        }
+        foreach (var country in countries) Assert.Contains(country.Region, validRegions);
     }
 
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveCallingCode()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
         {
             Assert.False(string.IsNullOrEmpty(country.CallingCode), $"Country '{country.Name}' has empty CallingCode");
@@ -717,20 +707,14 @@ public class CountryTests
     public void AllCountries_WithCurrency_Should_HaveCurrencyCodeMatchingCurrency()
     {
         var countries = Country.GetAll().Where(c => c.Currency != null);
-        foreach (var country in countries)
-        {
-            Assert.Equal(country.Currency!.Code, country.CurrencyCode);
-        }
+        foreach (var country in countries) Assert.Equal(country.Currency!.Code, country.CurrencyCode);
     }
 
     [Fact]
     public void AllCountries_WithoutCurrency_Should_HaveEmptyCurrencyCode()
     {
         var countries = Country.GetAll().Where(c => c.Currency == null);
-        foreach (var country in countries)
-        {
-            Assert.Equal(string.Empty, country.CurrencyCode);
-        }
+        foreach (var country in countries) Assert.Equal(string.Empty, country.CurrencyCode);
     }
 
     #endregion
@@ -761,11 +745,9 @@ public class CountryTests
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveNonEmptySubRegion()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
-        {
             Assert.False(string.IsNullOrEmpty(country.SubRegion), $"Country '{country.Name}' has empty SubRegion");
-        }
     }
 
     #endregion
@@ -796,11 +778,10 @@ public class CountryTests
     [Fact]
     public void AllCountries_ExceptNoneAndAntarctica_Should_HaveNonEmptyDemonym()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None && c != CountryHelper.Antarctica);
+        var countries = Country.GetAll().Where(c =>
+            !c.Equals(CountryHelper.None) && !c.Equals(CountryHelper.Antarctica));
         foreach (var country in countries)
-        {
             Assert.False(string.IsNullOrEmpty(country.Demonym), $"Country '{country.Name}' has empty Demonym");
-        }
     }
 
     #endregion
@@ -831,21 +812,16 @@ public class CountryTests
     [Fact]
     public void AllCountries_ExceptNone_Should_HaveNonEmptyTLD()
     {
-        var countries = Country.GetAll().Where(c => c != CountryHelper.None);
+        var countries = Country.GetAll().Where(c => !c.Equals(CountryHelper.None));
         foreach (var country in countries)
-        {
             Assert.False(string.IsNullOrEmpty(country.TLD), $"Country '{country.Name}' has empty TLD");
-        }
     }
 
     [Fact]
     public void AllCountries_TLD_Should_StartWithDot()
     {
         var countries = Country.GetAll().Where(c => !string.IsNullOrEmpty(c.TLD));
-        foreach (var country in countries)
-        {
-            Assert.StartsWith(".", country.TLD);
-        }
+        foreach (var country in countries) Assert.StartsWith(".", country.TLD);
     }
 
     #endregion
@@ -951,7 +927,7 @@ public class CountryTests
     public void Equals_NonCountryObject_Should_ReturnFalse()
     {
         var us = Country.GetCountry("US");
-        Assert.False(us.Equals("US"));
+        Assert.False(us.Equals((object)"US"));
     }
 
     [Fact]
@@ -1105,11 +1081,9 @@ public class CountryTests
     public void NameAliases_Should_AllResolveToKnownCountries()
     {
         foreach (var (alias, alpha2) in CountryHelper.NameAliases.Select(kvp => (kvp.Key, kvp.Value)))
-        {
             Assert.True(
                 CountryHelper.Alpha2CodeMap.ContainsKey(alpha2.ToLowerInvariant()),
                 $"Alias '{alias}' points to unknown alpha-2 code '{alpha2}'.");
-        }
     }
 
     #endregion

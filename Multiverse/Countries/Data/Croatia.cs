@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Croatia country.</summary>
     public static readonly Country Croatia =
-        new Country(
+        new(
             CountryNames.Croatia, "191", "HR", "HRV",
             "+385", "Zagreb", "Europe",
             CurrencyHelper.Euro,

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Cote DIvoire country.</summary>
     public static readonly Country CoteDIvoire =
-        new Country(
+        new(
             CountryNames.CoteDIvoire, "384", "CI", "CIV",
             "+225", "Yamoussoukro", "Africa",
             CurrencyHelper.CfaFrancBceao,
