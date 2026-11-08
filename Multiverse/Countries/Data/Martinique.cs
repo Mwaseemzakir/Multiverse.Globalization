@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Martinique country.</summary>
     public static readonly Country Martinique =
-        new Country(
+        new(
             CountryNames.Martinique, "474", "MQ", "MTQ",
             "+596", "Fort-de-France", "Americas",
             CurrencyHelper.Euro,

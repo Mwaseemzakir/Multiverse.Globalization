@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Lebanon country.</summary>
     public static readonly Country Lebanon =
-        new Country(
+        new(
             CountryNames.Lebanon, "422", "LB", "LBN",
             "+961", "Beirut", "Asia",
             CurrencyHelper.LebanesePound,

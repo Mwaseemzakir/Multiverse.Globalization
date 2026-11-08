@@ -9,8 +9,8 @@ public sealed class PhoneFormat
     {
         MinLength = minLength;
         MaxLength = maxLength;
-        TrunkPrefix = trunkPrefix ?? string.Empty;
-        InternationalPrefix = internationalPrefix ?? string.Empty;
+        TrunkPrefix = trunkPrefix;
+        InternationalPrefix = internationalPrefix;
     }
 
     /// <summary>Minimum number of digits in a local phone number (excluding country code).</summary>

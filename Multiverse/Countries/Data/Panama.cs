@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Panama country.</summary>
     public static readonly Country Panama =
-        new Country(
+        new(
             CountryNames.Panama, "591", "PA", "PAN",
             "+507", "Panama City", "Americas",
             CurrencyHelper.Balboa,

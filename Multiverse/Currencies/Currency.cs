@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using static Multiverse.Globalization.Currencies.CurrencyHelper;
+﻿using static Multiverse.Globalization.Currencies.CurrencyHelper;
 
 namespace Multiverse.Globalization.Currencies;
 
@@ -9,7 +6,7 @@ namespace Multiverse.Globalization.Currencies;
 /// Represents an ISO 4217 currency with its code, name, number, and symbol.
 /// </summary>
 public sealed class Currency
-{  
+{
     internal Currency(
         int number,
         string name,
@@ -23,13 +20,13 @@ public sealed class Currency
     }
 
     /// <summary>ISO 4217 numeric code.</summary>
-    public int Number { get; private set; }
+    public int Number { get; }
     /// <summary>ISO 4217 three-letter currency code, e.g. "USD".</summary>
-    public string Code { get; private set; } = string.Empty;
+    public string Code { get; }
     /// <summary>Full name of the currency, e.g. "US Dollar".</summary>
-    public string Name { get; private set; } = string.Empty;
+    public string Name { get; }
     /// <summary>Currency symbol, e.g. "$", "€", "£".</summary>
-    public string Symbol { get; private set; } = string.Empty;
+    public string Symbol { get; }
 
     /// <summary>
     /// Number of decimal places (minor units) for this currency.
@@ -68,7 +65,7 @@ public sealed class Currency
     public static Currency? GetCurrencyOrDefault(string identifier)
     {
         if (string.IsNullOrWhiteSpace(identifier))
-            return default;
+            return null;
 
         var key = identifier.ToLowerInvariant();
 
@@ -78,7 +75,7 @@ public sealed class Currency
         if (NameMap.TryGetValue(key, out var byName))
             return byName;
 
-        return default;
+        return null;
     }
 
     /// <summary>
@@ -99,7 +96,7 @@ public sealed class Currency
     /// Returns null if not found.
     /// </summary>
     public static Currency? GetCurrencyOrDefault(int number) =>
-        NumberMap.TryGetValue(number, out var currency) ? currency : default;
+        NumberMap.TryGetValue(number, out var currency) ? currency : null;
 
     /// <summary>
     /// Retrieves a Currency object based on the provided number. 
@@ -124,6 +121,71 @@ public sealed class Currency
             .Where(c => c.Currency != null && c.Currency.Code == Code)
             .ToList()
             .AsReadOnly();
+
+    // ── Formatting ────────────────────────────────────────────
+
+    /// <summary>
+    /// Formats a monetary amount in this currency, rounded to <see cref="DecimalPlaces"/> and
+    /// rendered with the separators of the supplied country, e.g. "$1,234.50" for the US or
+    /// "1.234,50 €" for Germany.
+    /// </summary>
+    /// <param name="amount">The amount to format.</param>
+    /// <param name="locale">
+    /// The country locale supplying the decimal and group separators, typically
+    /// <c>Country.GetCountry("DE").Locale</c>. When null, invariant separators ("." and ",") are used.
+    /// </param>
+    /// <param name="position">Where to place the currency symbol. Defaults to <see cref="CurrencySymbolPosition.Prefix"/>.</param>
+    public string Format(
+        decimal amount,
+        Countries.CountryLocale? locale = null,
+        CurrencySymbolPosition position = CurrencySymbolPosition.Prefix)
+    {
+        var number = locale is null
+            ? Math.Round(amount, DecimalPlaces, MidpointRounding.AwayFromZero)
+                .ToString("N" + DecimalPlaces.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    System.Globalization.CultureInfo.InvariantCulture)
+            : locale.FormatNumber(amount, DecimalPlaces);
+
+        if (position == CurrencySymbolPosition.None || Symbol.Length == 0)
+            return number;
+
+        return position == CurrencySymbolPosition.Prefix
+            ? Symbol + number
+            : number + " " + Symbol;
+    }
+
+    /// <summary>
+    /// Rounds an amount to this currency's minor unit, e.g. 2 decimals for USD, 0 for JPY,
+    /// 3 for KWD. Uses away-from-zero rounding, the convention for monetary values.
+    /// </summary>
+    public decimal Round(decimal amount) =>
+        Math.Round(amount, DecimalPlaces, MidpointRounding.AwayFromZero);
+
+    /// <summary>
+    /// Converts a whole number of minor units (cents, pence, fils) into a major-unit amount,
+    /// e.g. <c>123450</c> USD minor units becomes <c>1234.50</c>.
+    /// </summary>
+    public decimal FromMinorUnits(long minorUnits)
+    {
+        decimal factor = 1;
+        for (var i = 0; i < DecimalPlaces; i++)
+            factor *= 10;
+
+        return minorUnits / factor;
+    }
+
+    /// <summary>
+    /// Converts a major-unit amount into whole minor units, e.g. <c>1234.50</c> USD becomes
+    /// <c>123450</c>. The amount is rounded to the currency's minor unit first.
+    /// </summary>
+    public long ToMinorUnits(decimal amount)
+    {
+        decimal factor = 1;
+        for (var i = 0; i < DecimalPlaces; i++)
+            factor *= 10;
+
+        return (long)Math.Round(amount * factor, 0, MidpointRounding.AwayFromZero);
+    }
 
     /// <inheritdoc />
     public override string ToString() => $"{Name} ({Code})";

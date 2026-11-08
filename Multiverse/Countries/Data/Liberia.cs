@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Liberia country.</summary>
     public static readonly Country Liberia =
-        new Country(
+        new(
             CountryNames.Liberia, "430", "LR", "LBR",
             "+231", "Monrovia", "Africa",
             CurrencyHelper.LiberianDollar,

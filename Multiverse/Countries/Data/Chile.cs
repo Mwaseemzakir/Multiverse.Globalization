@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Chile country.</summary>
     public static readonly Country Chile =
-        new Country(
+        new(
             CountryNames.Chile, "152", "CL", "CHL",
             "+56", "Santiago", "Americas",
             CurrencyHelper.ChileanPeso,

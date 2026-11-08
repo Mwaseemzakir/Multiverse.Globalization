@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Burundi country.</summary>
     public static readonly Country Burundi =
-        new Country(
+        new(
             CountryNames.Burundi, "108", "BI", "BDI",
             "+257", "Gitega", "Africa",
             CurrencyHelper.BurundianFranc,

@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Bulgaria country.</summary>
     public static readonly Country Bulgaria =
-        new Country(
+        new(
             CountryNames.Bulgaria, "100", "BG", "BGR",
             "+359", "Sofia", "Europe",
             CurrencyHelper.BulgarianLev,

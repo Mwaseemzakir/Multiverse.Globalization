@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Multiverse.Globalization.Countries;
+﻿namespace Multiverse.Globalization.Countries;
 
 /// <summary>Exception thrown when a country cannot be found by its identifier.</summary>
 [Serializable]

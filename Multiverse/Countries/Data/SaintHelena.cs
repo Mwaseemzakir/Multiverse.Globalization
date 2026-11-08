@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Saint Helena country.</summary>
     public static readonly Country SaintHelena =
-        new Country(
+        new(
             CountryNames.SaintHelena, "654", "SH", "SHN",
             "+290", "Jamestown", "Africa",
             CurrencyHelper.SaintHelenaPound,

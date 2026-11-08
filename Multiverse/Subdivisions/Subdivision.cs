@@ -1,5 +1,3 @@
-using System;
-
 namespace Multiverse.Globalization.Subdivisions;
 
 /// <summary>
@@ -17,7 +15,7 @@ public sealed class Subdivision
 
         Code = code;
         Name = name;
-        Type = type ?? string.Empty;
+        Type = type;
     }
 
     /// <summary>ISO 3166-2 code, e.g. "US-CA", "PK-PB", "GB-ENG".</summary>

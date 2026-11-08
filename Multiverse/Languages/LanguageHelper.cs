@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Multiverse.Globalization.Languages;
+﻿namespace Multiverse.Globalization.Languages;
 
 /// <summary>
 /// Provides access to all ISO 639 languages as static readonly fields and lookup maps.
@@ -10,981 +6,981 @@ namespace Multiverse.Globalization.Languages;
 public static class LanguageHelper
 {
     /// <summary>The Afar language.</summary>
-    public static readonly Language Afar = new Language("aa", "aar", "Afar");
+    public static readonly Language Afar = new("aa", "aar", "Afar");
 
     /// <summary>The Abkhazian language.</summary>
-    public static readonly Language Abkhazian = new Language("ab", "abk", "Abkhazian");
+    public static readonly Language Abkhazian = new("ab", "abk", "Abkhazian");
     /// <summary>The Afrikaans language.</summary>
-    public static readonly Language Afrikaans = new Language("af", "afr", "Afrikaans");
+    public static readonly Language Afrikaans = new("af", "afr", "Afrikaans");
     /// <summary>The Akan language.</summary>
-    public static readonly Language Akan = new Language("ak", "aka", "Akan");
+    public static readonly Language Akan = new("ak", "aka", "Akan");
     /// <summary>The Albanian language.</summary>
-    public static readonly Language Albanian = new Language("sq", "alb", "Albanian");
+    public static readonly Language Albanian = new("sq", "alb", "Albanian");
     /// <summary>The Amharic language.</summary>
-    public static readonly Language Amharic = new Language("am", "amh", "Amharic");
+    public static readonly Language Amharic = new("am", "amh", "Amharic");
     /// <summary>The English Old language.</summary>
-    public static readonly Language EnglishOld = new Language("", "ang", "English, Old (ca.450-1100)");
+    public static readonly Language EnglishOld = new("", "ang", "English, Old (ca.450-1100)");
     /// <summary>The Angika language.</summary>
-    public static readonly Language Angika = new Language("", "anp", "Angika");
+    public static readonly Language Angika = new("", "anp", "Angika");
     /// <summary>The Apache Languages language.</summary>
-    public static readonly Language ApacheLanguages = new Language("", "apa", "Apache languages");
+    public static readonly Language ApacheLanguages = new("", "apa", "Apache languages");
     /// <summary>The Arabic language.</summary>
-    public static readonly Language Arabic = new Language("ar", "ara", "Arabic");
+    public static readonly Language Arabic = new("ar", "ara", "Arabic");
     /// <summary>The Official Aramaic language.</summary>
-    public static readonly Language OfficialAramaic = new Language("", "arc", "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)");
+    public static readonly Language OfficialAramaic = new("", "arc", "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)");
     /// <summary>The Aragonese language.</summary>
-    public static readonly Language Aragonese = new Language("an", "arg", "Aragonese");
+    public static readonly Language Aragonese = new("an", "arg", "Aragonese");
     /// <summary>The Armenian language.</summary>
-    public static readonly Language Armenian = new Language("hy", "arm", "Armenian");
+    public static readonly Language Armenian = new("hy", "arm", "Armenian");
     /// <summary>The Mapudungun language.</summary>
-    public static readonly Language Mapudungun = new Language("", "arn", "Mapudungun; Mapuche");
+    public static readonly Language Mapudungun = new("", "arn", "Mapudungun; Mapuche");
     /// <summary>The Arapaho language.</summary>
-    public static readonly Language Arapaho = new Language("", "arp", "Arapaho");
+    public static readonly Language Arapaho = new("", "arp", "Arapaho");
     /// <summary>The Artificial Languages language.</summary>
-    public static readonly Language ArtificialLanguages = new Language("", "art", "Artificial languages");
+    public static readonly Language ArtificialLanguages = new("", "art", "Artificial languages");
     /// <summary>The Arawak language.</summary>
-    public static readonly Language Arawak = new Language("", "arw", "Arawak");
+    public static readonly Language Arawak = new("", "arw", "Arawak");
     /// <summary>The Assamese language.</summary>
-    public static readonly Language Assamese = new Language("as", "asm", "Assamese");
+    public static readonly Language Assamese = new("as", "asm", "Assamese");
     /// <summary>The Asturian language.</summary>
-    public static readonly Language Asturian = new Language("", "ast", "Asturian; Bable; Leonese; Asturleonese");
+    public static readonly Language Asturian = new("", "ast", "Asturian; Bable; Leonese; Asturleonese");
     /// <summary>The Athapascan Languages language.</summary>
-    public static readonly Language AthapascanLanguages = new Language("", "ath", "Athapascan languages");
+    public static readonly Language AthapascanLanguages = new("", "ath", "Athapascan languages");
     /// <summary>The Australian Languages language.</summary>
-    public static readonly Language AustralianLanguages = new Language("", "aus", "Australian languages");
+    public static readonly Language AustralianLanguages = new("", "aus", "Australian languages");
     /// <summary>The Avaric language.</summary>
-    public static readonly Language Avaric = new Language("av", "ava", "Avaric");
+    public static readonly Language Avaric = new("av", "ava", "Avaric");
     /// <summary>The Avestan language.</summary>
-    public static readonly Language Avestan = new Language("ae", "ave", "Avestan");
+    public static readonly Language Avestan = new("ae", "ave", "Avestan");
     /// <summary>The Awadhi language.</summary>
-    public static readonly Language Awadhi = new Language("", "awa", "Awadhi");
+    public static readonly Language Awadhi = new("", "awa", "Awadhi");
     /// <summary>The Aymara language.</summary>
-    public static readonly Language Aymara = new Language("ay", "aym", "Aymara");
+    public static readonly Language Aymara = new("ay", "aym", "Aymara");
     /// <summary>The Azerbaijani language.</summary>
-    public static readonly Language Azerbaijani = new Language("az", "aze", "Azerbaijani");
+    public static readonly Language Azerbaijani = new("az", "aze", "Azerbaijani");
 
     /// <summary>The Banda Languages language.</summary>
-    public static readonly Language BandaLanguages = new Language("", "bad", "Banda languages");
+    public static readonly Language BandaLanguages = new("", "bad", "Banda languages");
     /// <summary>The Bamileke Languages language.</summary>
-    public static readonly Language BamilekeLanguages = new Language("", "bai", "Bamileke languages");
+    public static readonly Language BamilekeLanguages = new("", "bai", "Bamileke languages");
     /// <summary>The Bashkir language.</summary>
-    public static readonly Language Bashkir = new Language("ba", "bak", "Bashkir");
+    public static readonly Language Bashkir = new("ba", "bak", "Bashkir");
     /// <summary>The Baluchi language.</summary>
-    public static readonly Language Baluchi = new Language("", "bal", "Baluchi");
+    public static readonly Language Baluchi = new("", "bal", "Baluchi");
     /// <summary>The Bambara language.</summary>
-    public static readonly Language Bambara = new Language("bm", "bam", "Bambara");
+    public static readonly Language Bambara = new("bm", "bam", "Bambara");
     /// <summary>The Balinese language.</summary>
-    public static readonly Language Balinese = new Language("", "ban", "Balinese");
+    public static readonly Language Balinese = new("", "ban", "Balinese");
     /// <summary>The Basque language.</summary>
-    public static readonly Language Basque = new Language("eu", "baq", "Basque");
+    public static readonly Language Basque = new("eu", "baq", "Basque");
     /// <summary>The Basa language.</summary>
-    public static readonly Language Basa = new Language("", "bas", "Basa");
+    public static readonly Language Basa = new("", "bas", "Basa");
     /// <summary>The Baltic Languages language.</summary>
-    public static readonly Language BalticLanguages = new Language("", "bat", "Baltic languages");
+    public static readonly Language BalticLanguages = new("", "bat", "Baltic languages");
     /// <summary>The Beja language.</summary>
-    public static readonly Language Beja = new Language("", "bej", "Beja; Bedawiyet");
+    public static readonly Language Beja = new("", "bej", "Beja; Bedawiyet");
     /// <summary>The Belarusian language.</summary>
-    public static readonly Language Belarusian = new Language("be", "bel", "Belarusian");
+    public static readonly Language Belarusian = new("be", "bel", "Belarusian");
     /// <summary>The Bemba language.</summary>
-    public static readonly Language Bemba = new Language("", "bem", "Bemba");
+    public static readonly Language Bemba = new("", "bem", "Bemba");
     /// <summary>The Bengali language.</summary>
-    public static readonly Language Bengali = new Language("bn", "ben", "Bengali");
+    public static readonly Language Bengali = new("bn", "ben", "Bengali");
     /// <summary>The Berber Languages language.</summary>
-    public static readonly Language BerberLanguages = new Language("", "ber", "Berber languages");
+    public static readonly Language BerberLanguages = new("", "ber", "Berber languages");
     /// <summary>The Bhojpuri language.</summary>
-    public static readonly Language Bhojpuri = new Language("", "bho", "Bhojpuri");
+    public static readonly Language Bhojpuri = new("", "bho", "Bhojpuri");
     /// <summary>The Bihari Languages language.</summary>
-    public static readonly Language BihariLanguages = new Language("bh", "bih", "Bihari languages");
+    public static readonly Language BihariLanguages = new("bh", "bih", "Bihari languages");
     /// <summary>The Bikol language.</summary>
-    public static readonly Language Bikol = new Language("", "bik", "Bikol");
+    public static readonly Language Bikol = new("", "bik", "Bikol");
     /// <summary>The Bini language.</summary>
-    public static readonly Language Bini = new Language("", "bin", "Bini; Edo");
+    public static readonly Language Bini = new("", "bin", "Bini; Edo");
     /// <summary>The Bislama language.</summary>
-    public static readonly Language Bislama = new Language("bi", "bis", "Bislama");
+    public static readonly Language Bislama = new("bi", "bis", "Bislama");
     /// <summary>The Siksika language.</summary>
-    public static readonly Language Siksika = new Language("", "bla", "Siksika");
+    public static readonly Language Siksika = new("", "bla", "Siksika");
     /// <summary>The Bantu Languages language.</summary>
-    public static readonly Language BantuLanguages = new Language("", "bnt", "Bantu languages");
+    public static readonly Language BantuLanguages = new("", "bnt", "Bantu languages");
     /// <summary>The Tibetan language.</summary>
-    public static readonly Language Tibetan = new Language("bo", "tib", "Tibetan");
+    public static readonly Language Tibetan = new("bo", "tib", "Tibetan");
     /// <summary>The Bosnian language.</summary>
-    public static readonly Language Bosnian = new Language("bs", "bos", "Bosnian");
+    public static readonly Language Bosnian = new("bs", "bos", "Bosnian");
     /// <summary>The Braj language.</summary>
-    public static readonly Language Braj = new Language("", "bra", "Braj");
+    public static readonly Language Braj = new("", "bra", "Braj");
     /// <summary>The Breton language.</summary>
-    public static readonly Language Breton = new Language("br", "bre", "Breton");
+    public static readonly Language Breton = new("br", "bre", "Breton");
     /// <summary>The Batak Languages language.</summary>
-    public static readonly Language BatakLanguages = new Language("", "btk", "Batak languages");
+    public static readonly Language BatakLanguages = new("", "btk", "Batak languages");
     /// <summary>The Buriat language.</summary>
-    public static readonly Language Buriat = new Language("", "bua", "Buriat");
+    public static readonly Language Buriat = new("", "bua", "Buriat");
     /// <summary>The Buginese language.</summary>
-    public static readonly Language Buginese = new Language("", "bug", "Buginese");
+    public static readonly Language Buginese = new("", "bug", "Buginese");
     /// <summary>The Bulgarian language.</summary>
-    public static readonly Language Bulgarian = new Language("bg", "bul", "Bulgarian");
+    public static readonly Language Bulgarian = new("bg", "bul", "Bulgarian");
     /// <summary>The Burmese language.</summary>
-    public static readonly Language Burmese = new Language("my", "bur", "Burmese");
+    public static readonly Language Burmese = new("my", "bur", "Burmese");
     /// <summary>The Blin language.</summary>
-    public static readonly Language Blin = new Language("", "byn", "Blin; Bilin");
+    public static readonly Language Blin = new("", "byn", "Blin; Bilin");
 
     /// <summary>The Caddo language.</summary>
-    public static readonly Language Caddo = new Language("", "cad", "Caddo");
+    public static readonly Language Caddo = new("", "cad", "Caddo");
     /// <summary>The Central American Indian Languages language.</summary>
-    public static readonly Language CentralAmericanIndianLanguages = new Language("", "cai", "Central American Indian languages");
+    public static readonly Language CentralAmericanIndianLanguages = new("", "cai", "Central American Indian languages");
     /// <summary>The Galibi Carib language.</summary>
-    public static readonly Language GalibiCarib = new Language("", "car", "Galibi Carib");
+    public static readonly Language GalibiCarib = new("", "car", "Galibi Carib");
     /// <summary>The Catalan language.</summary>
-    public static readonly Language Catalan = new Language("ca", "cat", "Catalan; Valencian");
+    public static readonly Language Catalan = new("ca", "cat", "Catalan; Valencian");
     /// <summary>The Caucasian Languages language.</summary>
-    public static readonly Language CaucasianLanguages = new Language("", "cau", "Caucasian languages");
+    public static readonly Language CaucasianLanguages = new("", "cau", "Caucasian languages");
     /// <summary>The Cebuano language.</summary>
-    public static readonly Language Cebuano = new Language("", "ceb", "Cebuano");
+    public static readonly Language Cebuano = new("", "ceb", "Cebuano");
     /// <summary>The Celtic Languages language.</summary>
-    public static readonly Language CelticLanguages = new Language("", "cel", "Celtic languages");
+    public static readonly Language CelticLanguages = new("", "cel", "Celtic languages");
     /// <summary>The Czech language.</summary>
-    public static readonly Language Czech = new Language("cs", "cze", "Czech");
+    public static readonly Language Czech = new("cs", "cze", "Czech");
     /// <summary>The Chamorro language.</summary>
-    public static readonly Language Chamorro = new Language("ch", "cha", "Chamorro");
+    public static readonly Language Chamorro = new("ch", "cha", "Chamorro");
     /// <summary>The Chibcha language.</summary>
-    public static readonly Language Chibcha = new Language("", "chb", "Chibcha");
+    public static readonly Language Chibcha = new("", "chb", "Chibcha");
     /// <summary>The Chechen language.</summary>
-    public static readonly Language Chechen = new Language("ce", "che", "Chechen");
+    public static readonly Language Chechen = new("ce", "che", "Chechen");
     /// <summary>The Chagatai language.</summary>
-    public static readonly Language Chagatai = new Language("", "chg", "Chagatai");
+    public static readonly Language Chagatai = new("", "chg", "Chagatai");
     /// <summary>The Chinese language.</summary>
-    public static readonly Language Chinese = new Language("zh", "chi", "Chinese");
+    public static readonly Language Chinese = new("zh", "chi", "Chinese");
     /// <summary>The Chuukese language.</summary>
-    public static readonly Language Chuukese = new Language("", "chk", "Chuukese");
+    public static readonly Language Chuukese = new("", "chk", "Chuukese");
     /// <summary>The Mari language.</summary>
-    public static readonly Language Mari = new Language("", "chm", "Mari");
+    public static readonly Language Mari = new("", "chm", "Mari");
     /// <summary>The Chinook Jargon language.</summary>
-    public static readonly Language ChinookJargon = new Language("", "chn", "Chinook jargon");
+    public static readonly Language ChinookJargon = new("", "chn", "Chinook jargon");
     /// <summary>The Choctaw language.</summary>
-    public static readonly Language Choctaw = new Language("", "cho", "Choctaw");
+    public static readonly Language Choctaw = new("", "cho", "Choctaw");
     /// <summary>The Chipewyan language.</summary>
-    public static readonly Language Chipewyan = new Language("", "chp", "Chipewyan; Dene Suline");
+    public static readonly Language Chipewyan = new("", "chp", "Chipewyan; Dene Suline");
     /// <summary>The Cherokee language.</summary>
-    public static readonly Language Cherokee = new Language("", "chr", "Cherokee");
+    public static readonly Language Cherokee = new("", "chr", "Cherokee");
     /// <summary>The Church Slavic language.</summary>
-    public static readonly Language ChurchSlavic = new Language("cu", "chu", "Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic");
+    public static readonly Language ChurchSlavic = new("cu", "chu", "Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic");
     /// <summary>The Chuvash language.</summary>
-    public static readonly Language Chuvash = new Language("cv", "chv", "Chuvash");
+    public static readonly Language Chuvash = new("cv", "chv", "Chuvash");
     /// <summary>The Cheyenne language.</summary>
-    public static readonly Language Cheyenne = new Language("", "chy", "Cheyenne");
+    public static readonly Language Cheyenne = new("", "chy", "Cheyenne");
     /// <summary>The Chamic Languages language.</summary>
-    public static readonly Language ChamicLanguages = new Language("", "cmc", "Chamic languages");
+    public static readonly Language ChamicLanguages = new("", "cmc", "Chamic languages");
     /// <summary>The Montenegrin language.</summary>
-    public static readonly Language Montenegrin = new Language("", "cnr", "Montenegrin");
+    public static readonly Language Montenegrin = new("", "cnr", "Montenegrin");
     /// <summary>The Coptic language.</summary>
-    public static readonly Language Coptic = new Language("", "cop", "Coptic");
+    public static readonly Language Coptic = new("", "cop", "Coptic");
     /// <summary>The Cornish language.</summary>
-    public static readonly Language Cornish = new Language("kw", "cor", "Cornish");
+    public static readonly Language Cornish = new("kw", "cor", "Cornish");
     /// <summary>The Corsican language.</summary>
-    public static readonly Language Corsican = new Language("co", "cos", "Corsican");
+    public static readonly Language Corsican = new("co", "cos", "Corsican");
     /// <summary>The Creoles And Pidgins English Based language.</summary>
-    public static readonly Language CreolesAndPidginsEnglishBased = new Language("", "cpe", "Creoles and pidgins, English based");
+    public static readonly Language CreolesAndPidginsEnglishBased = new("", "cpe", "Creoles and pidgins, English based");
     /// <summary>The Creoles And Pidgins French Based language.</summary>
-    public static readonly Language CreolesAndPidginsFrenchBased = new Language("", "cpf", "Creoles and pidgins, French-based");
+    public static readonly Language CreolesAndPidginsFrenchBased = new("", "cpf", "Creoles and pidgins, French-based");
     /// <summary>The Creoles And Pidgins Portuguese Based language.</summary>
-    public static readonly Language CreolesAndPidginsPortugueseBased = new Language("", "cpp", "Creoles and pidgins, Portuguese-based");
+    public static readonly Language CreolesAndPidginsPortugueseBased = new("", "cpp", "Creoles and pidgins, Portuguese-based");
     /// <summary>The Cree language.</summary>
-    public static readonly Language Cree = new Language("cr", "cre", "Cree");
+    public static readonly Language Cree = new("cr", "cre", "Cree");
     /// <summary>The Crimean Tatar language.</summary>
-    public static readonly Language CrimeanTatar = new Language("", "crh", "Crimean Tatar; Crimean Turkish");
+    public static readonly Language CrimeanTatar = new("", "crh", "Crimean Tatar; Crimean Turkish");
     /// <summary>The Creoles And Pidgins language.</summary>
-    public static readonly Language CreolesAndPidgins = new Language("", "crp", "Creoles and pidgins");
+    public static readonly Language CreolesAndPidgins = new("", "crp", "Creoles and pidgins");
     /// <summary>The Kashubian language.</summary>
-    public static readonly Language Kashubian = new Language("", "csb", "Kashubian");
+    public static readonly Language Kashubian = new("", "csb", "Kashubian");
     /// <summary>The Cushitic Languages language.</summary>
-    public static readonly Language CushiticLanguages = new Language("", "cus", "Cushitic languages");
+    public static readonly Language CushiticLanguages = new("", "cus", "Cushitic languages");
     /// <summary>The Welsh language.</summary>
-    public static readonly Language Welsh = new Language("cy", "wel", "Welsh");
+    public static readonly Language Welsh = new("cy", "wel", "Welsh");
     /// <summary>The Dakota language.</summary>
-    public static readonly Language Dakota = new Language("", "dak", "Dakota");
+    public static readonly Language Dakota = new("", "dak", "Dakota");
     /// <summary>The Danish language.</summary>
-    public static readonly Language Danish = new Language("da", "dan", "Danish");
+    public static readonly Language Danish = new("da", "dan", "Danish");
     /// <summary>The Dargwa language.</summary>
-    public static readonly Language Dargwa = new Language("", "dar", "Dargwa");
+    public static readonly Language Dargwa = new("", "dar", "Dargwa");
     /// <summary>The Land Dayak Languages language.</summary>
-    public static readonly Language LandDayakLanguages = new Language("", "day", "Land Dayak languages");
+    public static readonly Language LandDayakLanguages = new("", "day", "Land Dayak languages");
     /// <summary>The Delaware language.</summary>
-    public static readonly Language Delaware = new Language("", "del", "Delaware");
+    public static readonly Language Delaware = new("", "del", "Delaware");
     /// <summary>The Slave language.</summary>
-    public static readonly Language Slave = new Language("", "den", "Slave (Athapascan)");
+    public static readonly Language Slave = new("", "den", "Slave (Athapascan)");
     /// <summary>The German language.</summary>
-    public static readonly Language German = new Language("de", "ger", "German");
+    public static readonly Language German = new("de", "ger", "German");
     /// <summary>The Dogrib language.</summary>
-    public static readonly Language Dogrib = new Language("", "dgr", "Dogrib");
+    public static readonly Language Dogrib = new("", "dgr", "Dogrib");
     /// <summary>The Dinka language.</summary>
-    public static readonly Language Dinka = new Language("", "din", "Dinka");
+    public static readonly Language Dinka = new("", "din", "Dinka");
     /// <summary>The Divehi language.</summary>
-    public static readonly Language Divehi = new Language("dv", "div", "Divehi; Dhivehi; Maldivian");
+    public static readonly Language Divehi = new("dv", "div", "Divehi; Dhivehi; Maldivian");
     /// <summary>The Dogri language.</summary>
-    public static readonly Language Dogri = new Language("", "doi", "Dogri");
+    public static readonly Language Dogri = new("", "doi", "Dogri");
     /// <summary>The Dravidian Languages language.</summary>
-    public static readonly Language DravidianLanguages = new Language("", "dra", "Dravidian languages");
+    public static readonly Language DravidianLanguages = new("", "dra", "Dravidian languages");
     /// <summary>The Lower Sorbian language.</summary>
-    public static readonly Language LowerSorbian = new Language("", "dsb", "Lower Sorbian");
+    public static readonly Language LowerSorbian = new("", "dsb", "Lower Sorbian");
     /// <summary>The Duala language.</summary>
-    public static readonly Language Duala = new Language("", "dua", "Duala");
+    public static readonly Language Duala = new("", "dua", "Duala");
     /// <summary>The Dutch Middle language.</summary>
-    public static readonly Language DutchMiddle = new Language("", "dum", "Dutch, Middle (ca.1050-1350)");
+    public static readonly Language DutchMiddle = new("", "dum", "Dutch, Middle (ca.1050-1350)");
     /// <summary>The Dutch language.</summary>
-    public static readonly Language Dutch = new Language("nl", "dut", "Dutch; Flemish");
+    public static readonly Language Dutch = new("nl", "dut", "Dutch; Flemish");
     /// <summary>The Dyula language.</summary>
-    public static readonly Language Dyula = new Language("", "dyu", "Dyula");
+    public static readonly Language Dyula = new("", "dyu", "Dyula");
     /// <summary>The Dzongkha language.</summary>
-    public static readonly Language Dzongkha = new Language("dz", "dzo", "Dzongkha");
+    public static readonly Language Dzongkha = new("dz", "dzo", "Dzongkha");
 
     /// <summary>The Efik language.</summary>
-    public static readonly Language Efik = new Language("", "efi", "Efik");
+    public static readonly Language Efik = new("", "efi", "Efik");
     /// <summary>The Egyptian Ancient language.</summary>
-    public static readonly Language EgyptianAncient = new Language("", "egy", "Egyptian (Ancient)");
+    public static readonly Language EgyptianAncient = new("", "egy", "Egyptian (Ancient)");
     /// <summary>The Ekajuk language.</summary>
-    public static readonly Language Ekajuk = new Language("", "eka", "Ekajuk");
+    public static readonly Language Ekajuk = new("", "eka", "Ekajuk");
     /// <summary>The Greek Modern language.</summary>
-    public static readonly Language GreekModern = new Language("el", "gre", "Greek, Modern (1453-)");
+    public static readonly Language GreekModern = new("el", "gre", "Greek, Modern (1453-)");
     /// <summary>The Elamite language.</summary>
-    public static readonly Language Elamite = new Language("", "elx", "Elamite");
+    public static readonly Language Elamite = new("", "elx", "Elamite");
     /// <summary>The English language.</summary>
-    public static readonly Language English = new Language("en", "eng", "English");
+    public static readonly Language English = new("en", "eng", "English");
     /// <summary>The English Middle language.</summary>
-    public static readonly Language EnglishMiddle = new Language("", "enm", "English, Middle (1100-1500)");
+    public static readonly Language EnglishMiddle = new("", "enm", "English, Middle (1100-1500)");
     /// <summary>The Esperanto language.</summary>
-    public static readonly Language Esperanto = new Language("eo", "epo", "Esperanto");
+    public static readonly Language Esperanto = new("eo", "epo", "Esperanto");
     /// <summary>The Estonian language.</summary>
-    public static readonly Language Estonian = new Language("et", "est", "Estonian");
+    public static readonly Language Estonian = new("et", "est", "Estonian");
     /// <summary>The Ewe language.</summary>
-    public static readonly Language Ewe = new Language("ee", "ewe", "Ewe");
+    public static readonly Language Ewe = new("ee", "ewe", "Ewe");
     /// <summary>The Ewondo language.</summary>
-    public static readonly Language Ewondo = new Language("", "ewo", "Ewondo");
+    public static readonly Language Ewondo = new("", "ewo", "Ewondo");
 
     /// <summary>The Fang language.</summary>
-    public static readonly Language Fang = new Language("", "fan", "Fang");
+    public static readonly Language Fang = new("", "fan", "Fang");
     /// <summary>The Faroese language.</summary>
-    public static readonly Language Faroese = new Language("fo", "fao", "Faroese");
+    public static readonly Language Faroese = new("fo", "fao", "Faroese");
     /// <summary>The Persian language.</summary>
-    public static readonly Language Persian = new Language("fa", "per", "Persian");
+    public static readonly Language Persian = new("fa", "per", "Persian");
     /// <summary>The Fanti language.</summary>
-    public static readonly Language Fanti = new Language("", "fat", "Fanti");
+    public static readonly Language Fanti = new("", "fat", "Fanti");
     /// <summary>The Fijian language.</summary>
-    public static readonly Language Fijian = new Language("fj", "fij", "Fijian");
+    public static readonly Language Fijian = new("fj", "fij", "Fijian");
     /// <summary>The Filipino language.</summary>
-    public static readonly Language Filipino = new Language("", "fil", "Filipino; Pilipino");
+    public static readonly Language Filipino = new("", "fil", "Filipino; Pilipino");
     /// <summary>The Finnish language.</summary>
-    public static readonly Language Finnish = new Language("fi", "fin", "Finnish");
+    public static readonly Language Finnish = new("fi", "fin", "Finnish");
     /// <summary>The Finno Ugrian Languages language.</summary>
-    public static readonly Language FinnoUgrianLanguages = new Language("", "fiu", "Finno-Ugrian languages");
+    public static readonly Language FinnoUgrianLanguages = new("", "fiu", "Finno-Ugrian languages");
     /// <summary>The Fon language.</summary>
-    public static readonly Language Fon = new Language("", "fon", "Fon");
+    public static readonly Language Fon = new("", "fon", "Fon");
     /// <summary>The French language.</summary>
-    public static readonly Language French = new Language("fr", "fre", "French");
+    public static readonly Language French = new("fr", "fre", "French");
     /// <summary>The French Middle language.</summary>
-    public static readonly Language FrenchMiddle = new Language("", "frm", "French, Middle (ca.1400-1600)");
+    public static readonly Language FrenchMiddle = new("", "frm", "French, Middle (ca.1400-1600)");
     /// <summary>The French Old language.</summary>
-    public static readonly Language FrenchOld = new Language("", "fro", "French, Old (842-ca.1400)");
+    public static readonly Language FrenchOld = new("", "fro", "French, Old (842-ca.1400)");
     /// <summary>The Northern Frisian language.</summary>
-    public static readonly Language NorthernFrisian = new Language("", "frr", "Northern Frisian");
+    public static readonly Language NorthernFrisian = new("", "frr", "Northern Frisian");
     /// <summary>The Eastern Frisian language.</summary>
-    public static readonly Language EasternFrisian = new Language("", "frs", "Eastern Frisian");
+    public static readonly Language EasternFrisian = new("", "frs", "Eastern Frisian");
     /// <summary>The Western Frisian language.</summary>
-    public static readonly Language WesternFrisian = new Language("fy", "fry", "Western Frisian");
+    public static readonly Language WesternFrisian = new("fy", "fry", "Western Frisian");
     /// <summary>The Fulah language.</summary>
-    public static readonly Language Fulah = new Language("ff", "ful", "Fulah");
+    public static readonly Language Fulah = new("ff", "ful", "Fulah");
     /// <summary>The Friulian language.</summary>
-    public static readonly Language Friulian = new Language("", "fur", "Friulian");
+    public static readonly Language Friulian = new("", "fur", "Friulian");
 
     /// <summary>The Ga language.</summary>
-    public static readonly Language Ga = new Language("", "gaa", "Ga");
+    public static readonly Language Ga = new("", "gaa", "Ga");
     /// <summary>The Gayo language.</summary>
-    public static readonly Language Gayo = new Language("", "gay", "Gayo");
+    public static readonly Language Gayo = new("", "gay", "Gayo");
     /// <summary>The Gbaya language.</summary>
-    public static readonly Language Gbaya = new Language("", "gba", "Gbaya");
+    public static readonly Language Gbaya = new("", "gba", "Gbaya");
     /// <summary>The Germanic Languages language.</summary>
-    public static readonly Language GermanicLanguages = new Language("", "gem", "Germanic languages");
+    public static readonly Language GermanicLanguages = new("", "gem", "Germanic languages");
     /// <summary>The Georgian language.</summary>
-    public static readonly Language Georgian = new Language("ka", "geo", "Georgian");
+    public static readonly Language Georgian = new("ka", "geo", "Georgian");
     /// <summary>The Geez language.</summary>
-    public static readonly Language Geez = new Language("", "gez", "Geez");
+    public static readonly Language Geez = new("", "gez", "Geez");
     /// <summary>The Gilbertese language.</summary>
-    public static readonly Language Gilbertese = new Language("", "gil", "Gilbertese");
+    public static readonly Language Gilbertese = new("", "gil", "Gilbertese");
     /// <summary>The Gaelic language.</summary>
-    public static readonly Language Gaelic = new Language("gd", "gla", "Gaelic; Scottish Gaelic");
+    public static readonly Language Gaelic = new("gd", "gla", "Gaelic; Scottish Gaelic");
     /// <summary>The Irish language.</summary>
-    public static readonly Language Irish = new Language("ga", "gle", "Irish");
+    public static readonly Language Irish = new("ga", "gle", "Irish");
     /// <summary>The Galician language.</summary>
-    public static readonly Language Galician = new Language("gl", "glg", "Galician");
+    public static readonly Language Galician = new("gl", "glg", "Galician");
     /// <summary>The Manx language.</summary>
-    public static readonly Language Manx = new Language("gv", "glv", "Manx");
+    public static readonly Language Manx = new("gv", "glv", "Manx");
     /// <summary>The German Middle High language.</summary>
-    public static readonly Language GermanMiddleHigh = new Language("", "gmh", "German, Middle High (ca.1050-1500)");
+    public static readonly Language GermanMiddleHigh = new("", "gmh", "German, Middle High (ca.1050-1500)");
     /// <summary>The German Old High language.</summary>
-    public static readonly Language GermanOldHigh = new Language("", "goh", "German, Old High (ca.750-1050)");
+    public static readonly Language GermanOldHigh = new("", "goh", "German, Old High (ca.750-1050)");
     /// <summary>The Gondi language.</summary>
-    public static readonly Language Gondi = new Language("", "gon", "Gondi");
+    public static readonly Language Gondi = new("", "gon", "Gondi");
     /// <summary>The Gorontalo language.</summary>
-    public static readonly Language Gorontalo = new Language("", "gor", "Gorontalo");
+    public static readonly Language Gorontalo = new("", "gor", "Gorontalo");
     /// <summary>The Gothic language.</summary>
-    public static readonly Language Gothic = new Language("", "got", "Gothic");
+    public static readonly Language Gothic = new("", "got", "Gothic");
     /// <summary>The Grebo language.</summary>
-    public static readonly Language Grebo = new Language("", "grb", "Grebo");
+    public static readonly Language Grebo = new("", "grb", "Grebo");
     /// <summary>The Greek Ancient language.</summary>
-    public static readonly Language GreekAncient = new Language("", "grc", "Greek, Ancient (to 1453)");
+    public static readonly Language GreekAncient = new("", "grc", "Greek, Ancient (to 1453)");
     /// <summary>The Guarani language.</summary>
-    public static readonly Language Guarani = new Language("gn", "grn", "Guarani");
+    public static readonly Language Guarani = new("gn", "grn", "Guarani");
     /// <summary>The Swiss German language.</summary>
-    public static readonly Language SwissGerman = new Language("", "gsw", "Swiss German; Alemannic; Alsatian");
+    public static readonly Language SwissGerman = new("", "gsw", "Swiss German; Alemannic; Alsatian");
     /// <summary>The Gujarati language.</summary>
-    public static readonly Language Gujarati = new Language("gu", "guj", "Gujarati");
+    public static readonly Language Gujarati = new("gu", "guj", "Gujarati");
     /// <summary>The Gwichin language.</summary>
-    public static readonly Language Gwichin = new Language("", "gwi", "Gwich'in");
+    public static readonly Language Gwichin = new("", "gwi", "Gwich'in");
 
     /// <summary>The Haida language.</summary>
-    public static readonly Language Haida = new Language("", "hai", "Haida");
+    public static readonly Language Haida = new("", "hai", "Haida");
     /// <summary>The Haitian language.</summary>
-    public static readonly Language Haitian = new Language("ht", "hat", "Haitian; Haitian Creole");
+    public static readonly Language Haitian = new("ht", "hat", "Haitian; Haitian Creole");
     /// <summary>The Hausa language.</summary>
-    public static readonly Language Hausa = new Language("ha", "hau", "Hausa");
+    public static readonly Language Hausa = new("ha", "hau", "Hausa");
     /// <summary>The Hawaiian language.</summary>
-    public static readonly Language Hawaiian = new Language("", "haw", "Hawaiian");
+    public static readonly Language Hawaiian = new("", "haw", "Hawaiian");
     /// <summary>The Hebrew language.</summary>
-    public static readonly Language Hebrew = new Language("he", "heb", "Hebrew");
+    public static readonly Language Hebrew = new("he", "heb", "Hebrew");
     /// <summary>The Herero language.</summary>
-    public static readonly Language Herero = new Language("hz", "her", "Herero");
+    public static readonly Language Herero = new("hz", "her", "Herero");
     /// <summary>The Hiligaynon language.</summary>
-    public static readonly Language Hiligaynon = new Language("", "hil", "Hiligaynon");
+    public static readonly Language Hiligaynon = new("", "hil", "Hiligaynon");
     /// <summary>The Himachali Languages language.</summary>
-    public static readonly Language HimachaliLanguages = new Language("", "him", "Himachali languages; Western Pahari languages");
+    public static readonly Language HimachaliLanguages = new("", "him", "Himachali languages; Western Pahari languages");
     /// <summary>The Hindi language.</summary>
-    public static readonly Language Hindi = new Language("hi", "hin", "Hindi");
+    public static readonly Language Hindi = new("hi", "hin", "Hindi");
     /// <summary>The Hittite language.</summary>
-    public static readonly Language Hittite = new Language("", "hit", "Hittite");
+    public static readonly Language Hittite = new("", "hit", "Hittite");
     /// <summary>The Hmong language.</summary>
-    public static readonly Language Hmong = new Language("", "hmn", "Hmong; Mong");
+    public static readonly Language Hmong = new("", "hmn", "Hmong; Mong");
     /// <summary>The Hiri Motu language.</summary>
-    public static readonly Language HiriMotu = new Language("ho", "hmo", "Hiri Motu");
+    public static readonly Language HiriMotu = new("ho", "hmo", "Hiri Motu");
     /// <summary>The Croatian language.</summary>
-    public static readonly Language Croatian = new Language("hr", "hrv", "Croatian");
+    public static readonly Language Croatian = new("hr", "hrv", "Croatian");
     /// <summary>The Upper Sorbian language.</summary>
-    public static readonly Language UpperSorbian = new Language("", "hsb", "Upper Sorbian");
+    public static readonly Language UpperSorbian = new("", "hsb", "Upper Sorbian");
     /// <summary>The Hungarian language.</summary>
-    public static readonly Language Hungarian = new Language("hu", "hun", "Hungarian");
+    public static readonly Language Hungarian = new("hu", "hun", "Hungarian");
     /// <summary>The Hupa language.</summary>
-    public static readonly Language Hupa = new Language("", "hup", "Hupa");
+    public static readonly Language Hupa = new("", "hup", "Hupa");
 
     /// <summary>The Iban language.</summary>
-    public static readonly Language Iban = new Language("", "iba", "Iban");
+    public static readonly Language Iban = new("", "iba", "Iban");
     /// <summary>The Igbo language.</summary>
-    public static readonly Language Igbo = new Language("ig", "ibo", "Igbo");
+    public static readonly Language Igbo = new("ig", "ibo", "Igbo");
     /// <summary>The Icelandic language.</summary>
-    public static readonly Language Icelandic = new Language("is", "ice", "Icelandic");
+    public static readonly Language Icelandic = new("is", "ice", "Icelandic");
     /// <summary>The Ido language.</summary>
-    public static readonly Language Ido = new Language("io", "ido", "Ido");
+    public static readonly Language Ido = new("io", "ido", "Ido");
     /// <summary>The Sichuan Yi language.</summary>
-    public static readonly Language SichuanYi = new Language("ii", "iii", "Sichuan Yi; Nuosu");
+    public static readonly Language SichuanYi = new("ii", "iii", "Sichuan Yi; Nuosu");
     /// <summary>The Ijo Languages language.</summary>
-    public static readonly Language IjoLanguages = new Language("", "ijo", "Ijo languages");
+    public static readonly Language IjoLanguages = new("", "ijo", "Ijo languages");
     /// <summary>The Inuktitut language.</summary>
-    public static readonly Language Inuktitut = new Language("iu", "iku", "Inuktitut");
+    public static readonly Language Inuktitut = new("iu", "iku", "Inuktitut");
     /// <summary>The Interlingue language.</summary>
-    public static readonly Language Interlingue = new Language("ie", "ile", "Interlingue; Occidental");
+    public static readonly Language Interlingue = new("ie", "ile", "Interlingue; Occidental");
     /// <summary>The Iloko language.</summary>
-    public static readonly Language Iloko = new Language("", "ilo", "Iloko");
+    public static readonly Language Iloko = new("", "ilo", "Iloko");
     /// <summary>The Interlingua language.</summary>
-    public static readonly Language Interlingua = new Language("ia", "ina", "Interlingua (International Auxiliary Language Association)");
+    public static readonly Language Interlingua = new("ia", "ina", "Interlingua (International Auxiliary Language Association)");
     /// <summary>The Indic Languages language.</summary>
-    public static readonly Language IndicLanguages = new Language("", "inc", "Indic languages");
+    public static readonly Language IndicLanguages = new("", "inc", "Indic languages");
     /// <summary>The Indonesian language.</summary>
-    public static readonly Language Indonesian = new Language("id", "ind", "Indonesian");
+    public static readonly Language Indonesian = new("id", "ind", "Indonesian");
     /// <summary>The Indo European Languages language.</summary>
-    public static readonly Language IndoEuropeanLanguages = new Language("", "ine", "Indo-European languages");
+    public static readonly Language IndoEuropeanLanguages = new("", "ine", "Indo-European languages");
     /// <summary>The Ingush language.</summary>
-    public static readonly Language Ingush = new Language("", "inh", "Ingush");
+    public static readonly Language Ingush = new("", "inh", "Ingush");
     /// <summary>The Inupiaq language.</summary>
-    public static readonly Language Inupiaq = new Language("ik", "ipk", "Inupiaq");
+    public static readonly Language Inupiaq = new("ik", "ipk", "Inupiaq");
     /// <summary>The Iranian Languages language.</summary>
-    public static readonly Language IranianLanguages = new Language("", "ira", "Iranian languages");
+    public static readonly Language IranianLanguages = new("", "ira", "Iranian languages");
     /// <summary>The Iroquoian Languages language.</summary>
-    public static readonly Language IroquoianLanguages = new Language("", "iro", "Iroquoian languages");
+    public static readonly Language IroquoianLanguages = new("", "iro", "Iroquoian languages");
     /// <summary>The Italian language.</summary>
-    public static readonly Language Italian = new Language("it", "ita", "Italian");
+    public static readonly Language Italian = new("it", "ita", "Italian");
 
     /// <summary>The Javanese language.</summary>
-    public static readonly Language Javanese = new Language("jv", "jav", "Javanese");
+    public static readonly Language Javanese = new("jv", "jav", "Javanese");
     /// <summary>The Lojban language.</summary>
-    public static readonly Language Lojban = new Language("", "jbo", "Lojban");
+    public static readonly Language Lojban = new("", "jbo", "Lojban");
     /// <summary>The Japanese language.</summary>
-    public static readonly Language Japanese = new Language("ja", "jpn", "Japanese");
+    public static readonly Language Japanese = new("ja", "jpn", "Japanese");
     /// <summary>The Judeo Persian language.</summary>
-    public static readonly Language JudeoPersian = new Language("", "jpr", "Judeo-Persian");
+    public static readonly Language JudeoPersian = new("", "jpr", "Judeo-Persian");
     /// <summary>The Judeo Arabic language.</summary>
-    public static readonly Language JudeoArabic = new Language("", "jrb", "Judeo-Arabic");
+    public static readonly Language JudeoArabic = new("", "jrb", "Judeo-Arabic");
 
     /// <summary>The Kara Kalpak language.</summary>
-    public static readonly Language KaraKalpak = new Language("", "kaa", "Kara-Kalpak");
+    public static readonly Language KaraKalpak = new("", "kaa", "Kara-Kalpak");
     /// <summary>The Kabyle language.</summary>
-    public static readonly Language Kabyle = new Language("", "kab", "Kabyle");
+    public static readonly Language Kabyle = new("", "kab", "Kabyle");
     /// <summary>The Kachin language.</summary>
-    public static readonly Language Kachin = new Language("", "kac", "Kachin; Jingpho");
+    public static readonly Language Kachin = new("", "kac", "Kachin; Jingpho");
     /// <summary>The Kalaallisut language.</summary>
-    public static readonly Language Kalaallisut = new Language("kl", "kal", "Kalaallisut; Greenlandic");
+    public static readonly Language Kalaallisut = new("kl", "kal", "Kalaallisut; Greenlandic");
     /// <summary>The Kamba language.</summary>
-    public static readonly Language Kamba = new Language("", "kam", "Kamba");
+    public static readonly Language Kamba = new("", "kam", "Kamba");
     /// <summary>The Kannada language.</summary>
-    public static readonly Language Kannada = new Language("kn", "kan", "Kannada");
+    public static readonly Language Kannada = new("kn", "kan", "Kannada");
     /// <summary>The Karen Languages language.</summary>
-    public static readonly Language KarenLanguages = new Language("", "kar", "Karen languages");
+    public static readonly Language KarenLanguages = new("", "kar", "Karen languages");
     /// <summary>The Kashmiri language.</summary>
-    public static readonly Language Kashmiri = new Language("ks", "kas", "Kashmiri");
+    public static readonly Language Kashmiri = new("ks", "kas", "Kashmiri");
     /// <summary>The Kanuri language.</summary>
-    public static readonly Language Kanuri = new Language("kr", "kau", "Kanuri");
+    public static readonly Language Kanuri = new("kr", "kau", "Kanuri");
     /// <summary>The Kawi language.</summary>
-    public static readonly Language Kawi = new Language("", "kaw", "Kawi");
+    public static readonly Language Kawi = new("", "kaw", "Kawi");
     /// <summary>The Kazakh language.</summary>
-    public static readonly Language Kazakh = new Language("kk", "kaz", "Kazakh");
+    public static readonly Language Kazakh = new("kk", "kaz", "Kazakh");
     /// <summary>The Kabardian language.</summary>
-    public static readonly Language Kabardian = new Language("", "kbd", "Kabardian");
+    public static readonly Language Kabardian = new("", "kbd", "Kabardian");
     /// <summary>The Khasi language.</summary>
-    public static readonly Language Khasi = new Language("", "kha", "Khasi");
+    public static readonly Language Khasi = new("", "kha", "Khasi");
     /// <summary>The Khoisan Languages language.</summary>
-    public static readonly Language KhoisanLanguages = new Language("", "khi", "Khoisan languages");
+    public static readonly Language KhoisanLanguages = new("", "khi", "Khoisan languages");
     /// <summary>The Central Khmer language.</summary>
-    public static readonly Language CentralKhmer = new Language("km", "khm", "Central Khmer");
+    public static readonly Language CentralKhmer = new("km", "khm", "Central Khmer");
     /// <summary>The Khotanese language.</summary>
-    public static readonly Language Khotanese = new Language("", "kho", "Khotanese; Sakan");
+    public static readonly Language Khotanese = new("", "kho", "Khotanese; Sakan");
     /// <summary>The Kikuyu language.</summary>
-    public static readonly Language Kikuyu = new Language("ki", "kik", "Kikuyu; Gikuyu");
+    public static readonly Language Kikuyu = new("ki", "kik", "Kikuyu; Gikuyu");
     /// <summary>The Kinyarwanda language.</summary>
-    public static readonly Language Kinyarwanda = new Language("rw", "kin", "Kinyarwanda");
+    public static readonly Language Kinyarwanda = new("rw", "kin", "Kinyarwanda");
     /// <summary>The Kirghiz language.</summary>
-    public static readonly Language Kirghiz = new Language("ky", "kir", "Kirghiz; Kyrgyz");
+    public static readonly Language Kirghiz = new("ky", "kir", "Kirghiz; Kyrgyz");
     /// <summary>The Kimbundu language.</summary>
-    public static readonly Language Kimbundu = new Language("", "kmb", "Kimbundu");
+    public static readonly Language Kimbundu = new("", "kmb", "Kimbundu");
     /// <summary>The Konkani language.</summary>
-    public static readonly Language Konkani = new Language("", "kok", "Konkani");
+    public static readonly Language Konkani = new("", "kok", "Konkani");
     /// <summary>The Komi language.</summary>
-    public static readonly Language Komi = new Language("kv", "kom", "Komi");
+    public static readonly Language Komi = new("kv", "kom", "Komi");
     /// <summary>The Kongo language.</summary>
-    public static readonly Language Kongo = new Language("kg", "kon", "Kongo");
+    public static readonly Language Kongo = new("kg", "kon", "Kongo");
     /// <summary>The Korean language.</summary>
-    public static readonly Language Korean = new Language("ko", "kor", "Korean");
+    public static readonly Language Korean = new("ko", "kor", "Korean");
     /// <summary>The Kosraean language.</summary>
-    public static readonly Language Kosraean = new Language("", "kos", "Kosraean");
+    public static readonly Language Kosraean = new("", "kos", "Kosraean");
     /// <summary>The Kpelle language.</summary>
-    public static readonly Language Kpelle = new Language("", "kpe", "Kpelle");
+    public static readonly Language Kpelle = new("", "kpe", "Kpelle");
     /// <summary>The Karachay Balkar language.</summary>
-    public static readonly Language KarachayBalkar = new Language("", "krc", "Karachay-Balkar");
+    public static readonly Language KarachayBalkar = new("", "krc", "Karachay-Balkar");
     /// <summary>The Karelian language.</summary>
-    public static readonly Language Karelian = new Language("", "krl", "Karelian");
+    public static readonly Language Karelian = new("", "krl", "Karelian");
     /// <summary>The Kru Languages language.</summary>
-    public static readonly Language KruLanguages = new Language("", "kro", "Kru languages");
+    public static readonly Language KruLanguages = new("", "kro", "Kru languages");
     /// <summary>The Kurukh language.</summary>
-    public static readonly Language Kurukh = new Language("", "kru", "Kurukh");
+    public static readonly Language Kurukh = new("", "kru", "Kurukh");
     /// <summary>The Kuanyama language.</summary>
-    public static readonly Language Kuanyama = new Language("kj", "kua", "Kuanyama; Kwanyama");
+    public static readonly Language Kuanyama = new("kj", "kua", "Kuanyama; Kwanyama");
     /// <summary>The Kumyk language.</summary>
-    public static readonly Language Kumyk = new Language("", "kum", "Kumyk");
+    public static readonly Language Kumyk = new("", "kum", "Kumyk");
     /// <summary>The Kurdish language.</summary>
-    public static readonly Language Kurdish = new Language("ku", "kur", "Kurdish");
+    public static readonly Language Kurdish = new("ku", "kur", "Kurdish");
     /// <summary>The Kutenai language.</summary>
-    public static readonly Language Kutenai = new Language("", "kut", "Kutenai");
+    public static readonly Language Kutenai = new("", "kut", "Kutenai");
 
     /// <summary>The Ladino language.</summary>
-    public static readonly Language Ladino = new Language("", "lad", "Ladino");
+    public static readonly Language Ladino = new("", "lad", "Ladino");
     /// <summary>The Lahnda language.</summary>
-    public static readonly Language Lahnda = new Language("", "lah", "Lahnda");
+    public static readonly Language Lahnda = new("", "lah", "Lahnda");
     /// <summary>The Lamba language.</summary>
-    public static readonly Language Lamba = new Language("", "lam", "Lamba");
+    public static readonly Language Lamba = new("", "lam", "Lamba");
     /// <summary>The Lao language.</summary>
-    public static readonly Language Lao = new Language("lo", "lao", "Lao");
+    public static readonly Language Lao = new("lo", "lao", "Lao");
     /// <summary>The Latin language.</summary>
-    public static readonly Language Latin = new Language("la", "lat", "Latin");
+    public static readonly Language Latin = new("la", "lat", "Latin");
     /// <summary>The Latvian language.</summary>
-    public static readonly Language Latvian = new Language("lv", "lav", "Latvian");
+    public static readonly Language Latvian = new("lv", "lav", "Latvian");
     /// <summary>The Lezghian language.</summary>
-    public static readonly Language Lezghian = new Language("", "lez", "Lezghian");
+    public static readonly Language Lezghian = new("", "lez", "Lezghian");
     /// <summary>The Limburgan language.</summary>
-    public static readonly Language Limburgan = new Language("li", "lim", "Limburgan; Limburger; Limburgish");
+    public static readonly Language Limburgan = new("li", "lim", "Limburgan; Limburger; Limburgish");
     /// <summary>The Lingala language.</summary>
-    public static readonly Language Lingala = new Language("ln", "lin", "Lingala");
+    public static readonly Language Lingala = new("ln", "lin", "Lingala");
     /// <summary>The Lithuanian language.</summary>
-    public static readonly Language Lithuanian = new Language("lt", "lit", "Lithuanian");
+    public static readonly Language Lithuanian = new("lt", "lit", "Lithuanian");
     /// <summary>The Mongo language.</summary>
-    public static readonly Language Mongo = new Language("", "lol", "Mongo");
+    public static readonly Language Mongo = new("", "lol", "Mongo");
     /// <summary>The Lozi language.</summary>
-    public static readonly Language Lozi = new Language("", "loz", "Lozi");
+    public static readonly Language Lozi = new("", "loz", "Lozi");
     /// <summary>The Luxembourgish language.</summary>
-    public static readonly Language Luxembourgish = new Language("lb", "ltz", "Luxembourgish; Letzeburgesch");
+    public static readonly Language Luxembourgish = new("lb", "ltz", "Luxembourgish; Letzeburgesch");
     /// <summary>The Luba Lulua language.</summary>
-    public static readonly Language LubaLulua = new Language("", "lua", "Luba-Lulua");
+    public static readonly Language LubaLulua = new("", "lua", "Luba-Lulua");
     /// <summary>The Luba Katanga language.</summary>
-    public static readonly Language LubaKatanga = new Language("lu", "lub", "Luba-Katanga");
+    public static readonly Language LubaKatanga = new("lu", "lub", "Luba-Katanga");
     /// <summary>The Ganda language.</summary>
-    public static readonly Language Ganda = new Language("lg", "lug", "Ganda");
+    public static readonly Language Ganda = new("lg", "lug", "Ganda");
     /// <summary>The Luiseno language.</summary>
-    public static readonly Language Luiseno = new Language("", "lui", "Luiseno");
+    public static readonly Language Luiseno = new("", "lui", "Luiseno");
     /// <summary>The Lunda language.</summary>
-    public static readonly Language Lunda = new Language("", "lun", "Lunda");
+    public static readonly Language Lunda = new("", "lun", "Lunda");
     /// <summary>The Luo language.</summary>
-    public static readonly Language Luo = new Language("", "luo", "Luo (Kenya and Tanzania)");
+    public static readonly Language Luo = new("", "luo", "Luo (Kenya and Tanzania)");
     /// <summary>The Lushai language.</summary>
-    public static readonly Language Lushai = new Language("", "lus", "Lushai");
+    public static readonly Language Lushai = new("", "lus", "Lushai");
 
     /// <summary>The Macedonian language.</summary>
-    public static readonly Language Macedonian = new Language("mk", "mac", "Macedonian");
+    public static readonly Language Macedonian = new("mk", "mac", "Macedonian");
     /// <summary>The Madurese language.</summary>
-    public static readonly Language Madurese = new Language("", "mad", "Madurese");
+    public static readonly Language Madurese = new("", "mad", "Madurese");
     /// <summary>The Magahi language.</summary>
-    public static readonly Language Magahi = new Language("", "mag", "Magahi");
+    public static readonly Language Magahi = new("", "mag", "Magahi");
     /// <summary>The Marshallese language.</summary>
-    public static readonly Language Marshallese = new Language("mh", "mah", "Marshallese");
+    public static readonly Language Marshallese = new("mh", "mah", "Marshallese");
     /// <summary>The Maithili language.</summary>
-    public static readonly Language Maithili = new Language("", "mai", "Maithili");
+    public static readonly Language Maithili = new("", "mai", "Maithili");
     /// <summary>The Makasar language.</summary>
-    public static readonly Language Makasar = new Language("", "mak", "Makasar");
+    public static readonly Language Makasar = new("", "mak", "Makasar");
     /// <summary>The Malayalam language.</summary>
-    public static readonly Language Malayalam = new Language("ml", "mal", "Malayalam");
+    public static readonly Language Malayalam = new("ml", "mal", "Malayalam");
     /// <summary>The Mandingo language.</summary>
-    public static readonly Language Mandingo = new Language("", "man", "Mandingo");
+    public static readonly Language Mandingo = new("", "man", "Mandingo");
     /// <summary>The Austronesian Languages language.</summary>
-    public static readonly Language AustronesianLanguages = new Language("", "map", "Austronesian languages");
+    public static readonly Language AustronesianLanguages = new("", "map", "Austronesian languages");
     /// <summary>The Marathi language.</summary>
-    public static readonly Language Marathi = new Language("mr", "mar", "Marathi");
+    public static readonly Language Marathi = new("mr", "mar", "Marathi");
     /// <summary>The Masai language.</summary>
-    public static readonly Language Masai = new Language("", "mas", "Masai");
+    public static readonly Language Masai = new("", "mas", "Masai");
     /// <summary>The Moksha language.</summary>
-    public static readonly Language Moksha = new Language("", "mdf", "Moksha");
+    public static readonly Language Moksha = new("", "mdf", "Moksha");
     /// <summary>The Mandar language.</summary>
-    public static readonly Language Mandar = new Language("", "mdr", "Mandar");
+    public static readonly Language Mandar = new("", "mdr", "Mandar");
     /// <summary>The Mende language.</summary>
-    public static readonly Language Mende = new Language("", "men", "Mende");
+    public static readonly Language Mende = new("", "men", "Mende");
     /// <summary>The Irish Middle language.</summary>
-    public static readonly Language IrishMiddle = new Language("", "mga", "Irish, Middle (900-1200)");
+    public static readonly Language IrishMiddle = new("", "mga", "Irish, Middle (900-1200)");
     /// <summary>The Mi Kmaq language.</summary>
-    public static readonly Language MiKmaq = new Language("", "mic", "Mi'kmaq; Micmac");
+    public static readonly Language MiKmaq = new("", "mic", "Mi'kmaq; Micmac");
     /// <summary>The Minangkabau language.</summary>
-    public static readonly Language Minangkabau = new Language("", "min", "Minangkabau");
+    public static readonly Language Minangkabau = new("", "min", "Minangkabau");
     /// <summary>The Uncoded Languages language.</summary>
-    public static readonly Language UncodedLanguages = new Language("", "mis", "Uncoded languages");
+    public static readonly Language UncodedLanguages = new("", "mis", "Uncoded languages");
     /// <summary>The Mon Khmer Languages language.</summary>
-    public static readonly Language MonKhmerLanguages = new Language("", "mkh", "Mon-Khmer languages");
+    public static readonly Language MonKhmerLanguages = new("", "mkh", "Mon-Khmer languages");
     /// <summary>The Malagasy language.</summary>
-    public static readonly Language Malagasy = new Language("mg", "mlg", "Malagasy");
+    public static readonly Language Malagasy = new("mg", "mlg", "Malagasy");
     /// <summary>The Malay language.</summary>
-    public static readonly Language Malay = new Language("ms", "may", "Malay");
+    public static readonly Language Malay = new("ms", "may", "Malay");
     /// <summary>The Maltese language.</summary>
-    public static readonly Language Maltese = new Language("mt", "mlt", "Maltese");
+    public static readonly Language Maltese = new("mt", "mlt", "Maltese");
     /// <summary>The Manchu language.</summary>
-    public static readonly Language Manchu = new Language("", "mnc", "Manchu");
+    public static readonly Language Manchu = new("", "mnc", "Manchu");
     /// <summary>The Manipuri language.</summary>
-    public static readonly Language Manipuri = new Language("", "mni", "Manipuri");
+    public static readonly Language Manipuri = new("", "mni", "Manipuri");
     /// <summary>The Manobo Languages language.</summary>
-    public static readonly Language ManoboLanguages = new Language("", "mno", "Manobo languages");
+    public static readonly Language ManoboLanguages = new("", "mno", "Manobo languages");
     /// <summary>The Mohawk language.</summary>
-    public static readonly Language Mohawk = new Language("", "moh", "Mohawk");
+    public static readonly Language Mohawk = new("", "moh", "Mohawk");
     /// <summary>The Mongolian language.</summary>
-    public static readonly Language Mongolian = new Language("mn", "mon", "Mongolian");
+    public static readonly Language Mongolian = new("mn", "mon", "Mongolian");
     /// <summary>The Mossi language.</summary>
-    public static readonly Language Mossi = new Language("", "mos", "Mossi");
+    public static readonly Language Mossi = new("", "mos", "Mossi");
     /// <summary>The Maori language.</summary>
-    public static readonly Language Maori = new Language("mi", "mri", "Maori");
+    public static readonly Language Maori = new("mi", "mri", "Maori");
     /// <summary>The Multiple Languages language.</summary>
-    public static readonly Language MultipleLanguages = new Language("", "mul", "Multiple languages");
+    public static readonly Language MultipleLanguages = new("", "mul", "Multiple languages");
     /// <summary>The Munda Languages language.</summary>
-    public static readonly Language MundaLanguages = new Language("", "mun", "Munda languages");
+    public static readonly Language MundaLanguages = new("", "mun", "Munda languages");
     /// <summary>The Creek language.</summary>
-    public static readonly Language Creek = new Language("", "mus", "Creek");
+    public static readonly Language Creek = new("", "mus", "Creek");
     /// <summary>The Mirandese language.</summary>
-    public static readonly Language Mirandese = new Language("", "mwl", "Mirandese");
+    public static readonly Language Mirandese = new("", "mwl", "Mirandese");
     /// <summary>The Marwari language.</summary>
-    public static readonly Language Marwari = new Language("", "mwr", "Marwari");
+    public static readonly Language Marwari = new("", "mwr", "Marwari");
     /// <summary>The Mayan Languages language.</summary>
-    public static readonly Language MayanLanguages = new Language("", "myn", "Mayan languages");
+    public static readonly Language MayanLanguages = new("", "myn", "Mayan languages");
     /// <summary>The Erzya language.</summary>
-    public static readonly Language Erzya = new Language("", "myv", "Erzya");
+    public static readonly Language Erzya = new("", "myv", "Erzya");
 
     /// <summary>The Nahuatl Languages language.</summary>
-    public static readonly Language NahuatlLanguages = new Language("", "nah", "Nahuatl languages");
+    public static readonly Language NahuatlLanguages = new("", "nah", "Nahuatl languages");
     /// <summary>The North American Indian Languages language.</summary>
-    public static readonly Language NorthAmericanIndianLanguages = new Language("", "nai", "North American Indian languages");
+    public static readonly Language NorthAmericanIndianLanguages = new("", "nai", "North American Indian languages");
     /// <summary>The Neapolitan language.</summary>
-    public static readonly Language Neapolitan = new Language("", "nap", "Neapolitan");
+    public static readonly Language Neapolitan = new("", "nap", "Neapolitan");
     /// <summary>The Nauru language.</summary>
-    public static readonly Language Nauru = new Language("na", "nau", "Nauru");
+    public static readonly Language Nauru = new("na", "nau", "Nauru");
     /// <summary>The Navajo language.</summary>
-    public static readonly Language Navajo = new Language("nv", "nav", "Navajo; Navaho");
+    public static readonly Language Navajo = new("nv", "nav", "Navajo; Navaho");
     /// <summary>The Ndebele South language.</summary>
-    public static readonly Language NdebeleSouth = new Language("nr", "nbl", "Ndebele, South; South Ndebele");
+    public static readonly Language NdebeleSouth = new("nr", "nbl", "Ndebele, South; South Ndebele");
     /// <summary>The Ndebele North language.</summary>
-    public static readonly Language NdebeleNorth = new Language("nd", "nde", "Ndebele, North; North Ndebele");
+    public static readonly Language NdebeleNorth = new("nd", "nde", "Ndebele, North; North Ndebele");
     /// <summary>The Ndonga language.</summary>
-    public static readonly Language Ndonga = new Language("ng", "ndo", "Ndonga");
+    public static readonly Language Ndonga = new("ng", "ndo", "Ndonga");
     /// <summary>The Low German language.</summary>
-    public static readonly Language LowGerman = new Language("", "nds", "Low German; Low Saxon; German, Low; Saxon, Low");
+    public static readonly Language LowGerman = new("", "nds", "Low German; Low Saxon; German, Low; Saxon, Low");
     /// <summary>The Nepali language.</summary>
-    public static readonly Language Nepali = new Language("ne", "nep", "Nepali");
+    public static readonly Language Nepali = new("ne", "nep", "Nepali");
     /// <summary>The Nepal Bhasa language.</summary>
-    public static readonly Language NepalBhasa = new Language("", "new", "Nepal Bhasa; Newari");
+    public static readonly Language NepalBhasa = new("", "new", "Nepal Bhasa; Newari");
     /// <summary>The Nias language.</summary>
-    public static readonly Language Nias = new Language("", "nia", "Nias");
+    public static readonly Language Nias = new("", "nia", "Nias");
     /// <summary>The Niger Kordofanian Languages language.</summary>
-    public static readonly Language NigerKordofanianLanguages = new Language("", "nic", "Niger-Kordofanian languages");
+    public static readonly Language NigerKordofanianLanguages = new("", "nic", "Niger-Kordofanian languages");
     /// <summary>The Niuean language.</summary>
-    public static readonly Language Niuean = new Language("", "niu", "Niuean");
+    public static readonly Language Niuean = new("", "niu", "Niuean");
     /// <summary>The Norwegian Nynorsk language.</summary>
-    public static readonly Language NorwegianNynorsk = new Language("nn", "nno", "Norwegian Nynorsk; Nynorsk, Norwegian");
+    public static readonly Language NorwegianNynorsk = new("nn", "nno", "Norwegian Nynorsk; Nynorsk, Norwegian");
     /// <summary>The Norwegian Bokmal language.</summary>
-    public static readonly Language NorwegianBokmal = new Language("nb", "nob", "Bokmål, Norwegian; Norwegian Bokmål");
+    public static readonly Language NorwegianBokmal = new("nb", "nob", "Bokmål, Norwegian; Norwegian Bokmål");
     /// <summary>The Nogai language.</summary>
-    public static readonly Language Nogai = new Language("", "nog", "Nogai");
+    public static readonly Language Nogai = new("", "nog", "Nogai");
     /// <summary>The Norse Old language.</summary>
-    public static readonly Language NorseOld = new Language("", "non", "Norse, Old");
+    public static readonly Language NorseOld = new("", "non", "Norse, Old");
     /// <summary>The Norwegian language.</summary>
-    public static readonly Language Norwegian = new Language("no", "nor", "Norwegian");
+    public static readonly Language Norwegian = new("no", "nor", "Norwegian");
     /// <summary>The N Ko language.</summary>
-    public static readonly Language NKo = new Language("", "nqo", "N'Ko");
+    public static readonly Language NKo = new("", "nqo", "N'Ko");
     /// <summary>The Northern Sotho language.</summary>
-    public static readonly Language NorthernSotho = new Language("", "nso", "Pedi; Sepedi; Northern Sotho");
+    public static readonly Language NorthernSotho = new("", "nso", "Pedi; Sepedi; Northern Sotho");
     /// <summary>The Nubian Languages language.</summary>
-    public static readonly Language NubianLanguages = new Language("", "nub", "Nubian languages");
+    public static readonly Language NubianLanguages = new("", "nub", "Nubian languages");
     /// <summary>The Classical Newari language.</summary>
-    public static readonly Language ClassicalNewari = new Language("", "nwc", "Classical Newari; Old Newari; Classical Nepal Bhasa");
+    public static readonly Language ClassicalNewari = new("", "nwc", "Classical Newari; Old Newari; Classical Nepal Bhasa");
     /// <summary>The Chichewa language.</summary>
-    public static readonly Language Chichewa = new Language("ny", "nya", "Chichewa; Chewa; Nyanja");
+    public static readonly Language Chichewa = new("ny", "nya", "Chichewa; Chewa; Nyanja");
     /// <summary>The Nyamwezi language.</summary>
-    public static readonly Language Nyamwezi = new Language("", "nym", "Nyamwezi");
+    public static readonly Language Nyamwezi = new("", "nym", "Nyamwezi");
     /// <summary>The Nyankole language.</summary>
-    public static readonly Language Nyankole = new Language("", "nyn", "Nyankole");
+    public static readonly Language Nyankole = new("", "nyn", "Nyankole");
     /// <summary>The Nyoro language.</summary>
-    public static readonly Language Nyoro = new Language("", "nyo", "Nyoro");
+    public static readonly Language Nyoro = new("", "nyo", "Nyoro");
     /// <summary>The Nzima language.</summary>
-    public static readonly Language Nzima = new Language("", "nzi", "Nzima");
+    public static readonly Language Nzima = new("", "nzi", "Nzima");
 
     /// <summary>The Occitan language.</summary>
-    public static readonly Language Occitan = new Language("oc", "oci", "Occitan (post 1500)");
+    public static readonly Language Occitan = new("oc", "oci", "Occitan (post 1500)");
     /// <summary>The Ojibwa language.</summary>
-    public static readonly Language Ojibwa = new Language("oj", "oji", "Ojibwa");
+    public static readonly Language Ojibwa = new("oj", "oji", "Ojibwa");
     /// <summary>The Oriya language.</summary>
-    public static readonly Language Oriya = new Language("or", "ori", "Oriya");
+    public static readonly Language Oriya = new("or", "ori", "Oriya");
     /// <summary>The Oromo language.</summary>
-    public static readonly Language Oromo = new Language("om", "orm", "Oromo");
+    public static readonly Language Oromo = new("om", "orm", "Oromo");
     /// <summary>The Osage language.</summary>
-    public static readonly Language Osage = new Language("", "osa", "Osage");
+    public static readonly Language Osage = new("", "osa", "Osage");
     /// <summary>The Ossetian language.</summary>
-    public static readonly Language Ossetian = new Language("os", "oss", "Ossetian; Ossetic");
+    public static readonly Language Ossetian = new("os", "oss", "Ossetian; Ossetic");
     /// <summary>The Turkish Ottoman language.</summary>
-    public static readonly Language TurkishOttoman = new Language("", "ota", "Turkish, Ottoman (1500-1928)");
+    public static readonly Language TurkishOttoman = new("", "ota", "Turkish, Ottoman (1500-1928)");
     /// <summary>The Otomian Languages language.</summary>
-    public static readonly Language OtomianLanguages = new Language("", "oto", "Otomian languages");
+    public static readonly Language OtomianLanguages = new("", "oto", "Otomian languages");
 
     /// <summary>The Papuan Languages language.</summary>
-    public static readonly Language PapuanLanguages = new Language("", "paa", "Papuan languages");
+    public static readonly Language PapuanLanguages = new("", "paa", "Papuan languages");
     /// <summary>The Pangasinan language.</summary>
-    public static readonly Language Pangasinan = new Language("", "pag", "Pangasinan");
+    public static readonly Language Pangasinan = new("", "pag", "Pangasinan");
     /// <summary>The Pahlavi language.</summary>
-    public static readonly Language Pahlavi = new Language("", "pal", "Pahlavi");
+    public static readonly Language Pahlavi = new("", "pal", "Pahlavi");
     /// <summary>The Pampanga language.</summary>
-    public static readonly Language Pampanga = new Language("", "pam", "Pampanga; Kapampangan");
+    public static readonly Language Pampanga = new("", "pam", "Pampanga; Kapampangan");
     /// <summary>The Panjabi language.</summary>
-    public static readonly Language Panjabi = new Language("pa", "pan", "Panjabi; Punjabi");
+    public static readonly Language Panjabi = new("pa", "pan", "Panjabi; Punjabi");
     /// <summary>The Papiamento language.</summary>
-    public static readonly Language Papiamento = new Language("", "pap", "Papiamento");
+    public static readonly Language Papiamento = new("", "pap", "Papiamento");
     /// <summary>The Palauan language.</summary>
-    public static readonly Language Palauan = new Language("", "pau", "Palauan");
+    public static readonly Language Palauan = new("", "pau", "Palauan");
     /// <summary>The Persian Old language.</summary>
-    public static readonly Language PersianOld = new Language("", "peo", "Persian, Old (ca.600-400 B.C.)");
+    public static readonly Language PersianOld = new("", "peo", "Persian, Old (ca.600-400 B.C.)");
     /// <summary>The Philippine Languages language.</summary>
-    public static readonly Language PhilippineLanguages = new Language("", "phi", "Philippine languages");
+    public static readonly Language PhilippineLanguages = new("", "phi", "Philippine languages");
     /// <summary>The Phoenician language.</summary>
-    public static readonly Language Phoenician = new Language("", "phn", "Phoenician");
+    public static readonly Language Phoenician = new("", "phn", "Phoenician");
     /// <summary>The Pali language.</summary>
-    public static readonly Language Pali = new Language("pi", "pli", "Pali");
+    public static readonly Language Pali = new("pi", "pli", "Pali");
     /// <summary>The Polish language.</summary>
-    public static readonly Language Polish = new Language("pl", "pol", "Polish");
+    public static readonly Language Polish = new("pl", "pol", "Polish");
     /// <summary>The Pohnpeian language.</summary>
-    public static readonly Language Pohnpeian = new Language("", "pon", "Pohnpeian");
+    public static readonly Language Pohnpeian = new("", "pon", "Pohnpeian");
     /// <summary>The Portuguese language.</summary>
-    public static readonly Language Portuguese = new Language("pt", "por", "Portuguese");
+    public static readonly Language Portuguese = new("pt", "por", "Portuguese");
     /// <summary>The Prakrit Languages language.</summary>
-    public static readonly Language PrakritLanguages = new Language("", "pra", "Prakrit languages");
+    public static readonly Language PrakritLanguages = new("", "pra", "Prakrit languages");
     /// <summary>The Provencal Old language.</summary>
-    public static readonly Language ProvencalOld = new Language("", "pro", "Provençal, Old (to 1500);Occitan, Old (to 1500)");
+    public static readonly Language ProvencalOld = new("", "pro", "Provençal, Old (to 1500);Occitan, Old (to 1500)");
     /// <summary>The Pushto language.</summary>
-    public static readonly Language Pushto = new Language("ps", "pus", "Pushto; Pashto");
+    public static readonly Language Pushto = new("ps", "pus", "Pushto; Pashto");
 
     /// <summary>The Reserved For Local Use language.</summary>
-    public static readonly Language ReservedForLocalUse = new Language("", "qaa-qtz", "Reserved for local use");
+    public static readonly Language ReservedForLocalUse = new("", "qaa-qtz", "Reserved for local use");
     /// <summary>The Quechua language.</summary>
-    public static readonly Language Quechua = new Language("qu", "que", "Quechua");
+    public static readonly Language Quechua = new("qu", "que", "Quechua");
     /// <summary>The Rajasthani language.</summary>
-    public static readonly Language Rajasthani = new Language("", "raj", "Rajasthani");
+    public static readonly Language Rajasthani = new("", "raj", "Rajasthani");
     /// <summary>The Rapanui language.</summary>
-    public static readonly Language Rapanui = new Language("", "rap", "Rapanui");
+    public static readonly Language Rapanui = new("", "rap", "Rapanui");
     /// <summary>The Rarotongan language.</summary>
-    public static readonly Language Rarotongan = new Language("", "rar", "Rarotongan; Cook Islands Maori");
+    public static readonly Language Rarotongan = new("", "rar", "Rarotongan; Cook Islands Maori");
     /// <summary>The Romance Languages language.</summary>
-    public static readonly Language RomanceLanguages = new Language("", "roa", "Romance languages");
+    public static readonly Language RomanceLanguages = new("", "roa", "Romance languages");
     /// <summary>The Romansh language.</summary>
-    public static readonly Language Romansh = new Language("rm", "roh", "Romansh");
+    public static readonly Language Romansh = new("rm", "roh", "Romansh");
     /// <summary>The Romany language.</summary>
-    public static readonly Language Romany = new Language("", "rom", "Romany");
+    public static readonly Language Romany = new("", "rom", "Romany");
     /// <summary>The Romanian language.</summary>
-    public static readonly Language Romanian = new Language("ro", "rum", "Romanian; Moldavian; Moldovan");
+    public static readonly Language Romanian = new("ro", "rum", "Romanian; Moldavian; Moldovan");
     /// <summary>The Rundi language.</summary>
-    public static readonly Language Rundi = new Language("rn", "run", "Rundi");
+    public static readonly Language Rundi = new("rn", "run", "Rundi");
     /// <summary>The Aromanian language.</summary>
-    public static readonly Language Aromanian = new Language("", "rup", "Aromanian; Arumanian; Macedo-Romanian");
+    public static readonly Language Aromanian = new("", "rup", "Aromanian; Arumanian; Macedo-Romanian");
     /// <summary>The Russian language.</summary>
-    public static readonly Language Russian = new Language("ru", "rus", "Russian");
+    public static readonly Language Russian = new("ru", "rus", "Russian");
 
     /// <summary>The Sandawe language.</summary>
-    public static readonly Language Sandawe = new Language("", "sad", "Sandawe");
+    public static readonly Language Sandawe = new("", "sad", "Sandawe");
     /// <summary>The Sango language.</summary>
-    public static readonly Language Sango = new Language("sg", "sag", "Sango");
+    public static readonly Language Sango = new("sg", "sag", "Sango");
     /// <summary>The Yakut language.</summary>
-    public static readonly Language Yakut = new Language("", "sah", "Yakut");
+    public static readonly Language Yakut = new("", "sah", "Yakut");
     /// <summary>The South American Indian Languages language.</summary>
-    public static readonly Language SouthAmericanIndianLanguages = new Language("", "sai", "South American Indian languages");
+    public static readonly Language SouthAmericanIndianLanguages = new("", "sai", "South American Indian languages");
     /// <summary>The Salishan Languages language.</summary>
-    public static readonly Language SalishanLanguages = new Language("", "sal", "Salishan languages");
+    public static readonly Language SalishanLanguages = new("", "sal", "Salishan languages");
     /// <summary>The Samaritan Aramaic language.</summary>
-    public static readonly Language SamaritanAramaic = new Language("", "sam", "Samaritan Aramaic");
+    public static readonly Language SamaritanAramaic = new("", "sam", "Samaritan Aramaic");
     /// <summary>The Sanskrit language.</summary>
-    public static readonly Language Sanskrit = new Language("sa", "san", "Sanskrit");
+    public static readonly Language Sanskrit = new("sa", "san", "Sanskrit");
     /// <summary>The Sasak language.</summary>
-    public static readonly Language Sasak = new Language("", "sas", "Sasak");
+    public static readonly Language Sasak = new("", "sas", "Sasak");
     /// <summary>The Santali language.</summary>
-    public static readonly Language Santali = new Language("", "sat", "Santali");
+    public static readonly Language Santali = new("", "sat", "Santali");
     /// <summary>The Sicilian language.</summary>
-    public static readonly Language Sicilian = new Language("", "scn", "Sicilian");
+    public static readonly Language Sicilian = new("", "scn", "Sicilian");
     /// <summary>The Scots language.</summary>
-    public static readonly Language Scots = new Language("", "sco", "Scots");
+    public static readonly Language Scots = new("", "sco", "Scots");
     /// <summary>The Selkup language.</summary>
-    public static readonly Language Selkup = new Language("", "sel", "Selkup");
+    public static readonly Language Selkup = new("", "sel", "Selkup");
     /// <summary>The Semitic Languages language.</summary>
-    public static readonly Language SemiticLanguages = new Language("", "sem", "Semitic languages");
+    public static readonly Language SemiticLanguages = new("", "sem", "Semitic languages");
     /// <summary>The Irish Old language.</summary>
-    public static readonly Language IrishOld = new Language("", "sga", "Irish, Old (to 900)");
+    public static readonly Language IrishOld = new("", "sga", "Irish, Old (to 900)");
     /// <summary>The Sign Languages language.</summary>
-    public static readonly Language SignLanguages = new Language("", "sgn", "Sign Languages");
+    public static readonly Language SignLanguages = new("", "sgn", "Sign Languages");
     /// <summary>The Shan language.</summary>
-    public static readonly Language Shan = new Language("", "shn", "Shan");
+    public static readonly Language Shan = new("", "shn", "Shan");
     /// <summary>The Sidamo language.</summary>
-    public static readonly Language Sidamo = new Language("", "sid", "Sidamo");
+    public static readonly Language Sidamo = new("", "sid", "Sidamo");
     /// <summary>The Sinhala language.</summary>
-    public static readonly Language Sinhala = new Language("si", "sin", "Sinhala; Sinhalese");
+    public static readonly Language Sinhala = new("si", "sin", "Sinhala; Sinhalese");
     /// <summary>The Siouan Languages language.</summary>
-    public static readonly Language SiouanLanguages = new Language("", "sio", "Siouan languages");
+    public static readonly Language SiouanLanguages = new("", "sio", "Siouan languages");
     /// <summary>The Sino Tibetan Languages language.</summary>
-    public static readonly Language SinoTibetanLanguages = new Language("", "sit", "Sino-Tibetan languages");
+    public static readonly Language SinoTibetanLanguages = new("", "sit", "Sino-Tibetan languages");
     /// <summary>The Slavic Languages language.</summary>
-    public static readonly Language SlavicLanguages = new Language("", "sla", "Slavic languages");
+    public static readonly Language SlavicLanguages = new("", "sla", "Slavic languages");
     /// <summary>The Slovak language.</summary>
-    public static readonly Language Slovak = new Language("sk", "slo", "Slovak");
+    public static readonly Language Slovak = new("sk", "slo", "Slovak");
     /// <summary>The Slovenian language.</summary>
-    public static readonly Language Slovenian = new Language("sl", "slv", "Slovenian");
+    public static readonly Language Slovenian = new("sl", "slv", "Slovenian");
     /// <summary>The Southern Sami language.</summary>
-    public static readonly Language SouthernSami = new Language("", "sma", "Southern Sami");
+    public static readonly Language SouthernSami = new("", "sma", "Southern Sami");
     /// <summary>The Northern Sami language.</summary>
-    public static readonly Language NorthernSami = new Language("se", "sme", "Northern Sami");
+    public static readonly Language NorthernSami = new("se", "sme", "Northern Sami");
     /// <summary>The Sami Languages language.</summary>
-    public static readonly Language SamiLanguages = new Language("", "smi", "Sami languages");
+    public static readonly Language SamiLanguages = new("", "smi", "Sami languages");
     /// <summary>The Lule Sami language.</summary>
-    public static readonly Language LuleSami = new Language("", "smj", "Lule Sami");
+    public static readonly Language LuleSami = new("", "smj", "Lule Sami");
     /// <summary>The Inari Sami language.</summary>
-    public static readonly Language InariSami = new Language("", "smn", "Inari Sami");
+    public static readonly Language InariSami = new("", "smn", "Inari Sami");
     /// <summary>The Samoan language.</summary>
-    public static readonly Language Samoan = new Language("sm", "smo", "Samoan");
+    public static readonly Language Samoan = new("sm", "smo", "Samoan");
     /// <summary>The Skolt Sami language.</summary>
-    public static readonly Language SkoltSami = new Language("", "sms", "Skolt Sami");
+    public static readonly Language SkoltSami = new("", "sms", "Skolt Sami");
     /// <summary>The Shona language.</summary>
-    public static readonly Language Shona = new Language("sn", "sna", "Shona");
+    public static readonly Language Shona = new("sn", "sna", "Shona");
     /// <summary>The Sindhi language.</summary>
-    public static readonly Language Sindhi = new Language("sd", "snd", "Sindhi");
+    public static readonly Language Sindhi = new("sd", "snd", "Sindhi");
     /// <summary>The Soninke language.</summary>
-    public static readonly Language Soninke = new Language("", "snk", "Soninke");
+    public static readonly Language Soninke = new("", "snk", "Soninke");
     /// <summary>The Sogdian language.</summary>
-    public static readonly Language Sogdian = new Language("", "sog", "Sogdian");
+    public static readonly Language Sogdian = new("", "sog", "Sogdian");
     /// <summary>The Somali language.</summary>
-    public static readonly Language Somali = new Language("so", "som", "Somali");
+    public static readonly Language Somali = new("so", "som", "Somali");
     /// <summary>The Songhai Languages language.</summary>
-    public static readonly Language SonghaiLanguages = new Language("", "son", "Songhai languages");
+    public static readonly Language SonghaiLanguages = new("", "son", "Songhai languages");
     /// <summary>The Sotho Southern language.</summary>
-    public static readonly Language SothoSouthern = new Language("st", "sot", "Sotho, Southern");
+    public static readonly Language SothoSouthern = new("st", "sot", "Sotho, Southern");
     /// <summary>The Spanish language.</summary>
-    public static readonly Language Spanish = new Language("es", "spa", "Spanish; Castilian");
+    public static readonly Language Spanish = new("es", "spa", "Spanish; Castilian");
     /// <summary>The Sardinian language.</summary>
-    public static readonly Language Sardinian = new Language("sc", "srd", "Sardinian");
+    public static readonly Language Sardinian = new("sc", "srd", "Sardinian");
     /// <summary>The Sranan Tongo language.</summary>
-    public static readonly Language SrananTongo = new Language("", "srn", "Sranan Tongo");
+    public static readonly Language SrananTongo = new("", "srn", "Sranan Tongo");
     /// <summary>The Serbian language.</summary>
-    public static readonly Language Serbian = new Language("sr", "srp", "Serbian");
+    public static readonly Language Serbian = new("sr", "srp", "Serbian");
     /// <summary>The Serer language.</summary>
-    public static readonly Language Serer = new Language("", "srr", "Serer");
+    public static readonly Language Serer = new("", "srr", "Serer");
     /// <summary>The Nilo Saharan Languages language.</summary>
-    public static readonly Language NiloSaharanLanguages = new Language("", "ssa", "Nilo-Saharan languages");
+    public static readonly Language NiloSaharanLanguages = new("", "ssa", "Nilo-Saharan languages");
     /// <summary>The Swati language.</summary>
-    public static readonly Language Swati = new Language("ss", "ssw", "Swati");
+    public static readonly Language Swati = new("ss", "ssw", "Swati");
     /// <summary>The Sukuma language.</summary>
-    public static readonly Language Sukuma = new Language("", "suk", "Sukuma");
+    public static readonly Language Sukuma = new("", "suk", "Sukuma");
     /// <summary>The Sundanese language.</summary>
-    public static readonly Language Sundanese = new Language("su", "sun", "Sundanese");
+    public static readonly Language Sundanese = new("su", "sun", "Sundanese");
     /// <summary>The Susu language.</summary>
-    public static readonly Language Susu = new Language("", "sus", "Susu");
+    public static readonly Language Susu = new("", "sus", "Susu");
     /// <summary>The Sumerian language.</summary>
-    public static readonly Language Sumerian = new Language("", "sux", "Sumerian");
+    public static readonly Language Sumerian = new("", "sux", "Sumerian");
     /// <summary>The Swahili language.</summary>
-    public static readonly Language Swahili = new Language("sw", "swa", "Swahili");
+    public static readonly Language Swahili = new("sw", "swa", "Swahili");
     /// <summary>The Swedish language.</summary>
-    public static readonly Language Swedish = new Language("sv", "swe", "Swedish");
+    public static readonly Language Swedish = new("sv", "swe", "Swedish");
     /// <summary>The Classical Syriac language.</summary>
-    public static readonly Language ClassicalSyriac = new Language("", "syc", "Classical Syriac");
+    public static readonly Language ClassicalSyriac = new("", "syc", "Classical Syriac");
     /// <summary>The Syriac language.</summary>
-    public static readonly Language Syriac = new Language("", "syr", "Syriac");
+    public static readonly Language Syriac = new("", "syr", "Syriac");
 
     /// <summary>The Tahitian language.</summary>
-    public static readonly Language Tahitian = new Language("ty", "tah", "Tahitian");
+    public static readonly Language Tahitian = new("ty", "tah", "Tahitian");
     /// <summary>The Tai Languages language.</summary>
-    public static readonly Language TaiLanguages = new Language("", "tai", "Tai languages");
+    public static readonly Language TaiLanguages = new("", "tai", "Tai languages");
     /// <summary>The Tamil language.</summary>
-    public static readonly Language Tamil = new Language("ta", "tam", "Tamil");
+    public static readonly Language Tamil = new("ta", "tam", "Tamil");
     /// <summary>The Tatar language.</summary>
-    public static readonly Language Tatar = new Language("tt", "tat", "Tatar");
+    public static readonly Language Tatar = new("tt", "tat", "Tatar");
     /// <summary>The Telugu language.</summary>
-    public static readonly Language Telugu = new Language("te", "tel", "Telugu");
+    public static readonly Language Telugu = new("te", "tel", "Telugu");
     /// <summary>The Timne language.</summary>
-    public static readonly Language Timne = new Language("", "tem", "Timne");
+    public static readonly Language Timne = new("", "tem", "Timne");
     /// <summary>The Tereno language.</summary>
-    public static readonly Language Tereno = new Language("", "ter", "Tereno");
+    public static readonly Language Tereno = new("", "ter", "Tereno");
     /// <summary>The Tetum language.</summary>
-    public static readonly Language Tetum = new Language("", "tet", "Tetum");
+    public static readonly Language Tetum = new("", "tet", "Tetum");
     /// <summary>The Tajik language.</summary>
-    public static readonly Language Tajik = new Language("tg", "tgk", "Tajik");
+    public static readonly Language Tajik = new("tg", "tgk", "Tajik");
     /// <summary>The Tagalog language.</summary>
-    public static readonly Language Tagalog = new Language("tl", "tgl", "Tagalog");
+    public static readonly Language Tagalog = new("tl", "tgl", "Tagalog");
     /// <summary>The Thai language.</summary>
-    public static readonly Language Thai = new Language("th", "tha", "Thai");
+    public static readonly Language Thai = new("th", "tha", "Thai");
     /// <summary>The Tigre language.</summary>
-    public static readonly Language Tigre = new Language("", "tig", "Tigre");
+    public static readonly Language Tigre = new("", "tig", "Tigre");
     /// <summary>The Tigrinya language.</summary>
-    public static readonly Language Tigrinya = new Language("ti", "tir", "Tigrinya");
+    public static readonly Language Tigrinya = new("ti", "tir", "Tigrinya");
     /// <summary>The Tiv language.</summary>
-    public static readonly Language Tiv = new Language("", "tiv", "Tiv");
+    public static readonly Language Tiv = new("", "tiv", "Tiv");
     /// <summary>The Tokelau language.</summary>
-    public static readonly Language Tokelau = new Language("", "tkl", "Tokelau");
+    public static readonly Language Tokelau = new("", "tkl", "Tokelau");
     /// <summary>The Klingon language.</summary>
-    public static readonly Language Klingon = new Language("", "tlh", "Klingon; tlhIngan-Hol");
+    public static readonly Language Klingon = new("", "tlh", "Klingon; tlhIngan-Hol");
     /// <summary>The Tlingit language.</summary>
-    public static readonly Language Tlingit = new Language("", "tli", "Tlingit");
+    public static readonly Language Tlingit = new("", "tli", "Tlingit");
     /// <summary>The Tamashek language.</summary>
-    public static readonly Language Tamashek = new Language("", "tmh", "Tamashek");
+    public static readonly Language Tamashek = new("", "tmh", "Tamashek");
     /// <summary>The Tonga Nyasa language.</summary>
-    public static readonly Language TongaNyasa = new Language("", "tog", "Tonga (Nyasa)");
+    public static readonly Language TongaNyasa = new("", "tog", "Tonga (Nyasa)");
     /// <summary>The Tonga Islands language.</summary>
-    public static readonly Language TongaIslands = new Language("to", "ton", "Tonga (Tonga Islands)");
+    public static readonly Language TongaIslands = new("to", "ton", "Tonga (Tonga Islands)");
     /// <summary>The Tok Pisin language.</summary>
-    public static readonly Language TokPisin = new Language("", "tpi", "Tok Pisin");
+    public static readonly Language TokPisin = new("", "tpi", "Tok Pisin");
     /// <summary>The Tsimshian language.</summary>
-    public static readonly Language Tsimshian = new Language("", "tsi", "Tsimshian");
+    public static readonly Language Tsimshian = new("", "tsi", "Tsimshian");
     /// <summary>The Tswana language.</summary>
-    public static readonly Language Tswana = new Language("tn", "tsn", "Tswana");
+    public static readonly Language Tswana = new("tn", "tsn", "Tswana");
     /// <summary>The Tsonga language.</summary>
-    public static readonly Language Tsonga = new Language("ts", "tso", "Tsonga");
+    public static readonly Language Tsonga = new("ts", "tso", "Tsonga");
     /// <summary>The Turkmen language.</summary>
-    public static readonly Language Turkmen = new Language("tk", "tuk", "Turkmen");
+    public static readonly Language Turkmen = new("tk", "tuk", "Turkmen");
     /// <summary>The Tumbuka language.</summary>
-    public static readonly Language Tumbuka = new Language("", "tum", "Tumbuka");
+    public static readonly Language Tumbuka = new("", "tum", "Tumbuka");
     /// <summary>The Tupi Languages language.</summary>
-    public static readonly Language TupiLanguages = new Language("", "tup", "Tupi languages");
+    public static readonly Language TupiLanguages = new("", "tup", "Tupi languages");
     /// <summary>The Turkish language.</summary>
-    public static readonly Language Turkish = new Language("tr", "tur", "Turkish");
+    public static readonly Language Turkish = new("tr", "tur", "Turkish");
     /// <summary>The Altaic Languages language.</summary>
-    public static readonly Language AltaicLanguages = new Language("", "tut", "Altaic languages");
+    public static readonly Language AltaicLanguages = new("", "tut", "Altaic languages");
     /// <summary>The Tuvalu language.</summary>
-    public static readonly Language Tuvalu = new Language("", "tvl", "Tuvalu");
+    public static readonly Language Tuvalu = new("", "tvl", "Tuvalu");
     /// <summary>The Twi language.</summary>
-    public static readonly Language Twi = new Language("tw", "twi", "Twi");
+    public static readonly Language Twi = new("tw", "twi", "Twi");
     /// <summary>The Tuvinian language.</summary>
-    public static readonly Language Tuvinian = new Language("", "tyv", "Tuvinian");
+    public static readonly Language Tuvinian = new("", "tyv", "Tuvinian");
 
     /// <summary>The Udmurt language.</summary>
-    public static readonly Language Udmurt = new Language("", "udm", "Udmurt");
+    public static readonly Language Udmurt = new("", "udm", "Udmurt");
     /// <summary>The Ugaritic language.</summary>
-    public static readonly Language Ugaritic = new Language("", "uga", "Ugaritic");
+    public static readonly Language Ugaritic = new("", "uga", "Ugaritic");
     /// <summary>The Uighur language.</summary>
-    public static readonly Language Uighur = new Language("ug", "uig", "Uighur; Uyghur");
+    public static readonly Language Uighur = new("ug", "uig", "Uighur; Uyghur");
     /// <summary>The Ukrainian language.</summary>
-    public static readonly Language Ukrainian = new Language("uk", "ukr", "Ukrainian");
+    public static readonly Language Ukrainian = new("uk", "ukr", "Ukrainian");
     /// <summary>The Umbundu language.</summary>
-    public static readonly Language Umbundu = new Language("", "umb", "Umbundu");
+    public static readonly Language Umbundu = new("", "umb", "Umbundu");
     /// <summary>The Undetermined language.</summary>
-    public static readonly Language Undetermined = new Language("", "und", "Undetermined");
+    public static readonly Language Undetermined = new("", "und", "Undetermined");
     /// <summary>The Urdu language.</summary>
-    public static readonly Language Urdu = new Language("ur", "urd", "Urdu");
+    public static readonly Language Urdu = new("ur", "urd", "Urdu");
     /// <summary>The Uzbek language.</summary>
-    public static readonly Language Uzbek = new Language("uz", "uzb", "Uzbek");
+    public static readonly Language Uzbek = new("uz", "uzb", "Uzbek");
 
     /// <summary>The Vai language.</summary>
-    public static readonly Language Vai = new Language("", "vai", "Vai");
+    public static readonly Language Vai = new("", "vai", "Vai");
     /// <summary>The Venda language.</summary>
-    public static readonly Language Venda = new Language("ve", "ven", "Venda");
+    public static readonly Language Venda = new("ve", "ven", "Venda");
     /// <summary>The Vietnamese language.</summary>
-    public static readonly Language Vietnamese = new Language("vi", "vie", "Vietnamese");
+    public static readonly Language Vietnamese = new("vi", "vie", "Vietnamese");
     /// <summary>The Volapuk language.</summary>
-    public static readonly Language Volapuk = new Language("vo", "vol", "Volapük");
+    public static readonly Language Volapuk = new("vo", "vol", "Volapük");
     /// <summary>The Votic language.</summary>
-    public static readonly Language Votic = new Language("", "vot", "Votic");
+    public static readonly Language Votic = new("", "vot", "Votic");
     /// <summary>The Wakashan Languages language.</summary>
-    public static readonly Language WakashanLanguages = new Language("", "wak", "Wakashan languages");
+    public static readonly Language WakashanLanguages = new("", "wak", "Wakashan languages");
     /// <summary>The Wolaitta language.</summary>
-    public static readonly Language Wolaitta = new Language("", "wal", "Wolaitta; Wolaytta");
+    public static readonly Language Wolaitta = new("", "wal", "Wolaitta; Wolaytta");
     /// <summary>The Waray language.</summary>
-    public static readonly Language Waray = new Language("", "war", "Waray");
+    public static readonly Language Waray = new("", "war", "Waray");
     /// <summary>The Washo language.</summary>
-    public static readonly Language Washo = new Language("", "was", "Washo");
+    public static readonly Language Washo = new("", "was", "Washo");
     /// <summary>The Sorbian Languages language.</summary>
-    public static readonly Language SorbianLanguages = new Language("", "wen", "Sorbian languages");
+    public static readonly Language SorbianLanguages = new("", "wen", "Sorbian languages");
     /// <summary>The Walloon language.</summary>
-    public static readonly Language Walloon = new Language("wa", "wln", "Walloon");
+    public static readonly Language Walloon = new("wa", "wln", "Walloon");
     /// <summary>The Wolof language.</summary>
-    public static readonly Language Wolof = new Language("wo", "wol", "Wolof");
+    public static readonly Language Wolof = new("wo", "wol", "Wolof");
 
     /// <summary>The Kalmyk language.</summary>
-    public static readonly Language Kalmyk = new Language("", "xal", "Kalmyk; Oirat");
+    public static readonly Language Kalmyk = new("", "xal", "Kalmyk; Oirat");
     /// <summary>The Xhosa language.</summary>
-    public static readonly Language Xhosa = new Language("xh", "xho", "Xhosa");
+    public static readonly Language Xhosa = new("xh", "xho", "Xhosa");
     /// <summary>The Yao language.</summary>
-    public static readonly Language Yao = new Language("", "yao", "Yao");
+    public static readonly Language Yao = new("", "yao", "Yao");
     /// <summary>The Yapese language.</summary>
-    public static readonly Language Yapese = new Language("", "yap", "Yapese");
+    public static readonly Language Yapese = new("", "yap", "Yapese");
     /// <summary>The Yiddish language.</summary>
-    public static readonly Language Yiddish = new Language("yi", "yid", "Yiddish");
+    public static readonly Language Yiddish = new("yi", "yid", "Yiddish");
     /// <summary>The Yoruba language.</summary>
-    public static readonly Language Yoruba = new Language("yo", "yor", "Yoruba");
+    public static readonly Language Yoruba = new("yo", "yor", "Yoruba");
     /// <summary>The Yupik Languages language.</summary>
-    public static readonly Language YupikLanguages = new Language("", "ypk", "Yupik languages");
+    public static readonly Language YupikLanguages = new("", "ypk", "Yupik languages");
     /// <summary>The Zapotec language.</summary>
-    public static readonly Language Zapotec = new Language("", "zap", "Zapotec");
+    public static readonly Language Zapotec = new("", "zap", "Zapotec");
     /// <summary>The Blissymbols language.</summary>
-    public static readonly Language Blissymbols = new Language("", "zbl", "Blissymbols; Blissymbolics; Bliss");
+    public static readonly Language Blissymbols = new("", "zbl", "Blissymbols; Blissymbolics; Bliss");
     /// <summary>The Zenaga language.</summary>
-    public static readonly Language Zenaga = new Language("", "zen", "Zenaga");
+    public static readonly Language Zenaga = new("", "zen", "Zenaga");
     /// <summary>The Standard Moroccan Tamazight language.</summary>
-    public static readonly Language StandardMoroccanTamazight = new Language("", "zgh", "Standard Moroccan Tamazight");
+    public static readonly Language StandardMoroccanTamazight = new("", "zgh", "Standard Moroccan Tamazight");
     /// <summary>The Zhuang language.</summary>
-    public static readonly Language Zhuang = new Language("za", "zha", "Zhuang; Chuang");
+    public static readonly Language Zhuang = new("za", "zha", "Zhuang; Chuang");
     /// <summary>The Zande Languages language.</summary>
-    public static readonly Language ZandeLanguages = new Language("", "znd", "Zande languages");
+    public static readonly Language ZandeLanguages = new("", "znd", "Zande languages");
     /// <summary>The Zulu language.</summary>
-    public static readonly Language Zulu = new Language("zu", "zul", "Zulu");
+    public static readonly Language Zulu = new("zu", "zul", "Zulu");
     /// <summary>The Zuni language.</summary>
-    public static readonly Language Zuni = new Language("", "zun", "Zuni");
+    public static readonly Language Zuni = new("", "zun", "Zuni");
     /// <summary>The No Linguistic Content language.</summary>
-    public static readonly Language NoLinguisticContent = new Language("", "zxx", "No linguistic content; Not applicable");
+    public static readonly Language NoLinguisticContent = new("", "zxx", "No linguistic content; Not applicable");
     /// <summary>The Zaza language.</summary>
-    public static readonly Language Zaza = new Language("", "zza", "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki");
+    public static readonly Language Zaza = new("", "zza", "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki");
 
     /// <summary>The None language.</summary>
-    public static readonly Language None = new Language(string.Empty, string.Empty, string.Empty);
+    public static readonly Language None = new(string.Empty, string.Empty, string.Empty);
 
     // ===== Static constructor — extended data initialization =====
     static LanguageHelper()
@@ -1180,20 +1176,19 @@ public static class LanguageHelper
         foreach (var kvp in data)
         {
             var lang = GetAll().FirstOrDefault(l => l.Alpha2Code == kvp.Key);
-            if (lang != null)
-                lang.SetExtendedData(kvp.Value.Native, kvp.Value.Script, kvp.Value.Dir);
+            lang?.SetExtendedData(kvp.Value.Native, kvp.Value.Script, kvp.Value.Dir);
         }
     }
 
-    private static readonly Lazy<IReadOnlyList<Language>> _all = new(() => InitializeAll());
+    private static readonly Lazy<IReadOnlyList<Language>> _all = new(InitializeAll);
 
     /// <summary>Gets all languages.</summary>
     public static IReadOnlyList<Language> GetAll() => _all.Value;
 
     private static List<Language> InitializeAll()
     {
-        return new List<Language>
-        {
+        return
+        [
             Afar,
             Abkhazian,
             Afrikaans,
@@ -1670,7 +1665,7 @@ public static class LanguageHelper
             Zuni,
             NoLinguisticContent,
             Zaza,
-        };
+        ];
     }
 
     /// <summary>Gets a dictionary mapping ISO 639-2 alpha-3 codes to languages.</summary>

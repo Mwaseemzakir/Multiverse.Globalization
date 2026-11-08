@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Fiji country.</summary>
     public static readonly Country Fiji =
-        new Country(
+        new(
             CountryNames.Fiji, "242", "FJ", "FJI",
             "+679", "Suva", "Oceania",
             CurrencyHelper.FijianDollar,

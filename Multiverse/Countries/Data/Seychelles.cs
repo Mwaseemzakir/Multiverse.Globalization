@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Seychelles country.</summary>
     public static readonly Country Seychelles =
-        new Country(
+        new(
             CountryNames.Seychelles, "690", "SC", "SYC",
             "+248", "Victoria", "Africa",
             CurrencyHelper.SeychelloisRupee,

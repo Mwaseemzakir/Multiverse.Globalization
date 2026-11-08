@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Multiverse.Globalization.Electrical;
 
 /// <summary>
@@ -18,7 +15,7 @@ public sealed class ElectricalSystem
 
         Voltage = voltage;
         Frequency = frequency;
-        PlugTypes = plugTypes ?? Array.Empty<PlugType>();
+        PlugTypes = plugTypes;
     }
 
     /// <summary>Standard mains voltage in volts (e.g. 120, 220, 230, 240).</summary>

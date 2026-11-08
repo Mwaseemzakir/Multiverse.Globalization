@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-#if NET8_0_OR_GREATER
-using System.Collections.Frozen;
-#endif
-
 namespace Multiverse.Globalization.Countries;
 
 /// <summary>
@@ -15,7 +7,21 @@ namespace Multiverse.Globalization.Countries;
 public static partial class CountryHelper
 {
     /// <summary>Empty sentinel value representing no country.</summary>
-    public static readonly Country None = new Country("", "", "", "", "", "", "", null);
+    public static readonly Country None = new(
+        "", "", "", "", "", "", "", null, CountryCodeStatus.Unspecified);
+
+    /// <summary>
+    /// Cached reflection scan of every public static <see cref="Country"/> field on this type
+    /// (the 250 country instances plus <see cref="None"/>). Computed once and reused by every
+    /// initialization pass and by <see cref="_all"/>, instead of each caller re-scanning the type.
+    /// </summary>
+    private static readonly Lazy<Country[]> _countryFields = new(() =>
+    [
+        .. typeof(CountryHelper)
+            .GetFields(BindingFlags.Public | BindingFlags.Static)
+            .Where(f => f.FieldType == typeof(Country))
+            .Select(f => (Country)f.GetValue(null)!)
+    ]);
 
     /// <summary>
     /// Static constructor — runs after all static field initializers (the 250 country objects)
@@ -294,26 +300,28 @@ public static partial class CountryHelper
             ["VI"] = ("Caribbean", "U.S. Virgin Islander", ".vi"),
             ["UM"] = ("Polynesia", "American", ".um"),
             ["WF"] = ("Polynesia", "Wallisian", ".wf"),
-            ["EH"] = ("Northern Africa", "Sahrawi", ".eh"),
+            ["EH"] = ("Northern Africa", "Sahrawi", ".eh")
         };
 
-        foreach (var field in typeof(CountryHelper)
-            .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country)))
-        {
-            var country = (Country)field.GetValue(null)!;
+        foreach (var country in _countryFields.Value)
             if (data.TryGetValue(country.Alpha2Code, out var ext))
                 country.SetExtendedData(ext.SubRegion, ext.Demonym, ext.TLD);
-        }
     }
 
     private static readonly Lazy<List<Country>> _all = new(() =>
-        typeof(CountryHelper)
-            .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => f.FieldType == typeof(Country))
-            .Select(f => (Country)f.GetValue(null)!)
-            .OrderBy(c => c.Name)
-            .ToList());
+        [.. _countryFields.Value.OrderBy(c => c.Name)]);
+
+    private static readonly Lazy<IReadOnlyList<Country>> _current = new(() =>
+        _all.Value
+            .Where(c => c.CodeStatus == CountryCodeStatus.OfficiallyAssigned)
+            .ToList()
+            .AsReadOnly());
+
+    private static readonly Lazy<IReadOnlyList<Country>> _legacy = new(() =>
+        _all.Value
+            .Where(c => c.CodeStatus == CountryCodeStatus.FormerlyAssigned)
+            .ToList()
+            .AsReadOnly());
 
     private static readonly Lazy<IReadOnlyDictionary<string, Country>> _alpha2CodeMap = new(() =>
 #if NET8_0_OR_GREATER
@@ -343,8 +351,26 @@ public static partial class CountryHelper
         _all.Value.ToDictionary(c => c.NumericCode));
 #endif
 
-    /// <summary>Returns a cached read-only list containing all countries.</summary>
-    public static IReadOnlyList<Country> GetAll() => _all.Value;
+    /// <summary>
+    /// Returns the complete compatibility catalog, including <see cref="None"/> and formerly
+    /// assigned country-code records. Use <see cref="GetCurrent"/> for current ISO entries only.
+    /// </summary>
+    public static IReadOnlyList<Country> GetAll()
+    {
+        return _all.Value;
+    }
+
+    /// <summary>Returns the 249 records with currently assigned ISO 3166-1 codes.</summary>
+    public static IReadOnlyList<Country> GetCurrent()
+    {
+        return _current.Value;
+    }
+
+    /// <summary>Returns formerly assigned country-code records retained for compatibility.</summary>
+    public static IReadOnlyList<Country> GetLegacy()
+    {
+        return _legacy.Value;
+    }
 
     /// <summary>Lookup by ISO 3166-1 alpha-2 code (case-insensitive).</summary>
     public static IReadOnlyDictionary<string, Country> Alpha2CodeMap => _alpha2CodeMap.Value;
@@ -357,4 +383,50 @@ public static partial class CountryHelper
 
     /// <summary>Lookup by ISO 3166-1 numeric code.</summary>
     public static IReadOnlyDictionary<string, Country> NumericCodeMap => _numericCodeMap.Value;
+
+    /// <summary>
+    /// Maps common alternate/colloquial country names (lowercase) to their ISO 3166-1 alpha-2 code,
+    /// for names that differ from the canonical <see cref="Country.Name"/> used as the key in
+    /// <see cref="NameMap"/> — e.g. "usa" for "United States of America", "russia" for
+    /// "Russian Federation", "ivory coast" for "Côte d'Ivoire". Consulted as a fallback by
+    /// <see cref="Country.GetCountryOrDefault"/> and <see cref="Country.IsValid"/> after an exact
+    /// code/name match fails.
+    /// </summary>
+    public static readonly IReadOnlyDictionary<string, string> NameAliases = new Dictionary<string, string>
+    {
+        ["usa"] = "US",
+        ["united states"] = "US",
+        ["uk"] = "GB",
+        ["britain"] = "GB",
+        ["great britain"] = "GB",
+        ["south korea"] = "KR",
+        ["north korea"] = "KP",
+        ["russia"] = "RU",
+        ["ivory coast"] = "CI",
+        ["czechia"] = "CZ",
+        ["burma"] = "MM",
+        ["eswatini"] = "SZ",
+        ["swaziland"] = "SZ",
+        ["syria"] = "SY",
+        ["tanzania"] = "TZ",
+        ["micronesia"] = "FM",
+        ["venezuela"] = "VE",
+        ["vatican"] = "VA",
+        ["vatican city"] = "VA",
+        ["holy see"] = "VA",
+        ["macedonia"] = "MK",
+        ["north macedonia"] = "MK",
+        ["dr congo"] = "CD",
+        ["democratic republic of the congo"] = "CD",
+        ["congo-kinshasa"] = "CD",
+        ["republic of the congo"] = "CG",
+        ["congo-brazzaville"] = "CG",
+        ["iran"] = "IR",
+        ["brunei"] = "BN",
+        ["laos"] = "LA",
+        ["vietnam"] = "VN",
+        ["east timor"] = "TL",
+        ["uae"] = "AE",
+        ["cabo verde"] = "CV"
+    };
 }

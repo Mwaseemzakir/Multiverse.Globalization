@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Qatar country.</summary>
     public static readonly Country Qatar =
-        new Country(
+        new(
             CountryNames.Qatar, "634", "QA", "QAT",
             "+974", "Doha", "Asia",
             CurrencyHelper.QatariRial,

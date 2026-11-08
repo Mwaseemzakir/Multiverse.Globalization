@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Togo country.</summary>
     public static readonly Country Togo =
-        new Country(
+        new(
             CountryNames.Togo, "768", "TG", "TGO",
             "+228", "Lome", "Africa",
             CurrencyHelper.CfaFrancBceao,

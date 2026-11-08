@@ -5,9 +5,6 @@ on:
     branches:
       - production
 
-permissions:
-  contents: write
-
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -54,18 +51,3 @@ jobs:
 
       - name: Push NuGet Package
         run: dotnet nuget push "nupkgs/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "${{ env.PACKAGE_SOURCE }}" --skip-duplicate
-
-      - name: Create Git tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "v${{ env.PACKAGE_VERSION }}"
-          git push origin "v${{ env.PACKAGE_VERSION }}"
-
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "v${{ env.PACKAGE_VERSION }}" \
-            --title "v${{ env.PACKAGE_VERSION }}" \
-            --notes-file RELEASE_NOTES.md

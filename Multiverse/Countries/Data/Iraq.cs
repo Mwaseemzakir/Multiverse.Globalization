@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Iraq country.</summary>
     public static readonly Country Iraq =
-        new Country(
+        new(
             CountryNames.Iraq, "368", "IQ", "IRQ",
             "+964", "Baghdad", "Asia",
             CurrencyHelper.IraqiDinar,

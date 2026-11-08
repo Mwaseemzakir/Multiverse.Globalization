@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Latvia country.</summary>
     public static readonly Country Latvia =
-        new Country(
+        new(
             CountryNames.Latvia, "428", "LV", "LVA",
             "+371", "Riga", "Europe",
             CurrencyHelper.Euro,

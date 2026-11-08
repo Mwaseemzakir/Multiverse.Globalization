@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Norfolk Island country.</summary>
     public static readonly Country NorfolkIsland =
-        new Country(
+        new(
             CountryNames.NorfolkIsland, "574", "NF", "NFK",
             "+672", "Kingston", "Oceania",
             CurrencyHelper.AustralianDollar,

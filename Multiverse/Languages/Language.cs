@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using static Multiverse.Globalization.Languages.LanguageHelper;
+﻿using static Multiverse.Globalization.Languages.LanguageHelper;
 
 namespace Multiverse.Globalization.Languages;
 
@@ -11,11 +8,11 @@ namespace Multiverse.Globalization.Languages;
 public sealed class Language
 {
     /// <summary>Full English name of the language.</summary>
-    public string Name { get; private set; }
+    public string Name { get; }
     /// <summary>ISO 639-1 two-letter language code, e.g. "en", "fr".</summary>
-    public string Alpha2Code { get; private set; } = string.Empty;
+    public string Alpha2Code { get; }
     /// <summary>ISO 639-2/T three-letter language code, e.g. "eng", "fra".</summary>
-    public string Alpha3Code { get; private set; } = string.Empty;
+    public string Alpha3Code { get; }
 
     /// <summary>Native name of the language, e.g. "Deutsch" for German, "العربية" for Arabic.</summary>
     public string NativeName { get; private set; } = string.Empty;
@@ -28,8 +25,8 @@ public sealed class Language
 
     internal void SetExtendedData(string nativeName, string script, TextDirection direction)
     {
-        NativeName = nativeName ?? string.Empty;
-        Script = script ?? string.Empty;
+        NativeName = nativeName;
+        Script = script;
         TextDirection = direction;
     }
 
@@ -39,8 +36,8 @@ public sealed class Language
         string name)
     {
         Name = name;
-        Alpha2Code = alpha2Code ?? string.Empty;
-        Alpha3Code = alpha3Code ?? string.Empty;
+        Alpha2Code = alpha2Code;
+        Alpha3Code = alpha3Code;
     }
 
     /// <summary>
@@ -49,21 +46,21 @@ public sealed class Language
     /// </summary>
     public static Language? GetLanguageOrDefault(string identifier)
     {
-        if(string.IsNullOrWhiteSpace(identifier))
-            return default;
+        if (string.IsNullOrWhiteSpace(identifier))
+            return null;
 
         identifier = identifier.ToLowerInvariant();
 
-        if(Alpha2CodeMap.TryGetValue(identifier, out var byAlpha2))
+        if (Alpha2CodeMap.TryGetValue(identifier, out var byAlpha2))
             return byAlpha2;
 
-        if(Alpha3CodeMap.TryGetValue(identifier, out var byAlpha3))
+        if (Alpha3CodeMap.TryGetValue(identifier, out var byAlpha3))
             return byAlpha3;
 
-        if(NameMap.TryGetValue(identifier, out var byName))
+        if (NameMap.TryGetValue(identifier, out var byName))
             return byName;
 
-        return default;
+        return null;
     }
 
     /// <summary>
@@ -72,7 +69,7 @@ public sealed class Language
     /// </summary>
     public static Language GetLanguage(string identifier)
     {
-        if(string.IsNullOrWhiteSpace(identifier))
+        if (string.IsNullOrWhiteSpace(identifier))
             throw new ArgumentNullException(nameof(identifier));
 
         return GetLanguageOrDefault(identifier)
@@ -85,7 +82,7 @@ public sealed class Language
     /// </summary>
     public static bool IsValid(string identifier)
     {
-        if(string.IsNullOrWhiteSpace(identifier))
+        if (string.IsNullOrWhiteSpace(identifier))
             return false;
 
         identifier = identifier.ToLowerInvariant();

@@ -1,0 +1,11 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using Multiverse.Globalization.Countries;
+global using Multiverse.Globalization.Currencies;
+global using Multiverse.Globalization.Electrical;
+global using Multiverse.Globalization.Holidays;
+global using Multiverse.Globalization.Languages;
+global using Multiverse.Globalization.Subdivisions;
+global using Multiverse.Globalization.TimeZones;
+global using Xunit;

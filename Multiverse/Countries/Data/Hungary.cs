@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Hungary country.</summary>
     public static readonly Country Hungary =
-        new Country(
+        new(
             CountryNames.Hungary, "348", "HU", "HUN",
             "+36", "Budapest", "Europe",
             CurrencyHelper.Forint,

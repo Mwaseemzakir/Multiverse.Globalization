@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Costa Rica country.</summary>
     public static readonly Country CostaRica =
-        new Country(
+        new(
             CountryNames.CostaRica, "188", "CR", "CRI",
             "+506", "San Jose", "Americas",
             CurrencyHelper.CostaRicanColon,

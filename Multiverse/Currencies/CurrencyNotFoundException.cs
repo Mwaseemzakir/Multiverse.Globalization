@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Multiverse.Globalization.Currencies;
+﻿namespace Multiverse.Globalization.Currencies;
 
 /// <summary>Exception thrown when a currency cannot be found by its identifier.</summary>
 [Serializable]

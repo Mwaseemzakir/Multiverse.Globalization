@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Sao Tome And Principe country.</summary>
     public static readonly Country SaoTomeAndPrincipe =
-        new Country(
+        new(
             CountryNames.SaoTomeAndPrincipe, "678", "ST", "STP",
             "+239", "Sao Tome", "Africa",
             CurrencyHelper.SaoTomeDobra,

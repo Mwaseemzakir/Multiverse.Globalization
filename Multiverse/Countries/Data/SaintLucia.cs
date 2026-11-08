@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Saint Lucia country.</summary>
     public static readonly Country SaintLucia =
-        new Country(
+        new(
             CountryNames.SaintLucia, "662", "LC", "LCA",
             "+1", "Castries", "Americas",
             CurrencyHelper.EastCaribbeanDollar,

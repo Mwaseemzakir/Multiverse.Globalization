@@ -4,17 +4,20 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Title>Multiverse</Title>
+    <Title>Multiverse.Globalization</Title>
     <Authors>Muhammad Waseem</Authors>
-    <Description>This NuGet package provides comprehensive language codes, country codes, and currency codes from around the globe, making it an essential tool for internationalization and localization in .NET projects.</Description>
-    <Version>2.0.0</Version>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
-    <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse.Globalization</RepositoryUrl>
+    <Description>Offline .NET globalization data and behaviour for countries, currencies, languages, holidays, IANA time-zone identifiers, locales, subdivisions, phone formats, and electrical systems - including postal code and phone number validation, money and address formatting, business-day arithmetic, and country search.</Description>
+    <Version>2.1.0</Version>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+    <RepositoryUrl>https://github.com/Mwaseemzakir/Multiverse</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Mwaseemzakir/Multiverse</PackageProjectUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Copyright>Muhammad Waseem - $([System.DateTime]::Now.Year)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageTags>internationalization; localization; language codes; country codes; currency codes; .NET; globalization; holidays; timezones; iana; iso3166; iso4217; iso639; country; currency; language; timezone; holiday; geodata; locale; subdivisions</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageTags>countries;country-data;iso-3166;currencies;iso-4217;languages;iso-639;internationalization;i18n;localization;l10n;globalization;holidays;business-days;working-days;time-zones;iana;phone-validation;postal-code;dotnet</PackageTags>
 	<PackageId>Multiverse</PackageId>
 	<PackageReleaseNotes>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\..\RELEASE_NOTES.md'))</PackageReleaseNotes>
   </PropertyGroup>
@@ -26,6 +29,7 @@
       <PackagePath>\</PackagePath>
     </None>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\DATA_SOURCES.md" Pack="true" PackagePath="\" />
     <None Include="logo.jpg" Pack="true" PackagePath="\" />
   </ItemGroup>
 	

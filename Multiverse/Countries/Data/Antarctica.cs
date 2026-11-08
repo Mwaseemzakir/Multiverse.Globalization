@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Antarctica country.</summary>
     public static readonly Country Antarctica =
-        new Country(
+        new(
             CountryNames.Antarctica, "010", "AQ", "ATA",
             "+672", "", "Antarctic",
             null);

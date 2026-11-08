@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Somalia country.</summary>
     public static readonly Country Somalia =
-        new Country(
+        new(
             CountryNames.Somalia, "706", "SO", "SOM",
             "+252", "Mogadishu", "Africa",
             CurrencyHelper.SomaliShilling,

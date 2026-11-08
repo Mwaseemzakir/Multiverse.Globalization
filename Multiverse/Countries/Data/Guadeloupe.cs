@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Guadeloupe country.</summary>
     public static readonly Country Guadeloupe =
-        new Country(
+        new(
             CountryNames.Guadeloupe, "312", "GP", "GLP",
             "+590", "Basse-Terre", "Americas",
             CurrencyHelper.Euro,

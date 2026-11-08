@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Aruba country.</summary>
     public static readonly Country Aruba =
-        new Country(
+        new(
             CountryNames.Aruba, "533", "AW", "ABW",
             "+297", "Oranjestad", "Americas",
             CurrencyHelper.ArubanFlorin,

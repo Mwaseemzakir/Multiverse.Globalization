@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Gabon country.</summary>
     public static readonly Country Gabon =
-        new Country(
+        new(
             CountryNames.Gabon, "266", "GA", "GAB",
             "+241", "Libreville", "Africa",
             CurrencyHelper.CfaFrancBeac,

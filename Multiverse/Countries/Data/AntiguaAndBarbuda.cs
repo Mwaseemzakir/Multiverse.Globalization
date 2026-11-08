@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Antigua And Barbuda country.</summary>
     public static readonly Country AntiguaAndBarbuda =
-        new Country(
+        new(
             CountryNames.AntiguaAndBarbuda, "028", "AG", "ATG",
             "+1", "Saint John's", "Americas",
             CurrencyHelper.EastCaribbeanDollar,

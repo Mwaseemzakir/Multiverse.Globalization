@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Palestine country.</summary>
     public static readonly Country Palestine =
-        new Country(
+        new(
             CountryNames.Palestine, "275", "PS", "PSE",
             "+970", "Ramallah", "Asia",
             CurrencyHelper.NewIsraeliSheqel,

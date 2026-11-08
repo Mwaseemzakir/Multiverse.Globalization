@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Ukraine country.</summary>
     public static readonly Country Ukraine =
-        new Country(
+        new(
             CountryNames.Ukraine, "804", "UA", "UKR",
             "+380", "Kyiv", "Europe",
             CurrencyHelper.Hryvnia,

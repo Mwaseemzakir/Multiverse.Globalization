@@ -1,13 +1,10 @@
-using Multiverse.Globalization.Currencies;
-using Multiverse.Globalization.Languages;
-
 namespace Multiverse.Globalization.Countries;
 
 public static partial class CountryHelper
 {
     /// <summary>The Luxembourg country.</summary>
     public static readonly Country Luxembourg =
-        new Country(
+        new(
             CountryNames.Luxembourg, "442", "LU", "LUX",
             "+352", "Luxembourg", "Europe",
             CurrencyHelper.Euro,

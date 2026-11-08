@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Multiverse.Globalization.Subdivisions;
 
 /// <summary>
@@ -12,7 +10,7 @@ public static class SubdivisionHelper
     internal static IReadOnlyList<Subdivision> GetSubdivisionsForCountry(string alpha2Code)
     {
         if (string.IsNullOrWhiteSpace(alpha2Code))
-            return new List<Subdivision>();
+            return [];
         return _data.TryGetValue(alpha2Code.ToUpperInvariant(), out var list)
             ? list.AsReadOnly()
             : new List<Subdivision>();
@@ -23,10 +21,10 @@ public static class SubdivisionHelper
 
     private static Dictionary<string, List<Subdivision>> InitializeData()
     {
-        var s = new Dictionary<string, List<Subdivision>>();
-
-        s["US"] = new List<Subdivision>
+        var s = new Dictionary<string, List<Subdivision>>
         {
+            ["US"] =
+        [
             new("US-AL", "Alabama", "State"), new("US-AK", "Alaska", "State"),
             new("US-AZ", "Arizona", "State"), new("US-AR", "Arkansas", "State"),
             new("US-CA", "California", "State"), new("US-CO", "Colorado", "State"),
@@ -53,10 +51,10 @@ public static class SubdivisionHelper
             new("US-WA", "Washington", "State"), new("US-WV", "West Virginia", "State"),
             new("US-WI", "Wisconsin", "State"), new("US-WY", "Wyoming", "State"),
             new("US-DC", "District of Columbia", "District"),
-        };
+        ],
 
-        s["CA"] = new List<Subdivision>
-        {
+            ["CA"] =
+        [
             new("CA-AB", "Alberta", "Province"), new("CA-BC", "British Columbia", "Province"),
             new("CA-MB", "Manitoba", "Province"), new("CA-NB", "New Brunswick", "Province"),
             new("CA-NL", "Newfoundland and Labrador", "Province"), new("CA-NS", "Nova Scotia", "Province"),
@@ -64,16 +62,16 @@ public static class SubdivisionHelper
             new("CA-QC", "Quebec", "Province"), new("CA-SK", "Saskatchewan", "Province"),
             new("CA-NT", "Northwest Territories", "Territory"), new("CA-NU", "Nunavut", "Territory"),
             new("CA-YT", "Yukon", "Territory"),
-        };
+        ],
 
-        s["GB"] = new List<Subdivision>
-        {
+            ["GB"] =
+        [
             new("GB-ENG", "England", "Country"), new("GB-SCT", "Scotland", "Country"),
             new("GB-WLS", "Wales", "Country"), new("GB-NIR", "Northern Ireland", "Province"),
-        };
+        ],
 
-        s["DE"] = new List<Subdivision>
-        {
+            ["DE"] =
+        [
             new("DE-BW", "Baden-Württemberg", "State"), new("DE-BY", "Bavaria", "State"),
             new("DE-BE", "Berlin", "State"), new("DE-BB", "Brandenburg", "State"),
             new("DE-HB", "Bremen", "State"), new("DE-HH", "Hamburg", "State"),
@@ -82,10 +80,10 @@ public static class SubdivisionHelper
             new("DE-RP", "Rhineland-Palatinate", "State"), new("DE-SL", "Saarland", "State"),
             new("DE-SN", "Saxony", "State"), new("DE-ST", "Saxony-Anhalt", "State"),
             new("DE-SH", "Schleswig-Holstein", "State"), new("DE-TH", "Thuringia", "State"),
-        };
+        ],
 
-        s["FR"] = new List<Subdivision>
-        {
+            ["FR"] =
+        [
             new("FR-ARA", "Auvergne-Rhône-Alpes", "Region"), new("FR-BFC", "Bourgogne-Franche-Comté", "Region"),
             new("FR-BRE", "Bretagne", "Region"), new("FR-CVL", "Centre-Val de Loire", "Region"),
             new("FR-COR", "Corse", "Region"), new("FR-GES", "Grand Est", "Region"),
@@ -93,18 +91,18 @@ public static class SubdivisionHelper
             new("FR-NOR", "Normandie", "Region"), new("FR-NAQ", "Nouvelle-Aquitaine", "Region"),
             new("FR-OCC", "Occitanie", "Region"), new("FR-PDL", "Pays de la Loire", "Region"),
             new("FR-PAC", "Provence-Alpes-Côte d'Azur", "Region"),
-        };
+        ],
 
-        s["AU"] = new List<Subdivision>
-        {
+            ["AU"] =
+        [
             new("AU-NSW", "New South Wales", "State"), new("AU-QLD", "Queensland", "State"),
             new("AU-SA", "South Australia", "State"), new("AU-TAS", "Tasmania", "State"),
             new("AU-VIC", "Victoria", "State"), new("AU-WA", "Western Australia", "State"),
             new("AU-ACT", "Australian Capital Territory", "Territory"), new("AU-NT", "Northern Territory", "Territory"),
-        };
+        ],
 
-        s["IN"] = new List<Subdivision>
-        {
+            ["IN"] =
+        [
             new("IN-AP", "Andhra Pradesh", "State"), new("IN-AR", "Arunachal Pradesh", "State"),
             new("IN-AS", "Assam", "State"), new("IN-BR", "Bihar", "State"),
             new("IN-CG", "Chhattisgarh", "State"), new("IN-GA", "Goa", "State"),
@@ -120,27 +118,27 @@ public static class SubdivisionHelper
             new("IN-TR", "Tripura", "State"), new("IN-UP", "Uttar Pradesh", "State"),
             new("IN-UK", "Uttarakhand", "State"), new("IN-WB", "West Bengal", "State"),
             new("IN-DL", "Delhi", "Union Territory"),
-        };
+        ],
 
-        s["PK"] = new List<Subdivision>
-        {
+            ["PK"] =
+        [
             new("PK-PB", "Punjab", "Province"), new("PK-SD", "Sindh", "Province"),
             new("PK-KP", "Khyber Pakhtunkhwa", "Province"), new("PK-BA", "Balochistan", "Province"),
             new("PK-IS", "Islamabad Capital Territory", "Federal Territory"),
             new("PK-GB", "Gilgit-Baltistan", "Territory"), new("PK-JK", "Azad Jammu and Kashmir", "Territory"),
-        };
+        ],
 
-        s["JP"] = new List<Subdivision>
-        {
+            ["JP"] =
+        [
             new("JP-01", "Hokkaido", "Prefecture"), new("JP-02", "Aomori", "Prefecture"),
             new("JP-13", "Tokyo", "Metropolis"), new("JP-14", "Kanagawa", "Prefecture"),
             new("JP-23", "Aichi", "Prefecture"), new("JP-26", "Kyoto", "Prefecture"),
             new("JP-27", "Osaka", "Prefecture"), new("JP-28", "Hyogo", "Prefecture"),
             new("JP-40", "Fukuoka", "Prefecture"), new("JP-47", "Okinawa", "Prefecture"),
-        };
+        ],
 
-        s["CN"] = new List<Subdivision>
-        {
+            ["CN"] =
+        [
             new("CN-BJ", "Beijing", "Municipality"), new("CN-SH", "Shanghai", "Municipality"),
             new("CN-TJ", "Tianjin", "Municipality"), new("CN-CQ", "Chongqing", "Municipality"),
             new("CN-GD", "Guangdong", "Province"), new("CN-JS", "Jiangsu", "Province"),
@@ -150,10 +148,10 @@ public static class SubdivisionHelper
             new("CN-HK", "Hong Kong", "Special Administrative Region"),
             new("CN-MO", "Macau", "Special Administrative Region"),
             new("CN-XZ", "Tibet", "Autonomous Region"), new("CN-XJ", "Xinjiang", "Autonomous Region"),
-        };
+        ],
 
-        s["BR"] = new List<Subdivision>
-        {
+            ["BR"] =
+        [
             new("BR-AC", "Acre", "State"), new("BR-AL", "Alagoas", "State"),
             new("BR-AM", "Amazonas", "State"), new("BR-AP", "Amapá", "State"),
             new("BR-BA", "Bahia", "State"), new("BR-CE", "Ceará", "State"),
@@ -168,10 +166,10 @@ public static class SubdivisionHelper
             new("BR-RS", "Rio Grande do Sul", "State"), new("BR-SC", "Santa Catarina", "State"),
             new("BR-SE", "Sergipe", "State"), new("BR-SP", "São Paulo", "State"),
             new("BR-TO", "Tocantins", "State"),
-        };
+        ],
 
-        s["MX"] = new List<Subdivision>
-        {
+            ["MX"] =
+        [
             new("MX-AGU", "Aguascalientes", "State"), new("MX-BCN", "Baja California", "State"),
             new("MX-BCS", "Baja California Sur", "State"), new("MX-CAM", "Campeche", "State"),
             new("MX-CHP", "Chiapas", "State"), new("MX-CHH", "Chihuahua", "State"),
@@ -188,45 +186,45 @@ public static class SubdivisionHelper
             new("MX-TAB", "Tabasco", "State"), new("MX-TAM", "Tamaulipas", "State"),
             new("MX-TLA", "Tlaxcala", "State"), new("MX-VER", "Veracruz", "State"),
             new("MX-YUC", "Yucatán", "State"), new("MX-ZAC", "Zacatecas", "State"),
-        };
+        ],
 
-        s["RU"] = new List<Subdivision>
-        {
+            ["RU"] =
+        [
             new("RU-MOW", "Moscow", "Federal City"), new("RU-SPE", "Saint Petersburg", "Federal City"),
             new("RU-MOS", "Moscow Oblast", "Oblast"), new("RU-LEN", "Leningrad Oblast", "Oblast"),
             new("RU-NIZ", "Nizhny Novgorod Oblast", "Oblast"), new("RU-SVE", "Sverdlovsk Oblast", "Oblast"),
             new("RU-KDA", "Krasnodar Krai", "Krai"), new("RU-TAT", "Republic of Tatarstan", "Republic"),
             new("RU-BA", "Republic of Bashkortostan", "Republic"), new("RU-NSO", "Novosibirsk Oblast", "Oblast"),
             new("RU-CE", "Chechen Republic", "Republic"),
-        };
+        ],
 
-        s["ZA"] = new List<Subdivision>
-        {
+            ["ZA"] =
+        [
             new("ZA-EC", "Eastern Cape", "Province"), new("ZA-FS", "Free State", "Province"),
             new("ZA-GP", "Gauteng", "Province"), new("ZA-KZN", "KwaZulu-Natal", "Province"),
             new("ZA-LP", "Limpopo", "Province"), new("ZA-MP", "Mpumalanga", "Province"),
             new("ZA-NC", "Northern Cape", "Province"), new("ZA-NW", "North West", "Province"),
             new("ZA-WC", "Western Cape", "Province"),
-        };
+        ],
 
-        s["NG"] = new List<Subdivision>
-        {
+            ["NG"] =
+        [
             new("NG-AB", "Abia", "State"), new("NG-AD", "Adamawa", "State"),
             new("NG-AK", "Akwa Ibom", "State"), new("NG-AN", "Anambra", "State"),
             new("NG-FC", "Federal Capital Territory", "Territory"), new("NG-LA", "Lagos", "State"),
             new("NG-KN", "Kano", "State"), new("NG-OG", "Ogun", "State"),
             new("NG-RI", "Rivers", "State"),
-        };
+        ],
 
-        s["EG"] = new List<Subdivision>
-        {
+            ["EG"] =
+        [
             new("EG-C", "Cairo", "Governorate"), new("EG-ALX", "Alexandria", "Governorate"),
             new("EG-GZ", "Giza", "Governorate"), new("EG-SHR", "Sharqia", "Governorate"),
             new("EG-ASN", "Aswan", "Governorate"), new("EG-LX", "Luxor", "Governorate"),
-        };
+        ],
 
-        s["SA"] = new List<Subdivision>
-        {
+            ["SA"] =
+        [
             new("SA-01", "Riyadh", "Region"), new("SA-02", "Makkah", "Region"),
             new("SA-03", "Madinah", "Region"), new("SA-04", "Eastern Province", "Region"),
             new("SA-05", "Al-Qassim", "Region"), new("SA-06", "Ha'il", "Region"),
@@ -234,10 +232,10 @@ public static class SubdivisionHelper
             new("SA-09", "Jazan", "Region"), new("SA-10", "Najran", "Region"),
             new("SA-11", "Al-Bahah", "Region"), new("SA-12", "Al Jawf", "Region"),
             new("SA-14", "Asir", "Region"),
-        };
+        ],
 
-        s["IT"] = new List<Subdivision>
-        {
+            ["IT"] =
+        [
             new("IT-65", "Abruzzo", "Region"), new("IT-77", "Basilicata", "Region"),
             new("IT-78", "Calabria", "Region"), new("IT-72", "Campania", "Region"),
             new("IT-45", "Emilia-Romagna", "Region"), new("IT-36", "Friuli Venezia Giulia", "Region"),
@@ -248,10 +246,10 @@ public static class SubdivisionHelper
             new("IT-82", "Sicily", "Region"), new("IT-52", "Tuscany", "Region"),
             new("IT-32", "Trentino-South Tyrol", "Region"), new("IT-55", "Umbria", "Region"),
             new("IT-23", "Aosta Valley", "Region"), new("IT-34", "Veneto", "Region"),
-        };
+        ],
 
-        s["ES"] = new List<Subdivision>
-        {
+            ["ES"] =
+        [
             new("ES-AN", "Andalusia", "Community"), new("ES-AR", "Aragon", "Community"),
             new("ES-AS", "Asturias", "Community"), new("ES-IB", "Balearic Islands", "Community"),
             new("ES-PV", "Basque Country", "Community"), new("ES-CN", "Canary Islands", "Community"),
@@ -261,29 +259,29 @@ public static class SubdivisionHelper
             new("ES-RI", "La Rioja", "Community"), new("ES-MD", "Madrid", "Community"),
             new("ES-MC", "Murcia", "Community"), new("ES-NC", "Navarre", "Community"),
             new("ES-VC", "Valencia", "Community"),
-        };
+        ],
 
-        s["TR"] = new List<Subdivision>
-        {
+            ["TR"] =
+        [
             new("TR-06", "Ankara", "Province"), new("TR-34", "Istanbul", "Province"),
             new("TR-35", "Izmir", "Province"), new("TR-16", "Bursa", "Province"),
             new("TR-07", "Antalya", "Province"), new("TR-01", "Adana", "Province"),
             new("TR-42", "Konya", "Province"), new("TR-27", "Gaziantep", "Province"),
-        };
+        ],
 
-        s["KR"] = new List<Subdivision>
-        {
+            ["KR"] =
+        [
             new("KR-11", "Seoul", "Special City"), new("KR-26", "Busan", "Metropolitan City"),
             new("KR-28", "Incheon", "Metropolitan City"), new("KR-27", "Daegu", "Metropolitan City"),
             new("KR-29", "Gwangju", "Metropolitan City"), new("KR-30", "Daejeon", "Metropolitan City"),
             new("KR-31", "Ulsan", "Metropolitan City"), new("KR-41", "Gyeonggi", "Province"),
             new("KR-50", "Sejong", "Special Autonomous City"),
-        };
+        ],
 
-        // ---------- Additional Americas ----------
+            // ---------- Additional Americas ----------
 
-        s["AR"] = new List<Subdivision>
-        {
+            ["AR"] =
+        [
             new("AR-B", "Buenos Aires", "Province"), new("AR-C", "Ciudad Autónoma de Buenos Aires", "Federal District"),
             new("AR-K", "Catamarca", "Province"), new("AR-H", "Chaco", "Province"),
             new("AR-U", "Chubut", "Province"), new("AR-X", "Córdoba", "Province"),
@@ -296,10 +294,10 @@ public static class SubdivisionHelper
             new("AR-D", "San Luis", "Province"), new("AR-Z", "Santa Cruz", "Province"),
             new("AR-S", "Santa Fe", "Province"), new("AR-G", "Santiago del Estero", "Province"),
             new("AR-V", "Tierra del Fuego", "Province"), new("AR-T", "Tucumán", "Province"),
-        };
+        ],
 
-        s["CO"] = new List<Subdivision>
-        {
+            ["CO"] =
+        [
             new("CO-DC", "Bogotá", "Capital District"), new("CO-ANT", "Antioquia", "Department"),
             new("CO-ATL", "Atlántico", "Department"), new("CO-BOL", "Bolívar", "Department"),
             new("CO-BOY", "Boyacá", "Department"), new("CO-CAL", "Caldas", "Department"),
@@ -307,10 +305,10 @@ public static class SubdivisionHelper
             new("CO-MAG", "Magdalena", "Department"), new("CO-NAR", "Nariño", "Department"),
             new("CO-NSA", "Norte de Santander", "Department"), new("CO-SAN", "Santander", "Department"),
             new("CO-TOL", "Tolima", "Department"), new("CO-VAC", "Valle del Cauca", "Department"),
-        };
+        ],
 
-        s["CL"] = new List<Subdivision>
-        {
+            ["CL"] =
+        [
             new("CL-AI", "Aisén", "Region"), new("CL-AN", "Antofagasta", "Region"),
             new("CL-AP", "Arica y Parinacota", "Region"), new("CL-AT", "Atacama", "Region"),
             new("CL-BI", "Biobío", "Region"), new("CL-CO", "Coquimbo", "Region"),
@@ -319,10 +317,10 @@ public static class SubdivisionHelper
             new("CL-MA", "Magallanes", "Region"), new("CL-ML", "Maule", "Region"),
             new("CL-NB", "Ñuble", "Region"), new("CL-RM", "Santiago Metropolitan", "Region"),
             new("CL-TA", "Tarapacá", "Region"), new("CL-VS", "Valparaíso", "Region"),
-        };
+        ],
 
-        s["PE"] = new List<Subdivision>
-        {
+            ["PE"] =
+        [
             new("PE-LIM", "Lima", "Region"), new("PE-AMA", "Amazonas", "Region"),
             new("PE-ANC", "Áncash", "Region"), new("PE-APU", "Apurímac", "Region"),
             new("PE-ARE", "Arequipa", "Region"), new("PE-AYA", "Ayacucho", "Region"),
@@ -336,10 +334,10 @@ public static class SubdivisionHelper
             new("PE-SAM", "San Martín", "Region"), new("PE-TAC", "Tacna", "Region"),
             new("PE-TUM", "Tumbes", "Region"), new("PE-UCA", "Ucayali", "Region"),
             new("PE-CAL", "Callao", "Constitutional Province"),
-        };
+        ],
 
-        s["VE"] = new List<Subdivision>
-        {
+            ["VE"] =
+        [
             new("VE-W", "Federal Dependencies", "Federal Dependency"), new("VE-A", "Distrito Capital", "Capital District"),
             new("VE-B", "Anzoátegui", "State"), new("VE-C", "Apure", "State"),
             new("VE-D", "Aragua", "State"), new("VE-E", "Barinas", "State"),
@@ -348,12 +346,12 @@ public static class SubdivisionHelper
             new("VE-L", "Mérida", "State"), new("VE-M", "Miranda", "State"),
             new("VE-O", "Monagas", "State"), new("VE-T", "Trujillo", "State"),
             new("VE-U", "Yaracuy", "State"), new("VE-V", "Zulia", "State"),
-        };
+        ],
 
-        // ---------- Additional Europe ----------
+            // ---------- Additional Europe ----------
 
-        s["PL"] = new List<Subdivision>
-        {
+            ["PL"] =
+        [
             new("PL-02", "Dolnośląskie", "Voivodeship"), new("PL-04", "Kujawsko-Pomorskie", "Voivodeship"),
             new("PL-06", "Lubelskie", "Voivodeship"), new("PL-08", "Lubuskie", "Voivodeship"),
             new("PL-10", "Łódzkie", "Voivodeship"), new("PL-12", "Małopolskie", "Voivodeship"),
@@ -362,10 +360,10 @@ public static class SubdivisionHelper
             new("PL-22", "Pomorskie", "Voivodeship"), new("PL-24", "Śląskie", "Voivodeship"),
             new("PL-26", "Świętokrzyskie", "Voivodeship"), new("PL-28", "Warmińsko-Mazurskie", "Voivodeship"),
             new("PL-30", "Wielkopolskie", "Voivodeship"), new("PL-32", "Zachodniopomorskie", "Voivodeship"),
-        };
+        ],
 
-        s["UA"] = new List<Subdivision>
-        {
+            ["UA"] =
+        [
             new("UA-71", "Cherkasy", "Oblast"), new("UA-74", "Chernihiv", "Oblast"),
             new("UA-77", "Chernivtsi", "Oblast"), new("UA-12", "Dnipropetrovsk", "Oblast"),
             new("UA-14", "Donetsk", "Oblast"), new("UA-26", "Ivano-Frankivsk", "Oblast"),
@@ -379,10 +377,10 @@ public static class SubdivisionHelper
             new("UA-05", "Vinnytsia", "Oblast"), new("UA-07", "Volyn", "Oblast"),
             new("UA-21", "Zakarpattia", "Oblast"), new("UA-23", "Zaporizhzhia", "Oblast"),
             new("UA-18", "Zhytomyr", "Oblast"),
-        };
+        ],
 
-        s["RO"] = new List<Subdivision>
-        {
+            ["RO"] =
+        [
             new("RO-B", "Bucharest", "Municipality"), new("RO-AB", "Alba", "County"),
             new("RO-AR", "Arad", "County"), new("RO-BC", "Bacău", "County"),
             new("RO-BH", "Bihor", "County"), new("RO-BN", "Bistrița-Năsăud", "County"),
@@ -402,20 +400,20 @@ public static class SubdivisionHelper
             new("RO-SV", "Suceava", "County"), new("RO-TR", "Teleorman", "County"),
             new("RO-TM", "Timiș", "County"), new("RO-TL", "Tulcea", "County"),
             new("RO-VL", "Vâlcea", "County"), new("RO-VN", "Vrancea", "County"),
-        };
+        ],
 
-        s["NL"] = new List<Subdivision>
-        {
+            ["NL"] =
+        [
             new("NL-DR", "Drenthe", "Province"), new("NL-FL", "Flevoland", "Province"),
             new("NL-FR", "Friesland", "Province"), new("NL-GE", "Gelderland", "Province"),
             new("NL-GR", "Groningen", "Province"), new("NL-LI", "Limburg", "Province"),
             new("NL-NB", "North Brabant", "Province"), new("NL-NH", "North Holland", "Province"),
             new("NL-OV", "Overijssel", "Province"), new("NL-UT", "Utrecht", "Province"),
             new("NL-ZE", "Zeeland", "Province"), new("NL-ZH", "South Holland", "Province"),
-        };
+        ],
 
-        s["SE"] = new List<Subdivision>
-        {
+            ["SE"] =
+        [
             new("SE-AB", "Stockholm", "County"), new("SE-AC", "Västerbotten", "County"),
             new("SE-BD", "Norrbotten", "County"), new("SE-C", "Uppsala", "County"),
             new("SE-D", "Södermanland", "County"), new("SE-E", "Östergötland", "County"),
@@ -427,27 +425,27 @@ public static class SubdivisionHelper
             new("SE-U", "Västmanland", "County"), new("SE-W", "Dalarna", "County"),
             new("SE-X", "Gävleborg", "County"), new("SE-Y", "Västernorrland", "County"),
             new("SE-Z", "Jämtland", "County"),
-        };
+        ],
 
-        s["NO"] = new List<Subdivision>
-        {
+            ["NO"] =
+        [
             new("NO-03", "Oslo", "County"), new("NO-11", "Rogaland", "County"),
             new("NO-15", "Møre og Romsdal", "County"), new("NO-18", "Nordland", "County"),
             new("NO-30", "Viken", "County"), new("NO-34", "Innlandet", "County"),
             new("NO-38", "Vestfold og Telemark", "County"), new("NO-42", "Agder", "County"),
             new("NO-46", "Vestland", "County"), new("NO-50", "Trøndelag", "County"),
             new("NO-54", "Troms og Finnmark", "County"),
-        };
+        ],
 
-        s["DK"] = new List<Subdivision>
-        {
+            ["DK"] =
+        [
             new("DK-81", "Nordjylland", "Region"), new("DK-82", "Midtjylland", "Region"),
             new("DK-83", "Syddanmark", "Region"), new("DK-84", "Hovedstaden", "Region"),
             new("DK-85", "Sjælland", "Region"),
-        };
+        ],
 
-        s["FI"] = new List<Subdivision>
-        {
+            ["FI"] =
+        [
             new("FI-01", "Åland", "Region"), new("FI-02", "South Karelia", "Region"),
             new("FI-03", "Southern Ostrobothnia", "Region"), new("FI-04", "Southern Savonia", "Region"),
             new("FI-05", "Kainuu", "Region"), new("FI-06", "Tavastia Proper", "Region"),
@@ -458,10 +456,10 @@ public static class SubdivisionHelper
             new("FI-15", "Northern Savonia", "Region"), new("FI-16", "Päijänne Tavastia", "Region"),
             new("FI-17", "Satakunta", "Region"), new("FI-18", "Uusimaa", "Region"),
             new("FI-19", "Southwest Finland", "Region"),
-        };
+        ],
 
-        s["CZ"] = new List<Subdivision>
-        {
+            ["CZ"] =
+        [
             new("CZ-10", "Prague", "Capital City"), new("CZ-20", "Central Bohemian", "Region"),
             new("CZ-31", "South Bohemian", "Region"), new("CZ-32", "Plzeň", "Region"),
             new("CZ-41", "Karlovy Vary", "Region"), new("CZ-42", "Ústí nad Labem", "Region"),
@@ -469,10 +467,10 @@ public static class SubdivisionHelper
             new("CZ-53", "Pardubice", "Region"), new("CZ-63", "Vysočina", "Region"),
             new("CZ-64", "South Moravian", "Region"), new("CZ-71", "Olomouc", "Region"),
             new("CZ-72", "Zlín", "Region"), new("CZ-80", "Moravian-Silesian", "Region"),
-        };
+        ],
 
-        s["HU"] = new List<Subdivision>
-        {
+            ["HU"] =
+        [
             new("HU-BU", "Budapest", "Capital City"), new("HU-BK", "Bács-Kiskun", "County"),
             new("HU-BA", "Baranya", "County"), new("HU-BE", "Békés", "County"),
             new("HU-BZ", "Borsod-Abaúj-Zemplén", "County"), new("HU-CS", "Csongrád-Csanád", "County"),
@@ -483,10 +481,10 @@ public static class SubdivisionHelper
             new("HU-SO", "Somogy", "County"), new("HU-SZ", "Szabolcs-Szatmár-Bereg", "County"),
             new("HU-TO", "Tolna", "County"), new("HU-VA", "Vas", "County"),
             new("HU-VE", "Veszprém", "County"), new("HU-ZA", "Zala", "County"),
-        };
+        ],
 
-        s["GR"] = new List<Subdivision>
-        {
+            ["GR"] =
+        [
             new("GR-A", "Eastern Macedonia and Thrace", "Region"), new("GR-B", "Central Macedonia", "Region"),
             new("GR-C", "Western Macedonia", "Region"), new("GR-D", "Epirus", "Region"),
             new("GR-E", "Thessaly", "Region"), new("GR-F", "Ionian Islands", "Region"),
@@ -494,10 +492,10 @@ public static class SubdivisionHelper
             new("GR-I", "Attica", "Region"), new("GR-J", "Peloponnese", "Region"),
             new("GR-K", "North Aegean", "Region"), new("GR-L", "South Aegean", "Region"),
             new("GR-M", "Crete", "Region"), new("GR-69", "Mount Athos", "Autonomous State"),
-        };
+        ],
 
-        s["PT"] = new List<Subdivision>
-        {
+            ["PT"] =
+        [
             new("PT-01", "Aveiro", "District"), new("PT-02", "Beja", "District"),
             new("PT-03", "Braga", "District"), new("PT-04", "Bragança", "District"),
             new("PT-05", "Castelo Branco", "District"), new("PT-06", "Coimbra", "District"),
@@ -508,25 +506,25 @@ public static class SubdivisionHelper
             new("PT-15", "Setúbal", "District"), new("PT-16", "Viana do Castelo", "District"),
             new("PT-17", "Vila Real", "District"), new("PT-18", "Viseu", "District"),
             new("PT-20", "Azores", "Autonomous Region"), new("PT-30", "Madeira", "Autonomous Region"),
-        };
+        ],
 
-        s["AT"] = new List<Subdivision>
-        {
+            ["AT"] =
+        [
             new("AT-1", "Burgenland", "State"), new("AT-2", "Carinthia", "State"),
             new("AT-3", "Lower Austria", "State"), new("AT-4", "Upper Austria", "State"),
             new("AT-5", "Salzburg", "State"), new("AT-6", "Styria", "State"),
             new("AT-7", "Tyrol", "State"), new("AT-8", "Vorarlberg", "State"),
             new("AT-9", "Vienna", "State"),
-        };
+        ],
 
-        s["BE"] = new List<Subdivision>
-        {
+            ["BE"] =
+        [
             new("BE-BRU", "Brussels-Capital Region", "Region"), new("BE-VLG", "Flemish Region", "Region"),
             new("BE-WAL", "Walloon Region", "Region"),
-        };
+        ],
 
-        s["CH"] = new List<Subdivision>
-        {
+            ["CH"] =
+        [
             new("CH-AG", "Aargau", "Canton"), new("CH-AI", "Appenzell Innerrhoden", "Canton"),
             new("CH-AR", "Appenzell Ausserrhoden", "Canton"), new("CH-BE", "Bern", "Canton"),
             new("CH-BL", "Basel-Landschaft", "Canton"), new("CH-BS", "Basel-Stadt", "Canton"),
@@ -540,18 +538,18 @@ public static class SubdivisionHelper
             new("CH-TI", "Ticino", "Canton"), new("CH-UR", "Uri", "Canton"),
             new("CH-VD", "Vaud", "Canton"), new("CH-VS", "Valais", "Canton"),
             new("CH-ZG", "Zug", "Canton"), new("CH-ZH", "Zurich", "Canton"),
-        };
+        ],
 
-        s["IE"] = new List<Subdivision>
-        {
+            ["IE"] =
+        [
             new("IE-C", "Connacht", "Province"), new("IE-L", "Leinster", "Province"),
             new("IE-M", "Munster", "Province"), new("IE-U", "Ulster", "Province"),
-        };
+        ],
 
-        // ---------- Additional Asia ----------
+            // ---------- Additional Asia ----------
 
-        s["ID"] = new List<Subdivision>
-        {
+            ["ID"] =
+        [
             new("ID-AC", "Aceh", "Province"), new("ID-BA", "Bali", "Province"),
             new("ID-BB", "Bangka Belitung Islands", "Province"), new("ID-BT", "Banten", "Province"),
             new("ID-BE", "Bengkulu", "Province"), new("ID-JK", "Jakarta", "Special Capital Region"),
@@ -569,10 +567,10 @@ public static class SubdivisionHelper
             new("ID-SA", "North Sulawesi", "Province"), new("ID-ST", "Central Sulawesi", "Province"),
             new("ID-SN", "South Sulawesi", "Province"), new("ID-SR", "West Sulawesi", "Province"),
             new("ID-GO", "Gorontalo", "Province"), new("ID-JA", "Jambi", "Province"),
-        };
+        ],
 
-        s["PH"] = new List<Subdivision>
-        {
+            ["PH"] =
+        [
             new("PH-00", "National Capital Region", "Region"), new("PH-01", "Ilocos Region", "Region"),
             new("PH-02", "Cagayan Valley", "Region"), new("PH-03", "Central Luzon", "Region"),
             new("PH-05", "Bicol Region", "Region"), new("PH-06", "Western Visayas", "Region"),
@@ -582,19 +580,19 @@ public static class SubdivisionHelper
             new("PH-13", "Caraga", "Region"), new("PH-14", "BARMM", "Autonomous Region"),
             new("PH-15", "Cordillera", "Administrative Region"), new("PH-40", "CALABARZON", "Region"),
             new("PH-41", "MIMAROPA", "Region"),
-        };
+        ],
 
-        s["TH"] = new List<Subdivision>
-        {
+            ["TH"] =
+        [
             new("TH-10", "Bangkok", "Special Administrative Area"),
             new("TH-11", "Samut Prakan", "Province"), new("TH-12", "Nonthaburi", "Province"),
             new("TH-13", "Pathum Thani", "Province"), new("TH-14", "Phra Nakhon Si Ayutthaya", "Province"),
             new("TH-20", "Chon Buri", "Province"), new("TH-50", "Chiang Mai", "Province"),
             new("TH-83", "Phuket", "Province"), new("TH-96", "Narathiwat", "Province"),
-        };
+        ],
 
-        s["MY"] = new List<Subdivision>
-        {
+            ["MY"] =
+        [
             new("MY-01", "Johor", "State"), new("MY-02", "Kedah", "State"),
             new("MY-03", "Kelantan", "State"), new("MY-04", "Malacca", "State"),
             new("MY-05", "Negeri Sembilan", "State"), new("MY-06", "Pahang", "State"),
@@ -603,25 +601,25 @@ public static class SubdivisionHelper
             new("MY-11", "Terengganu", "State"), new("MY-12", "Sabah", "State"),
             new("MY-13", "Sarawak", "State"), new("MY-14", "Kuala Lumpur", "Federal Territory"),
             new("MY-15", "Labuan", "Federal Territory"), new("MY-16", "Putrajaya", "Federal Territory"),
-        };
+        ],
 
-        s["VN"] = new List<Subdivision>
-        {
+            ["VN"] =
+        [
             new("VN-HN", "Hanoi", "Municipality"), new("VN-SG", "Ho Chi Minh City", "Municipality"),
             new("VN-HP", "Hai Phong", "Municipality"), new("VN-DN", "Da Nang", "Municipality"),
             new("VN-CT", "Can Tho", "Municipality"),
-        };
+        ],
 
-        s["BD"] = new List<Subdivision>
-        {
+            ["BD"] =
+        [
             new("BD-A", "Barishal", "Division"), new("BD-B", "Chattogram", "Division"),
             new("BD-C", "Dhaka", "Division"), new("BD-D", "Khulna", "Division"),
             new("BD-E", "Rajshahi", "Division"), new("BD-F", "Rangpur", "Division"),
             new("BD-G", "Sylhet", "Division"), new("BD-H", "Mymensingh", "Division"),
-        };
+        ],
 
-        s["IR"] = new List<Subdivision>
-        {
+            ["IR"] =
+        [
             new("IR-01", "East Azerbaijan", "Province"), new("IR-02", "West Azerbaijan", "Province"),
             new("IR-03", "Ardabil", "Province"), new("IR-04", "Isfahan", "Province"),
             new("IR-05", "Ilam", "Province"), new("IR-06", "Bushehr", "Province"),
@@ -638,10 +636,10 @@ public static class SubdivisionHelper
             new("IR-27", "Golestan", "Province"), new("IR-28", "Qazvin", "Province"),
             new("IR-29", "South Khorasan", "Province"), new("IR-30", "Razavi Khorasan", "Province"),
             new("IR-31", "North Khorasan", "Province"), new("IR-32", "Alborz", "Province"),
-        };
+        ],
 
-        s["IQ"] = new List<Subdivision>
-        {
+            ["IQ"] =
+        [
             new("IQ-AN", "Al Anbar", "Governorate"), new("IQ-BA", "Basra", "Governorate"),
             new("IQ-BB", "Babil", "Governorate"), new("IQ-BG", "Baghdad", "Governorate"),
             new("IQ-DA", "Dohuk", "Governorate"), new("IQ-DI", "Diyala", "Governorate"),
@@ -651,29 +649,29 @@ public static class SubdivisionHelper
             new("IQ-NA", "Najaf", "Governorate"), new("IQ-NI", "Nineveh", "Governorate"),
             new("IQ-QA", "Al-Qadisiyyah", "Governorate"), new("IQ-SD", "Saladin", "Governorate"),
             new("IQ-SU", "Sulaymaniyah", "Governorate"), new("IQ-WA", "Wasit", "Governorate"),
-        };
+        ],
 
-        s["AE"] = new List<Subdivision>
-        {
+            ["AE"] =
+        [
             new("AE-AZ", "Abu Dhabi", "Emirate"), new("AE-AJ", "Ajman", "Emirate"),
             new("AE-DU", "Dubai", "Emirate"), new("AE-FU", "Fujairah", "Emirate"),
             new("AE-RK", "Ras al-Khaimah", "Emirate"), new("AE-SH", "Sharjah", "Emirate"),
             new("AE-UQ", "Umm al-Quwain", "Emirate"),
-        };
+        ],
 
-        // ---------- Additional Africa ----------
+            // ---------- Additional Africa ----------
 
-        s["KE"] = new List<Subdivision>
-        {
+            ["KE"] =
+        [
             new("KE-01", "Baringo", "County"), new("KE-02", "Bomet", "County"),
             new("KE-03", "Bungoma", "County"), new("KE-04", "Busia", "County"),
             new("KE-30", "Nairobi", "County"), new("KE-32", "Nakuru", "County"),
             new("KE-34", "Nyandarua", "County"), new("KE-36", "Nyeri", "County"),
             new("KE-22", "Kiambu", "County"), new("KE-28", "Mombasa", "County"),
-        };
+        ],
 
-        s["ET"] = new List<Subdivision>
-        {
+            ["ET"] =
+        [
             new("ET-AA", "Addis Ababa", "City Administration"),
             new("ET-AF", "Afar", "Region"), new("ET-AM", "Amhara", "Region"),
             new("ET-BE", "Benishangul-Gumuz", "Region"), new("ET-DD", "Dire Dawa", "City Administration"),
@@ -681,19 +679,19 @@ public static class SubdivisionHelper
             new("ET-OR", "Oromia", "Region"), new("ET-SN", "Southern Nations", "Region"),
             new("ET-SO", "Somali", "Region"), new("ET-TI", "Tigray", "Region"),
             new("ET-SI", "Sidama", "Region"),
-        };
+        ],
 
-        s["GH"] = new List<Subdivision>
-        {
+            ["GH"] =
+        [
             new("GH-AA", "Greater Accra", "Region"), new("GH-AH", "Ashanti", "Region"),
             new("GH-BA", "Brong-Ahafo", "Region"), new("GH-CP", "Central", "Region"),
             new("GH-EP", "Eastern", "Region"), new("GH-NP", "Northern", "Region"),
             new("GH-UE", "Upper East", "Region"), new("GH-UW", "Upper West", "Region"),
             new("GH-TV", "Volta", "Region"), new("GH-WP", "Western", "Region"),
-        };
+        ],
 
-        s["TZ"] = new List<Subdivision>
-        {
+            ["TZ"] =
+        [
             new("TZ-01", "Arusha", "Region"), new("TZ-02", "Dar es Salaam", "Region"),
             new("TZ-03", "Dodoma", "Region"), new("TZ-04", "Iringa", "Region"),
             new("TZ-05", "Kagera", "Region"), new("TZ-06", "Pemba North", "Region"),
@@ -702,31 +700,31 @@ public static class SubdivisionHelper
             new("TZ-13", "Mara", "Region"), new("TZ-14", "Mbeya", "Region"),
             new("TZ-16", "Morogoro", "Region"), new("TZ-17", "Mtwara", "Region"),
             new("TZ-18", "Mwanza", "Region"), new("TZ-26", "Manyara", "Region"),
-        };
+        ],
 
-        s["MA"] = new List<Subdivision>
-        {
+            ["MA"] =
+        [
             new("MA-01", "Tanger-Tétouan-Al Hoceïma", "Region"), new("MA-02", "L'Oriental", "Region"),
             new("MA-03", "Fès-Meknès", "Region"), new("MA-04", "Rabat-Salé-Kénitra", "Region"),
             new("MA-05", "Béni Mellal-Khénifra", "Region"), new("MA-06", "Casablanca-Settat", "Region"),
             new("MA-07", "Marrakech-Safi", "Region"), new("MA-08", "Drâa-Tafilalet", "Region"),
             new("MA-09", "Souss-Massa", "Region"), new("MA-10", "Guelmim-Oued Noun", "Region"),
             new("MA-11", "Laâyoune-Sakia El Hamra", "Region"), new("MA-12", "Dakhla-Oued Ed-Dahab", "Region"),
-        };
+        ],
 
-        s["DZ"] = new List<Subdivision>
-        {
+            ["DZ"] =
+        [
             new("DZ-01", "Adrar", "Province"), new("DZ-02", "Chlef", "Province"),
             new("DZ-03", "Laghouat", "Province"), new("DZ-04", "Oum El Bouaghi", "Province"),
             new("DZ-06", "Béjaïa", "Province"), new("DZ-09", "Blida", "Province"),
             new("DZ-16", "Algiers", "Province"), new("DZ-19", "Sétif", "Province"),
             new("DZ-25", "Constantine", "Province"), new("DZ-31", "Oran", "Province"),
-        };
+        ],
 
-        // ---------- Oceania ----------
+            // ---------- Oceania ----------
 
-        s["NZ"] = new List<Subdivision>
-        {
+            ["NZ"] =
+        [
             new("NZ-AUK", "Auckland", "Region"), new("NZ-BOP", "Bay of Plenty", "Region"),
             new("NZ-CAN", "Canterbury", "Region"), new("NZ-GIS", "Gisborne", "Region"),
             new("NZ-HKB", "Hawke's Bay", "Region"), new("NZ-MBH", "Marlborough", "Region"),
@@ -735,12 +733,13 @@ public static class SubdivisionHelper
             new("NZ-STL", "Southland", "Region"), new("NZ-TAS", "Tasman", "Region"),
             new("NZ-TKI", "Taranaki", "Region"), new("NZ-WGN", "Wellington", "Region"),
             new("NZ-WKO", "Waikato", "Region"), new("NZ-WTC", "West Coast", "Region"),
-        };
+        ],
 
-        s["FJ"] = new List<Subdivision>
-        {
+            ["FJ"] =
+        [
             new("FJ-C", "Central", "Division"), new("FJ-E", "Eastern", "Division"),
             new("FJ-N", "Northern", "Division"), new("FJ-W", "Western", "Division"),
+        ]
         };
 
         return s;
