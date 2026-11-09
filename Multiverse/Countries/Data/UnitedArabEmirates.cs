@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The United Arab Emirates country.</summary>
     public static readonly Country UnitedArabEmirates =
-        new Country(
+        new(
             CountryNames.UnitedArabEmirates, "784", "AE", "ARE",
             "+971", "Abu Dhabi", "Asia",
             CurrencyHelper.UaeDirham,

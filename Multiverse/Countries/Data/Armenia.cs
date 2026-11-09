@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Armenia country.</summary>
     public static readonly Country Armenia =
-        new Country(
+        new(
             CountryNames.Armenia, "051", "AM", "ARM",
             "+374", "Yerevan", "Asia",
             CurrencyHelper.ArmenianDram,

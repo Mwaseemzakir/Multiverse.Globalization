@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Cambodia country.</summary>
     public static readonly Country Cambodia =
-        new Country(
+        new(
             CountryNames.Cambodia, "116", "KH", "KHM",
             "+855", "Phnom Penh", "Asia",
             CurrencyHelper.CambodianRiel,

@@ -43,12 +43,12 @@ public sealed class Holiday
     /// <summary>
     /// Returns the <see cref="DateTime"/> for this holiday in the given year.
     /// </summary>
-    public DateTime GetDate(int year) => new DateTime(year, Month, Day);
+    public DateTime GetDate(int year) => new(year, Month, Day);
 
     /// <summary>
     /// Returns the <see cref="DateTime"/> for this holiday in the current year.
     /// </summary>
-    public DateTime Date => new DateTime(DateTime.Today.Year, Month, Day);
+    public DateTime Date => new(DateTime.Today.Year, Month, Day);
 
     /// <summary>
     /// Checks if the given date falls on this holiday (month and day match, ignoring year).

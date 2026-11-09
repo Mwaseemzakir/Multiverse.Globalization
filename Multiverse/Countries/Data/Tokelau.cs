@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Tokelau country.</summary>
     public static readonly Country Tokelau =
-        new Country(
+        new(
             CountryNames.Tokelau, "772", "TK", "TKL",
             "+690", "", "Oceania",
             CurrencyHelper.NewZealandDollar,

@@ -7,7 +7,7 @@ public static partial class CountryHelper
     /// were withdrawn from ISO 3166-1 in 2010.
     /// </summary>
     public static readonly Country NetherlandsAntilles =
-        new Country(
+        new(
             CountryNames.NetherlandsAntilles, "530", "AN", "ANT",
             "+599", "Willemstad", "Americas",
             CurrencyHelper.NetherlandsAntilleanGuilder,

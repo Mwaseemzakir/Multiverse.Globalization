@@ -40,6 +40,8 @@ licenses and terms must be checked before importing or redistributing source dat
 | Locales | 251, including supplemental `XK` |
 | Country-name translations | 251, including supplemental `XK` |
 | First-level subdivisions | 59 |
+| Weekend deviations | 22 (all other countries default to Saturday–Sunday) |
+| Substitute-day rules | 13 (all other countries observe holidays on their calendar date) |
 
 Missing data is returned as an empty collection or `null`, depending on the API. A missing record
 must not be interpreted as proof that a country has no holidays, phone service, subdivisions, or
@@ -51,6 +53,47 @@ electrical system.
 are not a replacement for IANA transition rules. Use `GetUtcOffset(instant)` and
 `IsDaylightSavingTime(instant)` for date-aware results; those methods resolve the time-zone rules
 installed on the host operating system.
+
+## Weekends
+
+`Country.WeekendDays` defaults to Saturday–Sunday and stores only the countries that deviate, in
+`WeekendHelper.Exceptions`. Coverage is the well-established national conventions: the
+Friday–Saturday weekend across much of the Middle East and North Africa, Friday-only in Iran,
+Saturday-only in Nepal, and Brunei's split Friday-and-Sunday weekend.
+
+Known limitations:
+
+- The UAE moved to a Saturday–Sunday weekend in January 2022 and therefore carries no exception
+  entry. Countries that change their working week will lag until the dataset is refreshed.
+- Sub-national variation is not modelled. Four Malaysian states keep a Friday–Saturday weekend
+  while the federal weekend is Saturday–Sunday, and India's public sector observes a Sunday-only
+  weekend against a private-sector norm of Saturday–Sunday. Both take the national default.
+- Half-days (Friday in the UAE, Saturday in Hong Kong) are not represented; a day is either a
+  working day or it is not.
+
+## Substitute days
+
+`Country.ObservanceRule` records how a country moves a public holiday that lands on a weekend, and
+defaults to `None`. `NearestWorkingDay` (Saturday back to Friday, Sunday forward to Monday) is the
+US federal rule; `NextWorkingDay` covers the "bank holiday in lieu" convention in the UK, Ireland,
+Australia, New Zealand, Canada, Japan, Singapore, Hong Kong, Malaysia, South Africa, Kenya, and
+Nigeria.
+
+Known limitations:
+
+- The rule is applied uniformly to every holiday in a country. Real substitution law is often
+  per-holiday — not every US federal holiday shifts identically at state level.
+- Ad-hoc bridge days and one-off government proclamations (common in the Philippines, Indonesia,
+  and India) are not modelled.
+- `HolidayType.Observance` entries are treated as commemorations rather than days off, so they
+  neither shift nor count against working-day arithmetic.
+
+## Holiday name collisions
+
+Several countries list the same holiday both as a fixed date — a snapshot of one particular year —
+and as a movable rule. `Country.GetHolidays(int)` resolves this by dropping the fixed entry when a
+movable holiday of the same name exists, since the rule reproduces the correct date in any year.
+The raw `Country.Holidays` and `Country.MovableHolidays` collections are unaffected.
 
 Future data imports should record, at minimum, source URL, source version, retrieval date,
 effective date, transformation version, and per-record review status.

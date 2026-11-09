@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The British Virgin Islands country.</summary>
     public static readonly Country BritishVirginIslands =
-        new Country(
+        new(
             CountryNames.BritishVirginIslands, "092", "VG", "VGB",
             "+1", "Road Town", "Americas",
             CurrencyHelper.UsDollar,

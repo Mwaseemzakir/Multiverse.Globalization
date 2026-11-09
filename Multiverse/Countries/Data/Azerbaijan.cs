@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Azerbaijan country.</summary>
     public static readonly Country Azerbaijan =
-        new Country(
+        new(
             CountryNames.Azerbaijan, "031", "AZ", "AZE",
             "+994", "Baku", "Asia",
             CurrencyHelper.AzerbaijanManat,

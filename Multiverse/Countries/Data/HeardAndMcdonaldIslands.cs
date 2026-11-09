@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Heard And Mcdonald Islands country.</summary>
     public static readonly Country HeardAndMcdonaldIslands =
-        new Country(
+        new(
             CountryNames.HeardAndMcdonaldIslands, "334", "HM", "HMD",
             "+672", "", "Antarctic",
             CurrencyHelper.AustralianDollar);

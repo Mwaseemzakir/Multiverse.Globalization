@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Cook Islands country.</summary>
     public static readonly Country CookIslands =
-        new Country(
+        new(
             CountryNames.CookIslands, "184", "CK", "COK",
             "+682", "Avarua", "Oceania",
             CurrencyHelper.NewZealandDollar,

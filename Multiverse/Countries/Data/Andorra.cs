@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Andorra country.</summary>
     public static readonly Country Andorra =
-        new Country(
+        new(
             CountryNames.Andorra, "020", "AD", "AND",
             "+376", "Andorra la Vella", "Europe",
             CurrencyHelper.Euro,

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Guernsey country.</summary>
     public static readonly Country Guernsey =
-        new Country(
+        new(
             CountryNames.Guernsey, "831", "GG", "GGY",
             "+44", "Saint Peter Port", "Europe",
             CurrencyHelper.PoundSterling,

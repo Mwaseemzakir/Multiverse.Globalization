@@ -76,13 +76,11 @@ public class SubdivisionTests
     public void Subdivision_Should_HaveUniqueCodesPerCountry()
     {
         foreach (var country in Country.GetAll())
-        {
             if (country.Subdivisions.Count > 0)
             {
                 var codes = country.Subdivisions.Select(s => s.Code).ToList();
                 Assert.Equal(codes.Count, codes.Distinct().Count());
             }
-        }
     }
 
     [Fact]
@@ -120,4 +118,113 @@ public class SubdivisionTests
         var str = sub.ToString();
         Assert.Contains("California", str);
     }
+
+    #region Equals and GetHashCode
+
+    [Fact]
+    public void Equals_SameCode_Should_ReturnTrue()
+    {
+        var a = new Subdivision("US-CA", "California", "State");
+        var b = new Subdivision("US-CA", "California (alt name)", "Province");
+
+        Assert.Equal(a, b);
+        Assert.True(a.Equals(b));
+    }
+
+    [Fact]
+    public void Equals_DifferentCode_Should_ReturnFalse()
+    {
+        var a = new Subdivision("US-CA", "California", "State");
+        var b = new Subdivision("US-NY", "New York", "State");
+
+        Assert.NotEqual(a, b);
+    }
+
+    [Fact]
+    public void Equals_NonSubdivisionObject_Should_ReturnFalse()
+    {
+        var a = new Subdivision("US-CA", "California", "State");
+        Assert.False(a.Equals((object)"US-CA"));
+    }
+
+    [Fact]
+    public void Equals_Null_Should_ReturnFalse()
+    {
+        var a = new Subdivision("US-CA", "California", "State");
+        Assert.False(a.Equals(null));
+    }
+
+    [Fact]
+    public void GetHashCode_SameCode_Should_ReturnSameHash()
+    {
+        var a = new Subdivision("US-CA", "California", "State");
+        var b = new Subdivision("US-CA", "California", "State");
+
+        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+    }
+
+    #endregion
+
+    #region SubdivisionHelper.GetSubdivisionsForCountry Edge Cases
+
+    [Fact]
+    public void GetSubdivisionsForCountry_NullCode_ReturnsEmpty()
+    {
+        var result = SubdivisionHelper.GetSubdivisionsForCountry(null!);
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetSubdivisionsForCountry_EmptyCode_ReturnsEmpty()
+    {
+        var result = SubdivisionHelper.GetSubdivisionsForCountry("");
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetSubdivisionsForCountry_InvalidCode_ReturnsEmpty()
+    {
+        var result = SubdivisionHelper.GetSubdivisionsForCountry("XX");
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetSubdivisionsForCountry_LowercaseCode_ShouldStillWork()
+    {
+        var result = SubdivisionHelper.GetSubdivisionsForCountry("us");
+        Assert.Equal(51, result.Count);
+    }
+
+    #endregion
+
+    #region SubdivisionHelper.All
+
+    [Fact]
+    public void SubdivisionHelper_All_Should_NotBeEmpty()
+    {
+        Assert.NotEmpty(SubdivisionHelper.All);
+    }
+
+    [Fact]
+    public void SubdivisionHelper_All_Should_ContainKnownCountries()
+    {
+        Assert.True(SubdivisionHelper.All.ContainsKey("US"));
+        Assert.True(SubdivisionHelper.All.ContainsKey("CA"));
+        Assert.True(SubdivisionHelper.All.ContainsKey("PK"));
+    }
+
+    [Fact]
+    public void SubdivisionHelper_All_KeysShouldBeUppercaseAlpha2()
+    {
+        foreach (var key in SubdivisionHelper.All.Keys)
+        {
+            Assert.Equal(2, key.Length);
+            Assert.Equal(key.ToUpperInvariant(), key);
+        }
+    }
+
+    #endregion
 }

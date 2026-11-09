@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Guyana country.</summary>
     public static readonly Country Guyana =
-        new Country(
+        new(
             CountryNames.Guyana, "328", "GY", "GUY",
             "+592", "Georgetown", "Americas",
             CurrencyHelper.GuyaneseDollar,

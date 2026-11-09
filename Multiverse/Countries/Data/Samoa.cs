@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Samoa country.</summary>
     public static readonly Country Samoa =
-        new Country(
+        new(
             CountryNames.Samoa, "882", "WS", "WSM",
             "+685", "Apia", "Oceania",
             CurrencyHelper.SamoanTala,

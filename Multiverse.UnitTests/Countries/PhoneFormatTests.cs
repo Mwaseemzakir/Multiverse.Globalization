@@ -55,12 +55,78 @@ public class PhoneFormatTests
     public void CountryWithoutPhoneFormat_Should_ReturnNull()
     {
         // Antarctica doesn't have phone format data
-        var aq = Country.GetCountryOrDefault("AQ");
-        if (aq != null)
+        var aq = Country.GetCountry("AQ");
+        Assert.Null(aq.PhoneFormat);
+    }
+
+    [Fact]
+    public void ToString_Should_IncludeDigitsAndTrunkPrefix()
+    {
+        var pf = new PhoneFormat(10, 10, "1", "011");
+        Assert.Equal("Digits: 10-10, Trunk: 1", pf.ToString());
+    }
+
+    #region PhoneFormatHelper.GetPhoneFormatForCountry Edge Cases
+
+    [Fact]
+    public void GetPhoneFormatForCountry_NullCode_ReturnsNull()
+    {
+        Assert.Null(PhoneFormatHelper.GetPhoneFormatForCountry(null!));
+    }
+
+    [Fact]
+    public void GetPhoneFormatForCountry_EmptyCode_ReturnsNull()
+    {
+        Assert.Null(PhoneFormatHelper.GetPhoneFormatForCountry(""));
+    }
+
+    [Fact]
+    public void GetPhoneFormatForCountry_WhitespaceCode_ReturnsNull()
+    {
+        Assert.Null(PhoneFormatHelper.GetPhoneFormatForCountry("   "));
+    }
+
+    [Fact]
+    public void GetPhoneFormatForCountry_InvalidCode_ReturnsNull()
+    {
+        Assert.Null(PhoneFormatHelper.GetPhoneFormatForCountry("XX"));
+    }
+
+    [Fact]
+    public void GetPhoneFormatForCountry_LowercaseCode_ShouldStillWork()
+    {
+        var format = PhoneFormatHelper.GetPhoneFormatForCountry("us");
+        Assert.NotNull(format);
+        Assert.Equal(10, format!.MinLength);
+    }
+
+    #endregion
+
+    #region PhoneFormatHelper.All
+
+    [Fact]
+    public void PhoneFormatHelper_All_Should_NotBeEmpty()
+    {
+        Assert.NotEmpty(PhoneFormatHelper.All);
+    }
+
+    [Fact]
+    public void PhoneFormatHelper_All_Should_ContainKnownCountries()
+    {
+        Assert.True(PhoneFormatHelper.All.ContainsKey("US"));
+        Assert.True(PhoneFormatHelper.All.ContainsKey("GB"));
+        Assert.True(PhoneFormatHelper.All.ContainsKey("PK"));
+    }
+
+    [Fact]
+    public void PhoneFormatHelper_All_KeysShouldBeUppercaseAlpha2()
+    {
+        foreach (var key in PhoneFormatHelper.All.Keys)
         {
-            // Phone format may be null for territories without telephone systems
-            // This is an expected behavior
-            Assert.True(true);
+            Assert.Equal(2, key.Length);
+            Assert.Equal(key.ToUpperInvariant(), key);
         }
     }
+
+    #endregion
 }

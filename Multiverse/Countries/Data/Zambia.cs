@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Zambia country.</summary>
     public static readonly Country Zambia =
-        new Country(
+        new(
             CountryNames.Zambia, "894", "ZM", "ZMB",
             "+260", "Lusaka", "Africa",
             CurrencyHelper.ZambianKwacha,

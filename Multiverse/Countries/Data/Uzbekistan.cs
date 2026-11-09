@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Uzbekistan country.</summary>
     public static readonly Country Uzbekistan =
-        new Country(
+        new(
             CountryNames.Uzbekistan, "860", "UZ", "UZB",
             "+998", "Tashkent", "Asia",
             CurrencyHelper.UzbekistanSum,

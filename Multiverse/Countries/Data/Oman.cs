@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Oman country.</summary>
     public static readonly Country Oman =
-        new Country(
+        new(
             CountryNames.Oman, "512", "OM", "OMN",
             "+968", "Muscat", "Asia",
             CurrencyHelper.RialOmani,

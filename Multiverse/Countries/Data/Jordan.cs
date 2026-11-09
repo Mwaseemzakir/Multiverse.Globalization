@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Jordan country.</summary>
     public static readonly Country Jordan =
-        new Country(
+        new(
             CountryNames.Jordan, "400", "JO", "JOR",
             "+962", "Amman", "Asia",
             CurrencyHelper.JordanianDinar,

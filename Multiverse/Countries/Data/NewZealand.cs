@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The New Zealand country.</summary>
     public static readonly Country NewZealand =
-        new Country(
+        new(
             CountryNames.NewZealand, "554", "NZ", "NZL",
             "+64", "Wellington", "Oceania",
             CurrencyHelper.NewZealandDollar,

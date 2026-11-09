@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Canada country.</summary>
     public static readonly Country Canada =
-        new Country(
+        new(
             CountryNames.Canada, "124", "CA", "CAN",
             "+1", "Ottawa", "Americas",
             CurrencyHelper.CanadianDollar,

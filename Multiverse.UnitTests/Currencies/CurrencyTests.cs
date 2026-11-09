@@ -7,7 +7,7 @@ public class CurrencyTests
     [Fact]
     public void GetAll_Should_ReturnAllCurrencies()
     {
-        IReadOnlyList<Currency> currencies = Currency.GetAll();
+        var currencies = Currency.GetAll();
 
         Assert.NotNull(currencies);
         Assert.NotEmpty(currencies);
@@ -107,7 +107,7 @@ public class CurrencyTests
     [Fact]
     public void IsValid_String_Should_ReturnFalseForNullOrWhitespace()
     {
-        Assert.False(Currency.IsValid((string)null!));
+        Assert.False(Currency.IsValid(null!));
         Assert.False(Currency.IsValid(""));
         Assert.False(Currency.IsValid(" "));
         Assert.False(Currency.IsValid("  "));
@@ -137,7 +137,7 @@ public class CurrencyTests
         Assert.True(Currency.IsValid(826)); // GBP
         Assert.True(Currency.IsValid(586)); // PKR
         Assert.True(Currency.IsValid(392)); // JPY
-        Assert.True(Currency.IsValid(0));   // None
+        Assert.True(Currency.IsValid(0)); // None
     }
 
     [Fact]
@@ -183,7 +183,7 @@ public class CurrencyTests
     [Fact]
     public void GetCurrency_String_Should_ThrowForNull()
     {
-        Assert.Throws<ArgumentNullException>(() => Currency.GetCurrency((string)null!));
+        Assert.Throws<ArgumentNullException>(() => Currency.GetCurrency(null!));
     }
 
     [Fact]
@@ -436,9 +436,7 @@ public class CurrencyTests
     {
         var currencies = Currency.GetAll();
         foreach (var currency in currencies)
-        {
             Assert.False(string.IsNullOrEmpty(currency.Name), $"Currency with code '{currency.Code}' has empty Name");
-        }
     }
 
     [Fact]
@@ -446,9 +444,7 @@ public class CurrencyTests
     {
         var currencies = Currency.GetAll();
         foreach (var currency in currencies)
-        {
             Assert.False(string.IsNullOrEmpty(currency.Symbol), $"Currency '{currency.Name}' has empty Symbol");
-        }
     }
 
     [Fact]
@@ -456,19 +452,14 @@ public class CurrencyTests
     {
         var currencies = Currency.GetAll();
         foreach (var currency in currencies)
-        {
             Assert.True(currency.Number > 0, $"Currency '{currency.Name}' has non-positive Number: {currency.Number}");
-        }
     }
 
     [Fact]
     public void AllCurrencies_Should_HaveUppercaseCode()
     {
         var currencies = Currency.GetAll();
-        foreach (var currency in currencies)
-        {
-            Assert.Equal(currency.Code, currency.Code.ToUpperInvariant());
-        }
+        foreach (var currency in currencies) Assert.Equal(currency.Code, currency.Code.ToUpperInvariant());
     }
 
     #endregion
@@ -542,7 +533,7 @@ public class CurrencyTests
     public void Equals_NonCurrencyObject_Should_ReturnFalse()
     {
         var usd = Currency.GetCurrency("USD");
-        Assert.False(usd.Equals("USD"));
+        Assert.False(usd.Equals((object)"USD"));
     }
 
     [Fact]
@@ -675,10 +666,7 @@ public class CurrencyTests
     public void AllCurrencies_Should_HaveValidDecimalPlaces()
     {
         var validValues = new[] { 0, 2, 3, 4 };
-        foreach (var currency in Currency.GetAll())
-        {
-            Assert.Contains(currency.DecimalPlaces, validValues);
-        }
+        foreach (var currency in Currency.GetAll()) Assert.Contains(currency.DecimalPlaces, validValues);
     }
 
     #endregion

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Libya country.</summary>
     public static readonly Country Libya =
-        new Country(
+        new(
             CountryNames.Libya, "434", "LY", "LBY",
             "+218", "Tripoli", "Africa",
             CurrencyHelper.LibyanDinar,

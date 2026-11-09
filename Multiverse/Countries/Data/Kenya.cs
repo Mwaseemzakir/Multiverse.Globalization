@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Kenya country.</summary>
     public static readonly Country Kenya =
-        new Country(
+        new(
             CountryNames.Kenya, "404", "KE", "KEN",
             "+254", "Nairobi", "Africa",
             CurrencyHelper.KenyanShilling,

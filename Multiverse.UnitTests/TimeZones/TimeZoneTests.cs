@@ -277,7 +277,7 @@ public class TimeZoneTests
         var second = country.TimeZones;
 
         Assert.Equal(first.Count, second.Count);
-        for (int i = 0; i < first.Count; i++)
+        for (var i = 0; i < first.Count; i++)
         {
             Assert.Equal(first[i].IanaId, second[i].IanaId);
             Assert.Equal(first[i].UtcOffsetHours, second[i].UtcOffsetHours);
@@ -659,10 +659,7 @@ public class TimeZoneTests
     [Fact]
     public void TimeZoneHelper_All_ShouldHaveAtLeastOneZonePerEntry()
     {
-        foreach (var entry in TimeZoneHelper.All)
-        {
-            Assert.NotEmpty(entry.Value);
-        }
+        foreach (var entry in TimeZoneHelper.All) Assert.NotEmpty(entry.Value);
     }
 
     [Fact]
@@ -683,13 +680,9 @@ public class TimeZoneTests
     public void AllTimeZones_IanaIds_Should_NotBeNullOrEmpty()
     {
         foreach (var entry in TimeZoneHelper.All)
-        {
             foreach (var tz in entry.Value)
-            {
                 Assert.False(string.IsNullOrWhiteSpace(tz.IanaId),
                     $"Country {entry.Key} has a time zone with null/empty IANA ID");
-            }
-        }
     }
 
     [Fact]
@@ -697,12 +690,8 @@ public class TimeZoneTests
     {
         // IANA IDs are in "Area/Location" format (e.g. "Asia/Karachi", "Pacific/Auckland")
         foreach (var entry in TimeZoneHelper.All)
-        {
             foreach (var tz in entry.Value)
-            {
                 Assert.Contains("/", tz.IanaId);
-            }
-        }
     }
 
     [Fact]
@@ -710,13 +699,9 @@ public class TimeZoneTests
     {
         // UTC offsets range from -12 to +14 hours
         foreach (var entry in TimeZoneHelper.All)
-        {
             foreach (var tz in entry.Value)
-            {
                 Assert.True(tz.UtcOffsetHours >= -12 && tz.UtcOffsetHours <= 14,
                     $"Country {entry.Key}, zone {tz.IanaId}: offset {tz.UtcOffsetHours} is out of range [-12, +14]");
-            }
-        }
     }
 
     [Fact]
@@ -753,24 +738,16 @@ public class TimeZoneTests
     public void AllTimeZones_UtcOffsetString_ShouldStartWithUtc()
     {
         foreach (var entry in TimeZoneHelper.All)
-        {
             foreach (var tz in entry.Value)
-            {
                 Assert.StartsWith("UTC", tz.UtcOffsetString);
-            }
-        }
     }
 
     [Fact]
     public void AllTimeZones_UtcOffset_ShouldMatchUtcOffsetHours()
     {
         foreach (var entry in TimeZoneHelper.All)
-        {
             foreach (var tz in entry.Value)
-            {
                 Assert.Equal(TimeSpan.FromHours(tz.UtcOffsetHours), tz.UtcOffset);
-            }
-        }
     }
 
     #endregion
@@ -1028,11 +1005,11 @@ public class TimeZoneTests
         {
             var exception = Record.Exception(() =>
             {
-                var _ = country.TimeZones;
-                var __ = country.HasMultipleTimeZones;
-                var ___ = country.GetPrimaryTimeZone();
-                var ____ = country.GetTimeZonesWithDst();
-                var _____ = country.GetUtcOffsets();
+                _ = country.TimeZones;
+                _ = country.HasMultipleTimeZones;
+                _ = country.GetPrimaryTimeZone();
+                _ = country.GetTimeZonesWithDst();
+                _ = country.GetUtcOffsets();
             });
 
             Assert.Null(exception);
@@ -1060,7 +1037,7 @@ public class TimeZoneTests
     [Fact]
     public void ChannelIslandsAndIsleOfMan_Should_ObserveDst()
     {
-        Assert.All(new[] { "GG", "JE", "IM" }, code =>
+        Assert.All(["GG", "JE", "IM"], code =>
         {
             var tz = TimeZoneHelper.GetTimeZonesForCountry(code).Single();
             Assert.Equal(0, tz.UtcOffsetHours);
@@ -1072,7 +1049,7 @@ public class TimeZoneTests
     public void AllCountries_Should_HaveAtLeastOneTimeZone()
     {
         var missing = Country.GetAll()
-            .Where(c => c != CountryHelper.None && c.TimeZones.Count == 0)
+            .Where(c => !c.Equals(CountryHelper.None) && c.TimeZones.Count == 0)
             .Select(c => c.Alpha2Code)
             .ToList();
 

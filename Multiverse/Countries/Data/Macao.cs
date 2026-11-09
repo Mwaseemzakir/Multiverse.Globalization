@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Macao country.</summary>
     public static readonly Country Macao =
-        new Country(
+        new(
             CountryNames.Macao, "446", "MO", "MAC",
             "+853", "Macao", "Asia",
             CurrencyHelper.MacanesePataca,

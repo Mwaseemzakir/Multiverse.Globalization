@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Eritrea country.</summary>
     public static readonly Country Eritrea =
-        new Country(
+        new(
             CountryNames.Eritrea, "232", "ER", "ERI",
             "+291", "Asmara", "Africa",
             CurrencyHelper.EritreanNakfa,

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Dominica country.</summary>
     public static readonly Country Dominica =
-        new Country(
+        new(
             CountryNames.Dominica, "212", "DM", "DMA",
             "+1", "Roseau", "Americas",
             CurrencyHelper.EastCaribbeanDollar,

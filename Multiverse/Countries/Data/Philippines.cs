@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Philippines country.</summary>
     public static readonly Country Philippines =
-        new Country(
+        new(
             CountryNames.Philippines, "608", "PH", "PHL",
             "+63", "Manila", "Asia",
             CurrencyHelper.PhilippinePeso,

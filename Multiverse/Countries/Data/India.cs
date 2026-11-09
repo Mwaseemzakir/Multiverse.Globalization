@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The India country.</summary>
     public static readonly Country India =
-        new Country(
+        new(
             CountryNames.India, "356", "IN", "IND",
             "+91", "New Delhi", "Asia",
             CurrencyHelper.IndianRupee,

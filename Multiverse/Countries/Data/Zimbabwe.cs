@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Zimbabwe country.</summary>
     public static readonly Country Zimbabwe =
-        new Country(
+        new(
             CountryNames.Zimbabwe, "716", "ZW", "ZWE",
             "+263", "Harare", "Africa",
             CurrencyHelper.ZimbabweanDollar,

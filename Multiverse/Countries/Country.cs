@@ -5,19 +5,8 @@ namespace Multiverse.Globalization.Countries;
 /// <summary>
 /// Represents a country with its ISO 3166 codes, geographic, political, and cultural data.
 /// </summary>
-public sealed class Country
+public sealed partial class Country
 {
-    private IReadOnlyList<Holiday>? _holidays;
-    private IReadOnlyList<MovableHoliday>? _movableHolidays;
-    private IReadOnlyList<CountryTimeZone>? _timeZones;
-    private IReadOnlyList<Subdivision>? _subdivisions;
-    private ElectricalSystem? _electricalSystem;
-    private IReadOnlyList<string>? _emergencyNumbers;
-    private PhoneFormat? _phoneFormat;
-    private CountryLocale? _locale;
-    private IReadOnlyDictionary<string, string>? _translations;
-    private string? _flag;
-
     internal Country(
         string name,
         string numericCode,
@@ -55,29 +44,29 @@ public sealed class Country
         Region = region;
         Currency = currency;
         CodeStatus = codeStatus;
-        OfficialLanguages = officialLanguages ?? Array.Empty<Language>();
+        OfficialLanguages = officialLanguages;
     }
 
     /// <summary>Country name.</summary>
-    public string Name { get; private set; } = string.Empty;
+    public string Name { get; }
 
     /// <summary>ISO 3166-1 alpha-3 code (3-letter).</summary>
-    public string Alpha3Code { get; private set; } = string.Empty;
+    public string Alpha3Code { get; }
 
     /// <summary>ISO 3166-1 alpha-2 code (2-letter).</summary>
-    public string Alpha2Code { get; private set; } = string.Empty;
+    public string Alpha2Code { get; }
 
     /// <summary>ISO 3166-1 numeric code (3-digit).</summary>
-    public string NumericCode { get; private set; } = string.Empty;
+    public string NumericCode { get; }
 
     /// <summary>International dialing code (E.164), e.g. "+1", "+44".</summary>
-    public string CallingCode { get; private set; } = string.Empty;
+    public string CallingCode { get; }
 
     /// <summary>Capital city name.</summary>
-    public string Capital { get; private set; } = string.Empty;
+    public string Capital { get; }
 
     /// <summary>Geographic region/continent, e.g. "Asia", "Europe", "Americas", "Africa", "Oceania", "Antarctic".</summary>
-    public string Region { get; private set; } = string.Empty;
+    public string Region { get; }
 
     /// <summary>Whether this record uses a current, former, or unspecified ISO 3166-1 code.</summary>
     public CountryCodeStatus CodeStatus { get; }
@@ -106,7 +95,7 @@ public sealed class Country
     public GeoCoordinate? CapitalCoordinates { get; private set; }
 
     /// <summary>ISO 3166-1 alpha-2 codes of bordering (neighboring) countries.</summary>
-    public IReadOnlyList<string> BorderingCountries { get; private set; } = Array.Empty<string>();
+    public IReadOnlyList<string> BorderingCountries { get; private set; } = [];
 
     /// <summary>Which side of the road vehicles drive on.</summary>
     public DrivingSide DrivingSide { get; private set; } = DrivingSide.Right;
@@ -124,40 +113,55 @@ public sealed class Country
     public string SpeedUnit { get; private set; } = "km/h";
 
     /// <summary>Alternative country-code top-level domains, e.g. ".uk" for GB alongside ".gb".</summary>
-    public IReadOnlyList<string> AlternativeTlds { get; private set; } = Array.Empty<string>();
+    public IReadOnlyList<string> AlternativeTlds { get; private set; } = [];
 
     /// <summary>Primary currency used in this country.</summary>
-    public Currency? Currency { get; private set; }
+    public Currency? Currency { get; }
 
     /// <summary>Primary ISO 4217 currency code derived from the Currency property, e.g. "USD", "EUR".</summary>
     public string CurrencyCode => Currency?.Code ?? string.Empty;
 
     /// <summary>Official languages of this country.</summary>
-    public IReadOnlyList<Language> OfficialLanguages { get; private set; } = Array.Empty<Language>();
+    public IReadOnlyList<Language> OfficialLanguages { get; }
 
     /// <summary>
     /// Public holidays observed in this country (fixed-date holidays only).
     /// Movable holidays (e.g. Easter, Eid, Diwali, Thanksgiving) are not included.
     /// </summary>
-    public IReadOnlyList<Holiday> Holidays => _holidays ??= HolidayHelper.GetHolidaysForCountry(Alpha2Code);
+    public IReadOnlyList<Holiday> Holidays
+        => field ??= HolidayHelper.GetHolidaysForCountry(Alpha2Code);
 
     /// <summary>
     /// Returns holidays filtered by the specified <see cref="HolidayType"/>.
     /// </summary>
     public IReadOnlyList<Holiday> GetHolidaysByType(HolidayType type)
-        => Holidays.Where(h => h.Type == type).ToList().AsReadOnly();
+    {
+        return Holidays.Where(h => h.Type == type).ToList().AsReadOnly();
+    }
 
     /// <summary>
-    /// Checks whether the given date falls on any public holiday in this country (month and day match, ignoring year).
+    /// Checks whether the given date falls on any fixed-date public holiday in this country
+    /// (month and day match, ignoring year).
     /// </summary>
+    /// <remarks>
+    /// This matches only fixed-date holidays and ignores the year entirely, so movable holidays
+    /// such as Easter Monday and Thanksgiving are never reported and substitute days are not
+    /// accounted for. Use <see cref="IsHoliday"/> for a year-aware answer.
+    /// </remarks>
+    [Obsolete(
+        "Ignores the year and misses movable holidays. Use IsHoliday(DateTime), which resolves fixed and movable holidays for the date's own year and honours substitute days.")]
     public bool IsPublicHoliday(DateTime date)
-        => Holidays.Any(h => h.IsOnDate(date));
+    {
+        return Holidays.Any(h => h.IsOnDate(date));
+    }
 
     /// <summary>
     /// Returns the holiday that falls on the given date, or null if no holiday matches.
     /// </summary>
     public Holiday? GetHolidayOnDate(DateTime date)
-        => Holidays.FirstOrDefault(h => h.IsOnDate(date));
+    {
+        return Holidays.FirstOrDefault(h => h.IsOnDate(date));
+    }
 
     // ── Movable Holidays ────────────────────────────────────────────
 
@@ -165,7 +169,7 @@ public sealed class Country
     /// Movable holidays observed in this country (dates vary by year, e.g. Easter, Thanksgiving).
     /// </summary>
     public IReadOnlyList<MovableHoliday> MovableHolidays
-        => _movableHolidays ??= MovableHolidayHelper.GetMovableHolidaysForCountry(Alpha2Code);
+        => field ??= MovableHolidayHelper.GetMovableHolidaysForCountry(Alpha2Code);
 
     /// <summary>
     /// Returns all holidays (both fixed and movable) that fall on the given date.
@@ -192,17 +196,18 @@ public sealed class Country
         var result = new List<HolidayOccurrence>();
         result.AddRange(Holidays
             .Where(h => h.IsOnDate(date))
-            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, isMovable: false)));
+            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, false)));
         result.AddRange(MovableHolidays
             .Where(h => h.IsOnDate(date))
-            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, isMovable: true)));
+            .Select(h => new HolidayOccurrence(h.Name, date.Date, h.Type, true)));
         return result.AsReadOnly();
     }
 
     // ── Time Zones ──────────────────────────────────────────────────
 
     /// <summary>IANA time zones observed in this country.</summary>
-    public IReadOnlyList<CountryTimeZone> TimeZones => _timeZones ??= TimeZoneHelper.GetTimeZonesForCountry(Alpha2Code);
+    public IReadOnlyList<CountryTimeZone> TimeZones
+        => field ??= TimeZoneHelper.GetTimeZonesForCountry(Alpha2Code);
 
     /// <summary>Whether this country spans more than one time zone.</summary>
     public bool HasMultipleTimeZones => TimeZones.Count > 1;
@@ -211,19 +216,25 @@ public sealed class Country
     /// Returns the primary (first-listed / capital-city) time zone, or null if none defined.
     /// </summary>
     public CountryTimeZone? GetPrimaryTimeZone()
-        => TimeZones.Count > 0 ? TimeZones[0] : null;
+    {
+        return TimeZones.Count > 0 ? TimeZones[0] : null;
+    }
 
     /// <summary>
     /// Returns all time zones in this country that observe Daylight Saving Time.
     /// </summary>
     public IReadOnlyList<CountryTimeZone> GetTimeZonesWithDst()
-        => TimeZones.Where(tz => tz.ObservesDst).ToList().AsReadOnly();
+    {
+        return TimeZones.Where(tz => tz.ObservesDst).ToList().AsReadOnly();
+    }
 
     /// <summary>
     /// Returns the distinct UTC offsets observed in this country.
     /// </summary>
     public IReadOnlyList<TimeSpan> GetUtcOffsets()
-        => TimeZones.Select(tz => tz.UtcOffset).Distinct().ToList().AsReadOnly();
+    {
+        return TimeZones.Select(tz => tz.UtcOffset).Distinct().ToList().AsReadOnly();
+    }
 
     // ── Subdivisions ────────────────────────────────────────────────
 
@@ -232,7 +243,7 @@ public sealed class Country
     /// such as states, provinces, regions, or territories.
     /// </summary>
     public IReadOnlyList<Subdivision> Subdivisions
-        => _subdivisions ??= SubdivisionHelper.GetSubdivisionsForCountry(Alpha2Code);
+        => field ??= SubdivisionHelper.GetSubdivisionsForCountry(Alpha2Code);
 
     // ── Electrical System ───────────────────────────────────────────
 
@@ -240,7 +251,7 @@ public sealed class Country
     /// Electrical system specifications (plug types, voltage, frequency) for this country.
     /// </summary>
     public ElectricalSystem? ElectricalSystem
-        => _electricalSystem ??= ElectricalSystemHelper.GetElectricalSystemForCountry(Alpha2Code);
+        => field ??= ElectricalSystemHelper.GetElectricalSystemForCountry(Alpha2Code);
 
     // ── Emergency Numbers ───────────────────────────────────────────
 
@@ -248,7 +259,7 @@ public sealed class Country
     /// Emergency telephone numbers for this country, e.g. "911", "112", "999".
     /// </summary>
     public IReadOnlyList<string> EmergencyNumbers
-        => _emergencyNumbers ??= EmergencyNumberHelper.GetEmergencyNumbersForCountry(Alpha2Code);
+        => field ??= EmergencyNumberHelper.GetEmergencyNumbersForCountry(Alpha2Code);
 
     // ── Phone Format ────────────────────────────────────────────────
 
@@ -256,7 +267,7 @@ public sealed class Country
     /// Phone number format information for this country.
     /// </summary>
     public PhoneFormat? PhoneFormat
-        => _phoneFormat ??= PhoneFormatHelper.GetPhoneFormatForCountry(Alpha2Code);
+        => field ??= PhoneFormatHelper.GetPhoneFormatForCountry(Alpha2Code);
 
     // ── Locale ──────────────────────────────────────────────────────
 
@@ -265,7 +276,7 @@ public sealed class Country
     /// (date format, number format, measurement system, postal code format, etc.).
     /// </summary>
     public CountryLocale? Locale
-        => _locale ??= CountryLocaleHelper.GetLocaleForCountry(Alpha2Code);
+        => field ??= CountryLocaleHelper.GetLocaleForCountry(Alpha2Code);
 
     // ── Translations ────────────────────────────────────────────────
 
@@ -274,7 +285,7 @@ public sealed class Country
     /// Keys are ISO 639-1 alpha-2 language codes (e.g. "fr", "es", "de", "ar", "zh", "ja").
     /// </summary>
     public IReadOnlyDictionary<string, string> Translations
-        => _translations ??= CountryTranslationHelper.GetTranslationsForCountry(Alpha2Code);
+        => field ??= CountryTranslationHelper.GetTranslationsForCountry(Alpha2Code);
 
     /// <summary>
     /// Gets the country name in the specified language, or null if no translation is available.
@@ -304,7 +315,7 @@ public sealed class Country
         Population = population;
         AreaInSquareKilometers = area;
         CapitalCoordinates = capitalCoordinates;
-        BorderingCountries = borderingCountries ?? Array.Empty<string>();
+        BorderingCountries = borderingCountries ?? [];
         IsLandlocked = isLandlocked;
     }
 
@@ -319,16 +330,16 @@ public sealed class Country
     internal void SetTransportData(DrivingSide drivingSide, string speedUnit)
     {
         DrivingSide = drivingSide;
-        SpeedUnit = speedUnit ?? "km/h";
+        SpeedUnit = speedUnit;
     }
 
     internal void SetAlternativeTlds(params string[] tlds)
     {
-        AlternativeTlds = tlds ?? Array.Empty<string>();
+        AlternativeTlds = tlds;
     }
 
     /// <summary>Unicode flag emoji derived from the Alpha-2 code.</summary>
-    public string Flag => _flag ??= string.IsNullOrEmpty(Alpha2Code)
+    public string Flag => field ??= string.IsNullOrEmpty(Alpha2Code)
         ? string.Empty
         : string.Concat(Alpha2Code.ToUpperInvariant().Select(c => char.ConvertFromUtf32(c - 'A' + 0x1F1E6)));
 
@@ -339,7 +350,7 @@ public sealed class Country
     public static Country? GetCountryOrDefault(string identifier)
     {
         if (string.IsNullOrWhiteSpace(identifier))
-            return default;
+            return null;
 
         identifier = identifier.ToLowerInvariant();
 
@@ -359,7 +370,7 @@ public sealed class Country
             Alpha2CodeMap.TryGetValue(aliasAlpha2.ToLowerInvariant(), out var byAlias))
             return byAlias;
 
-        return default;
+        return null;
     }
 
     /// <summary>
@@ -372,7 +383,7 @@ public sealed class Country
             throw new ArgumentNullException(nameof(identifier));
 
         return GetCountryOrDefault(identifier)
-            ?? throw new CountryNotFoundException($"Country with identifier '{identifier}' was not found.");
+               ?? throw new CountryNotFoundException($"Country with identifier '{identifier}' was not found.");
     }
 
     /// <summary>
@@ -387,32 +398,50 @@ public sealed class Country
         identifier = identifier.ToLowerInvariant();
 
         return Alpha2CodeMap.ContainsKey(identifier) ||
-            Alpha3CodeMap.ContainsKey(identifier) ||
-            NumericCodeMap.ContainsKey(identifier) ||
-            NameMap.ContainsKey(identifier) ||
-            NameAliases.ContainsKey(identifier);
+               Alpha3CodeMap.ContainsKey(identifier) ||
+               NumericCodeMap.ContainsKey(identifier) ||
+               NameMap.ContainsKey(identifier) ||
+               NameAliases.ContainsKey(identifier);
     }
 
     /// <summary>
     /// Retrieves a list of all available Country objects.
     /// </summary>
-    public static IReadOnlyList<Country> GetAll() => CountryHelper.GetAll();
+    public static IReadOnlyList<Country> GetAll()
+    {
+        return CountryHelper.GetAll();
+    }
 
     /// <summary>
     /// Retrieves the 249 records with currently assigned ISO 3166-1 codes.
     /// This excludes <see cref="CountryHelper.None"/> and formerly assigned compatibility records.
     /// </summary>
-    public static IReadOnlyList<Country> GetCurrent() => CountryHelper.GetCurrent();
+    public static IReadOnlyList<Country> GetCurrent()
+    {
+        return CountryHelper.GetCurrent();
+    }
 
     /// <summary>Retrieves formerly assigned country-code records retained for compatibility.</summary>
-    public static IReadOnlyList<Country> GetLegacy() => CountryHelper.GetLegacy();
+    public static IReadOnlyList<Country> GetLegacy()
+    {
+        return CountryHelper.GetLegacy();
+    }
 
     /// <inheritdoc />
-    public override string ToString() => $"{Name} ({Alpha2Code})";
+    public override string ToString()
+    {
+        return $"{Name} ({Alpha2Code})";
+    }
 
     /// <inheritdoc />
-    public override bool Equals(object? obj) => obj is Country other && Alpha2Code == other.Alpha2Code;
+    public override bool Equals(object? obj)
+    {
+        return obj is Country other && Alpha2Code == other.Alpha2Code;
+    }
 
     /// <inheritdoc />
-    public override int GetHashCode() => Alpha2Code.GetHashCode();
+    public override int GetHashCode()
+    {
+        return Alpha2Code.GetHashCode();
+    }
 }

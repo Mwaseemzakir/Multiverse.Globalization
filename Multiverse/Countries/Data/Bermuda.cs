@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Bermuda country.</summary>
     public static readonly Country Bermuda =
-        new Country(
+        new(
             CountryNames.Bermuda, "060", "BM", "BMU",
             "+1", "Hamilton", "Americas",
             CurrencyHelper.BermudianDollar,

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Botswana country.</summary>
     public static readonly Country Botswana =
-        new Country(
+        new(
             CountryNames.Botswana, "072", "BW", "BWA",
             "+267", "Gaborone", "Africa",
             CurrencyHelper.BotswanaPula,

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Curacao country.</summary>
     public static readonly Country Curacao =
-        new Country(
+        new(
             CountryNames.Curacao, "531", "CW", "CUW",
             "+599", "Willemstad", "Americas",
             CurrencyHelper.NetherlandsAntilleanGuilder,

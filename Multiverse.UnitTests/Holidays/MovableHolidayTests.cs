@@ -179,7 +179,7 @@ public class MovableHolidayTests
     [Fact]
     public void MovableHoliday_Constructor_ShouldRejectNullName()
     {
-        Assert.Throws<ArgumentNullException>(() => new MovableHoliday(null!, HolidayType.National, y => null));
+        Assert.Throws<ArgumentNullException>(() => new MovableHoliday(null!, HolidayType.National, _ => null));
     }
 
     [Fact]

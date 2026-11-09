@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Korea North country.</summary>
     public static readonly Country KoreaNorth =
-        new Country(
+        new(
             CountryNames.KoreaNorth, "408", "KP", "PRK",
             "+850", "Pyongyang", "Asia",
             CurrencyHelper.NorthKoreanWon,

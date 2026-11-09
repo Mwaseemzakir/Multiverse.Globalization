@@ -1,0 +1,27 @@
+root = true
+
+[*.cs]
+# System.Index/System.Range are unavailable on the netstandard2.0 and net462 targets.
+dotnet_diagnostic.IDE0056.severity = none
+dotnet_diagnostic.IDE0057.severity = none
+resharper_use_index_from_end_expression_highlighting = none
+
+# System.Threading.Lock is unavailable on the library's legacy target frameworks.
+dotnet_diagnostic.IDE0330.severity = none
+
+# Dictionary.GetValueOrDefault is unavailable on the library's legacy target frameworks.
+resharper_can_simplify_dictionary_try_get_value_with_get_value_or_default_highlighting = none
+
+# Preserve the library's established public acronyms and underscore-prefixed private fields.
+resharper_inconsistent_naming_highlighting = none
+
+[Multiverse/Countries/Data/*.cs]
+# These files are partial declarations of CountryHelper, not a separate Data API namespace.
+resharper_check_namespace_highlighting = none
+
+[Multiverse.UnitTests/**/*.cs]
+# Null-forgiving operators intentionally pass null into non-nullable APIs in negative tests.
+resharper_redundant_suppress_nullable_warning_expression_highlighting = none
+
+# Some test callbacks exist only to assert their arguments satisfy a contract.
+resharper_parameter_only_used_for_precondition_check_local_highlighting = none

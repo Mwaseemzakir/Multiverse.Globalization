@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Ethiopia country.</summary>
     public static readonly Country Ethiopia =
-        new Country(
+        new(
             CountryNames.Ethiopia, "231", "ET", "ETH",
             "+251", "Addis Ababa", "Africa",
             CurrencyHelper.EthiopianBirr,

@@ -4,7 +4,7 @@ public static partial class CountryHelper
 {
     /// <summary>The Mauritania country.</summary>
     public static readonly Country Mauritania =
-        new Country(
+        new(
             CountryNames.Mauritania, "478", "MR", "MRT",
             "+222", "Nouakchott", "Africa",
             CurrencyHelper.MauritanianOuguiya,
